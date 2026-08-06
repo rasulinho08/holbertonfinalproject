@@ -1,0 +1,911 @@
+[
+  {
+    "id": "u_1",
+    "username": "leyla",
+    "name": "Leyla Məmmədova",
+    "email": "leyla@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Kitab oxumaq — başqasının həyatını yaşamaqdır. Klassika və detektiv sevirəm.",
+    "role": "user",
+    "createdAt": "2023-12-17T18:31:07.038Z",
+    "followersCount": 875,
+    "followingCount": 182,
+    "isFollowing": false,
+    "stats": {
+      "booksRead": 96,
+      "pagesRead": 34848,
+      "reviewsCount": 2,
+      "quotesCount": 8,
+      "streakDays": 57,
+      "longestStreak": 59,
+      "readToday": false,
+      "genreDistribution": [
+        {
+          "genre": "scifi",
+          "count": 19
+        },
+        {
+          "genre": "fantasy",
+          "count": 38
+        },
+        {
+          "genre": "poetry",
+          "count": 40
+        },
+        {
+          "genre": "history",
+          "count": 27
+        }
+      ],
+      "weeklyPages": [
+        80,
+        18,
+        66,
+        40,
+        0,
+        56,
+        23
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 12,
+      "completed": 5
+    },
+    "favoriteGenres": [
+      "scifi",
+      "fantasy",
+      "poetry",
+      "history"
+    ],
+    "favoriteAuthorIds": [
+      "au_35",
+      "au_14",
+      "au_10",
+      "au_20"
+    ],
+    "walletBalance": 41.3,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_2",
+    "username": "reshad",
+    "name": "Rəşad Quliyev",
+    "email": "reshad@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Elmi-populyar ədəbiyyat həvəskarı. İldə 40 kitab hədəfim var.",
+    "role": "user",
+    "createdAt": "2026-04-09T18:31:07.038Z",
+    "followersCount": 1187,
+    "followingCount": 256,
+    "isFollowing": true,
+    "stats": {
+      "booksRead": 4,
+      "pagesRead": 948,
+      "reviewsCount": 8,
+      "quotesCount": 35,
+      "streakDays": 18,
+      "longestStreak": 77,
+      "readToday": true,
+      "genreDistribution": [
+        {
+          "genre": "children",
+          "count": 2
+        },
+        {
+          "genre": "novel",
+          "count": 2
+        },
+        {
+          "genre": "scifi",
+          "count": 3
+        },
+        {
+          "genre": "mystery",
+          "count": 3
+        },
+        {
+          "genre": "science",
+          "count": 2
+        }
+      ],
+      "weeklyPages": [
+        8,
+        0,
+        90,
+        88,
+        86,
+        29,
+        58
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 20,
+      "completed": 4
+    },
+    "favoriteGenres": [
+      "children",
+      "novel",
+      "scifi",
+      "mystery",
+      "science"
+    ],
+    "favoriteAuthorIds": [
+      "au_22",
+      "au_42"
+    ],
+    "walletBalance": 57.97,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_3",
+    "username": "nigar",
+    "name": "Nigar Əliyeva",
+    "email": "nigar@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Poeziya və Azərbaycan ədəbiyyatı. Sitat toplamağı sevirəm.",
+    "role": "user",
+    "createdAt": "2025-02-18T18:31:07.038Z",
+    "followersCount": 1055,
+    "followingCount": 229,
+    "isFollowing": false,
+    "stats": {
+      "booksRead": 61,
+      "pagesRead": 11407,
+      "reviewsCount": 40,
+      "quotesCount": 31,
+      "streakDays": 60,
+      "longestStreak": 82,
+      "readToday": false,
+      "genreDistribution": [
+        {
+          "genre": "psychology",
+          "count": 30
+        },
+        {
+          "genre": "fantasy",
+          "count": 13
+        },
+        {
+          "genre": "business",
+          "count": 19
+        },
+        {
+          "genre": "classic",
+          "count": 4
+        }
+      ],
+      "weeklyPages": [
+        0,
+        89,
+        59,
+        0,
+        95,
+        85,
+        32
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 36,
+      "completed": 20
+    },
+    "favoriteGenres": [
+      "psychology",
+      "fantasy",
+      "business",
+      "classic"
+    ],
+    "favoriteAuthorIds": [
+      "au_25",
+      "au_9",
+      "au_38",
+      "au_12"
+    ],
+    "walletBalance": 54.17,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_4",
+    "username": "tural",
+    "name": "Tural Həsənov",
+    "email": "tural@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Fantastika, Tolkien və Herbert. Bakı, 25 yaş.",
+    "role": "user",
+    "createdAt": "2024-07-21T18:31:07.038Z",
+    "followersCount": 79,
+    "followingCount": 84,
+    "isFollowing": false,
+    "stats": {
+      "booksRead": 21,
+      "pagesRead": 7077,
+      "reviewsCount": 37,
+      "quotesCount": 29,
+      "streakDays": 83,
+      "longestStreak": 169,
+      "readToday": false,
+      "genreDistribution": [
+        {
+          "genre": "psychology",
+          "count": 6
+        },
+        {
+          "genre": "classic",
+          "count": 7
+        },
+        {
+          "genre": "philosophy",
+          "count": 9
+        },
+        {
+          "genre": "science",
+          "count": 5
+        }
+      ],
+      "weeklyPages": [
+        73,
+        0,
+        0,
+        23,
+        68,
+        40,
+        63
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 12,
+      "completed": 18
+    },
+    "favoriteGenres": [
+      "psychology",
+      "classic",
+      "philosophy",
+      "science"
+    ],
+    "favoriteAuthorIds": [
+      "au_31",
+      "au_31"
+    ],
+    "walletBalance": 43.05,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_5",
+    "username": "aysel",
+    "name": "Aysel Kərimli",
+    "email": "aysel@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Psixologiya və şəxsi inkişaf kitabları. Hər səhər 30 səhifə.",
+    "role": "user",
+    "createdAt": "2026-06-16T18:31:07.038Z",
+    "followersCount": 914,
+    "followingCount": 96,
+    "isFollowing": true,
+    "stats": {
+      "booksRead": 4,
+      "pagesRead": 1376,
+      "reviewsCount": 24,
+      "quotesCount": 67,
+      "streakDays": 54,
+      "longestStreak": 120,
+      "readToday": false,
+      "genreDistribution": [
+        {
+          "genre": "fantasy",
+          "count": 2
+        },
+        {
+          "genre": "psychology",
+          "count": 2
+        },
+        {
+          "genre": "poetry",
+          "count": 2
+        },
+        {
+          "genre": "science",
+          "count": 2
+        }
+      ],
+      "weeklyPages": [
+        60,
+        71,
+        77,
+        23,
+        40,
+        8,
+        25
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 12,
+      "completed": 4
+    },
+    "favoriteGenres": [
+      "fantasy",
+      "psychology",
+      "poetry",
+      "science"
+    ],
+    "favoriteAuthorIds": [
+      "au_32"
+    ],
+    "walletBalance": 9.48,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_6",
+    "username": "elvin",
+    "name": "Elvin Bayramov",
+    "email": "elvin@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Tarix və bioqrafiya. Kitab rəfim evimin ən vacib mebelidir.",
+    "role": "user",
+    "createdAt": "2025-10-05T18:31:07.038Z",
+    "followersCount": 976,
+    "followingCount": 148,
+    "isFollowing": true,
+    "stats": {
+      "booksRead": 14,
+      "pagesRead": 3444,
+      "reviewsCount": 11,
+      "quotesCount": 28,
+      "streakDays": 12,
+      "longestStreak": 41,
+      "readToday": false,
+      "genreDistribution": [
+        {
+          "genre": "history",
+          "count": 7
+        },
+        {
+          "genre": "philosophy",
+          "count": 7
+        },
+        {
+          "genre": "scifi",
+          "count": 5
+        }
+      ],
+      "weeklyPages": [
+        18,
+        52,
+        15,
+        63,
+        0,
+        0,
+        0
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 50,
+      "completed": 14
+    },
+    "favoriteGenres": [
+      "history",
+      "philosophy",
+      "scifi"
+    ],
+    "favoriteAuthorIds": [
+      "au_39"
+    ],
+    "walletBalance": 19.15,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_7",
+    "username": "gunel",
+    "name": "Günel Səfərova",
+    "email": "gunel@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Murakami oxucusuyam. Kitab klubunun təşkilatçısı.",
+    "role": "user",
+    "createdAt": "2025-02-26T18:31:07.038Z",
+    "followersCount": 1043,
+    "followingCount": 24,
+    "isFollowing": false,
+    "stats": {
+      "booksRead": 22,
+      "pagesRead": 8250,
+      "reviewsCount": 31,
+      "quotesCount": 13,
+      "streakDays": 31,
+      "longestStreak": 113,
+      "readToday": true,
+      "genreDistribution": [
+        {
+          "genre": "business",
+          "count": 6
+        },
+        {
+          "genre": "biography",
+          "count": 9
+        },
+        {
+          "genre": "classic",
+          "count": 8
+        },
+        {
+          "genre": "poetry",
+          "count": 8
+        }
+      ],
+      "weeklyPages": [
+        51,
+        90,
+        70,
+        30,
+        0,
+        0,
+        0
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 50,
+      "completed": 3
+    },
+    "favoriteGenres": [
+      "business",
+      "biography",
+      "classic",
+      "poetry"
+    ],
+    "favoriteAuthorIds": [
+      "au_40",
+      "au_10",
+      "au_19",
+      "au_15"
+    ],
+    "walletBalance": 23.77,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_8",
+    "username": "kamran",
+    "name": "Kamran Nəbiyev",
+    "email": "kamran@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Biznes ədəbiyyatı və podcast həvəskarı.",
+    "role": "user",
+    "createdAt": "2023-06-30T18:31:07.038Z",
+    "followersCount": 1324,
+    "followingCount": 193,
+    "isFollowing": false,
+    "stats": {
+      "booksRead": 36,
+      "pagesRead": 8568,
+      "reviewsCount": 21,
+      "quotesCount": 15,
+      "streakDays": 79,
+      "longestStreak": 140,
+      "readToday": true,
+      "genreDistribution": [
+        {
+          "genre": "mystery",
+          "count": 3
+        },
+        {
+          "genre": "business",
+          "count": 10
+        },
+        {
+          "genre": "novel",
+          "count": 3
+        }
+      ],
+      "weeklyPages": [
+        53,
+        11,
+        50,
+        13,
+        0,
+        83,
+        25
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 24,
+      "completed": 10
+    },
+    "favoriteGenres": [
+      "mystery",
+      "business",
+      "novel"
+    ],
+    "favoriteAuthorIds": [
+      "au_24",
+      "au_43",
+      "au_27"
+    ],
+    "walletBalance": 37.52,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_9",
+    "username": "sebine",
+    "name": "Səbinə Vəliyeva",
+    "email": "sebine@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Uşaq ədəbiyyatı müəllimiyəm. Klassikaları yenidən oxuyuram.",
+    "role": "user",
+    "createdAt": "2024-08-13T18:31:07.038Z",
+    "followersCount": 509,
+    "followingCount": 41,
+    "isFollowing": true,
+    "stats": {
+      "booksRead": 50,
+      "pagesRead": 9300,
+      "reviewsCount": 32,
+      "quotesCount": 47,
+      "streakDays": 27,
+      "longestStreak": 116,
+      "readToday": true,
+      "genreDistribution": [
+        {
+          "genre": "classic",
+          "count": 16
+        },
+        {
+          "genre": "poetry",
+          "count": 20
+        },
+        {
+          "genre": "novel",
+          "count": 22
+        },
+        {
+          "genre": "psychology",
+          "count": 10
+        }
+      ],
+      "weeklyPages": [
+        70,
+        23,
+        32,
+        87,
+        65,
+        17,
+        15
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 20,
+      "completed": 8
+    },
+    "favoriteGenres": [
+      "classic",
+      "poetry",
+      "novel",
+      "psychology"
+    ],
+    "favoriteAuthorIds": [
+      "au_25",
+      "au_30"
+    ],
+    "walletBalance": 40.91,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_10",
+    "username": "orxan",
+    "name": "Orxan Rzayev",
+    "email": "orxan@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Fəlsəfə, Dostoyevski, uzun gecələr.",
+    "role": "user",
+    "createdAt": "2023-06-23T18:31:07.038Z",
+    "followersCount": 1104,
+    "followingCount": 126,
+    "isFollowing": false,
+    "stats": {
+      "booksRead": 37,
+      "pagesRead": 9102,
+      "reviewsCount": 36,
+      "quotesCount": 60,
+      "streakDays": 89,
+      "longestStreak": 98,
+      "readToday": false,
+      "genreDistribution": [
+        {
+          "genre": "selfHelp",
+          "count": 14
+        },
+        {
+          "genre": "poetry",
+          "count": 17
+        }
+      ],
+      "weeklyPages": [
+        0,
+        39,
+        80,
+        0,
+        56,
+        78,
+        0
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 36,
+      "completed": 19
+    },
+    "favoriteGenres": [
+      "selfHelp",
+      "poetry"
+    ],
+    "favoriteAuthorIds": [
+      "au_4",
+      "au_28",
+      "au_7"
+    ],
+    "walletBalance": 14.14,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_11",
+    "username": "leman",
+    "name": "Ləman Abbasova",
+    "email": "leman@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Şeir yazıram, roman oxuyuram.",
+    "role": "user",
+    "createdAt": "2024-12-07T18:31:07.038Z",
+    "followersCount": 625,
+    "followingCount": 231,
+    "isFollowing": false,
+    "stats": {
+      "booksRead": 67,
+      "pagesRead": 25929,
+      "reviewsCount": 36,
+      "quotesCount": 48,
+      "streakDays": 74,
+      "longestStreak": 105,
+      "readToday": true,
+      "genreDistribution": [
+        {
+          "genre": "business",
+          "count": 8
+        },
+        {
+          "genre": "philosophy",
+          "count": 23
+        },
+        {
+          "genre": "novel",
+          "count": 15
+        },
+        {
+          "genre": "poetry",
+          "count": 24
+        }
+      ],
+      "weeklyPages": [
+        9,
+        0,
+        40,
+        0,
+        0,
+        92,
+        43
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 36,
+      "completed": 3
+    },
+    "favoriteGenres": [
+      "business",
+      "philosophy",
+      "novel",
+      "poetry"
+    ],
+    "favoriteAuthorIds": [
+      "au_22",
+      "au_22"
+    ],
+    "walletBalance": 58.32,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_12",
+    "username": "ferid",
+    "name": "Fərid Musayev",
+    "email": "ferid@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Detektiv janrının fanatı. Agatha Christie kolleksiyaçısı.",
+    "role": "user",
+    "createdAt": "2026-05-08T18:31:07.038Z",
+    "followersCount": 442,
+    "followingCount": 47,
+    "isFollowing": false,
+    "stats": {
+      "booksRead": 95,
+      "pagesRead": 34770,
+      "reviewsCount": 15,
+      "quotesCount": 48,
+      "streakDays": 14,
+      "longestStreak": 65,
+      "readToday": true,
+      "genreDistribution": [
+        {
+          "genre": "scifi",
+          "count": 45
+        },
+        {
+          "genre": "classic",
+          "count": 14
+        },
+        {
+          "genre": "philosophy",
+          "count": 20
+        },
+        {
+          "genre": "science",
+          "count": 10
+        }
+      ],
+      "weeklyPages": [
+        45,
+        80,
+        53,
+        63,
+        41,
+        50,
+        61
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 36,
+      "completed": 15
+    },
+    "favoriteGenres": [
+      "scifi",
+      "classic",
+      "philosophy",
+      "science"
+    ],
+    "favoriteAuthorIds": [
+      "au_30",
+      "au_16"
+    ],
+    "walletBalance": 19.57,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_13",
+    "username": "aynur",
+    "name": "Aynur Hüseynova",
+    "email": "aynur@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Türk ədəbiyyatı və Sabahattin Ali.",
+    "role": "user",
+    "createdAt": "2026-04-27T18:31:07.038Z",
+    "followersCount": 1258,
+    "followingCount": 250,
+    "isFollowing": true,
+    "stats": {
+      "booksRead": 41,
+      "pagesRead": 14924,
+      "reviewsCount": 15,
+      "quotesCount": 65,
+      "streakDays": 121,
+      "longestStreak": 169,
+      "readToday": false,
+      "genreDistribution": [
+        {
+          "genre": "business",
+          "count": 5
+        },
+        {
+          "genre": "science",
+          "count": 9
+        },
+        {
+          "genre": "selfHelp",
+          "count": 9
+        },
+        {
+          "genre": "philosophy",
+          "count": 4
+        }
+      ],
+      "weeklyPages": [
+        63,
+        0,
+        31,
+        15,
+        45,
+        0,
+        70
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 36,
+      "completed": 24
+    },
+    "favoriteGenres": [
+      "business",
+      "science",
+      "selfHelp",
+      "philosophy"
+    ],
+    "favoriteAuthorIds": [
+      "au_15"
+    ],
+    "walletBalance": 58.01,
+    "twoFactorEnabled": false
+  },
+  {
+    "id": "u_14",
+    "username": "vuqar",
+    "name": "Vüqar Salmanov",
+    "email": "vuqar@kitabdostu.az",
+    "avatarUrl": null,
+    "bio": "Elm, kosmos, Hawking.",
+    "role": "user",
+    "createdAt": "2023-08-12T18:31:07.038Z",
+    "followersCount": 259,
+    "followingCount": 140,
+    "isFollowing": true,
+    "stats": {
+      "booksRead": 63,
+      "pagesRead": 21357,
+      "reviewsCount": 26,
+      "quotesCount": 49,
+      "streakDays": 116,
+      "longestStreak": 173,
+      "readToday": true,
+      "genreDistribution": [
+        {
+          "genre": "biography",
+          "count": 22
+        },
+        {
+          "genre": "novel",
+          "count": 27
+        },
+        {
+          "genre": "scifi",
+          "count": 12
+        }
+      ],
+      "weeklyPages": [
+        70,
+        92,
+        19,
+        15,
+        90,
+        0,
+        47
+      ]
+    },
+    "goal": {
+      "year": 2026,
+      "target": 24,
+      "completed": 8
+    },
+    "favoriteGenres": [
+      "biography",
+      "novel",
+      "scifi"
+    ],
+    "favoriteAuthorIds": [
+      "au_10",
+      "au_5"
+    ],
+    "walletBalance": 27.84,
+    "twoFactorEnabled": false
+  }
+]

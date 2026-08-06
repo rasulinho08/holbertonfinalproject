@@ -1,0 +1,60 @@
+{
+  "expo": {
+    "name": "KitabDostu",
+    "slug": "kitabdostu",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "kitabdostu",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#12100E"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "az.kitabdostu.app"
+    },
+    "android": {
+      "package": "az.kitabdostu.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#12100E"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/images/favicon.png",
+      "name": "KitabDostu",
+      "shortName": "KitabDostu",
+      "themeColor": "#C2410C",
+      "backgroundColor": "#12100E",
+      "display": "standalone",
+      "lang": "az"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "KitabDostu sitatları kitab şəkillərindən çıxarmaq üçün qalereyaya giriş istəyir.",
+          "cameraPermission": "KitabDostu sitat çəkmək üçün kameraya giriş istəyir."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  }
+}

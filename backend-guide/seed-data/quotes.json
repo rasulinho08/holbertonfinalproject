@@ -1,0 +1,600 @@
+[
+  {
+    "id": "q_11",
+    "bookId": "b_13",
+    "book": {
+      "id": "b_13",
+      "title": "Leyli və Məcnun",
+      "authorName": "Məhəmməd Füzuli",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "text": "Hər gecənin bir səhəri var, amma hər səhər eyni adamı oyatmır.",
+    "page": 126,
+    "background": "ink",
+    "likesCount": 1422,
+    "commentsCount": 63,
+    "isLiked": false,
+    "createdAt": "2026-08-06T18:31:07.038Z"
+  },
+  {
+    "id": "q_26",
+    "bookId": "b_2",
+    "book": {
+      "id": "b_2",
+      "title": "Beşmərtəbəli evin altıncı mərtəbəsi",
+      "authorName": "Anar",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "text": "Sabahı düşünməyən adam bu günü də tam yaşaya bilmir.",
+    "page": 167,
+    "background": "ember",
+    "likesCount": 1494,
+    "commentsCount": 20,
+    "isLiked": false,
+    "createdAt": "2026-07-30T18:31:07.038Z"
+  },
+  {
+    "id": "q_22",
+    "bookId": "b_32",
+    "book": {
+      "id": "b_32",
+      "title": "Fahrenheit 451",
+      "authorName": "Ray Bradbury",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "text": "Yaddaş — insanın özü ilə apardığı yeganə vətəndir.",
+    "page": 39,
+    "background": "rose",
+    "likesCount": 1310,
+    "commentsCount": 13,
+    "isLiked": true,
+    "createdAt": "2026-07-28T18:31:07.038Z"
+  },
+  {
+    "id": "q_1",
+    "bookId": "b_1",
+    "book": {
+      "id": "b_1",
+      "title": "Əli və Nino",
+      "authorName": "Qurban Səid",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "text": "İnsan yalnız ürəyi ilə yaxşı görür. Əsas olan gözlə görünməzdir.",
+    "page": 170,
+    "background": "paper",
+    "likesCount": 1764,
+    "commentsCount": 22,
+    "isLiked": true,
+    "createdAt": "2026-07-22T18:31:07.038Z"
+  },
+  {
+    "id": "q_13",
+    "bookId": "b_27",
+    "book": {
+      "id": "b_27",
+      "title": "Kiçik Şahzadə",
+      "authorName": "Antoine de Saint-Exupéry",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "text": "Yol getdiyin qədər uzundur, dayandığın yerdə isə bitir.",
+    "page": 46,
+    "background": "plum",
+    "likesCount": 1486,
+    "commentsCount": 1,
+    "isLiked": false,
+    "createdAt": "2026-07-13T18:31:07.038Z"
+  },
+  {
+    "id": "q_4",
+    "bookId": "b_22",
+    "book": {
+      "id": "b_22",
+      "title": "Heyvanıstan",
+      "authorName": "George Orwell",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "text": "Kitablar dostların ən sakitidir; onlar heç vaxt üzünü çevirmir.",
+    "page": 34,
+    "background": "sea",
+    "likesCount": 189,
+    "commentsCount": 8,
+    "isLiked": false,
+    "createdAt": "2026-07-09T18:31:07.038Z"
+  },
+  {
+    "id": "q_23",
+    "bookId": "b_39",
+    "book": {
+      "id": "b_39",
+      "title": "Şərq ekspresində qətl",
+      "authorName": "Agatha Christie",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_11",
+      "username": "leman",
+      "name": "Ləman Abbasova",
+      "avatarUrl": null
+    },
+    "text": "Bir sözün ağırlığını ancaq onu deməyi bacarmayan bilir.",
+    "page": 224,
+    "background": "moss",
+    "likesCount": 339,
+    "commentsCount": 61,
+    "isLiked": false,
+    "createdAt": "2026-07-06T18:31:07.038Z"
+  },
+  {
+    "id": "q_9",
+    "bookId": "b_57",
+    "book": {
+      "id": "b_57",
+      "title": "Kainatın qısa tarixi",
+      "authorName": "Stephen Hawking",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_11",
+      "username": "leman",
+      "name": "Ləman Abbasova",
+      "avatarUrl": null
+    },
+    "text": "Xoşbəxtlik — arzuladığını almaq deyil, sahib olduğunu qiymətləndirməkdir.",
+    "page": 159,
+    "background": "paper",
+    "likesCount": 683,
+    "commentsCount": 0,
+    "isLiked": false,
+    "createdAt": "2026-07-04T18:31:07.038Z"
+  },
+  {
+    "id": "q_8",
+    "bookId": "b_50",
+    "book": {
+      "id": "b_50",
+      "title": "Homo Deus: Sabahın qısa tarixi",
+      "authorName": "Yuval Noah Harari",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "text": "Vaxt heç nəyi sağaltmır; sadəcə yaddaşı yumşaldır.",
+    "page": 12,
+    "background": "dusk",
+    "likesCount": 496,
+    "commentsCount": 40,
+    "isLiked": true,
+    "createdAt": "2026-06-29T18:31:07.038Z"
+  },
+  {
+    "id": "q_2",
+    "bookId": "b_8",
+    "book": {
+      "id": "b_8",
+      "title": "Daş yuxular",
+      "authorName": "Əkrəm Əylisli",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "text": "Kim keçmişi idarə edirsə, gələcəyi də idarə edir; kim indini idarə edirsə, keçmişi idarə edir.",
+    "page": 20,
+    "background": "ember",
+    "likesCount": 1206,
+    "commentsCount": 54,
+    "isLiked": true,
+    "createdAt": "2026-06-19T18:31:07.038Z"
+  },
+  {
+    "id": "q_25",
+    "bookId": "b_53",
+    "book": {
+      "id": "b_53",
+      "title": "İnsanın mənası axtarışı",
+      "authorName": "Viktor Frankl",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "text": "Dünyanı dəyişən böyük ideyalar həmişə kiçik otaqlarda doğulub.",
+    "page": 54,
+    "background": "paper",
+    "likesCount": 1800,
+    "commentsCount": 47,
+    "isLiked": false,
+    "createdAt": "2026-06-10T18:31:07.038Z"
+  },
+  {
+    "id": "q_19",
+    "bookId": "b_11",
+    "book": {
+      "id": "b_11",
+      "title": "Kitabi-Dədə Qorqud",
+      "authorName": "Xalq dastanı",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_13",
+      "username": "aynur",
+      "name": "Aynur Hüseynova",
+      "avatarUrl": null
+    },
+    "text": "Həyat geriyə baxaraq anlaşılır, amma irəli baxaraq yaşanılır.",
+    "page": 17,
+    "background": "ink",
+    "likesCount": 1437,
+    "commentsCount": 18,
+    "isLiked": false,
+    "createdAt": "2026-06-06T18:31:07.038Z"
+  },
+  {
+    "id": "q_15",
+    "bookId": "b_41",
+    "book": {
+      "id": "b_41",
+      "title": "Kafka sahildə",
+      "authorName": "Haruki Murakami",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "text": "Cəsarət qorxunun olmaması deyil, qorxuya baxmayaraq addım atmaqdır.",
+    "page": 63,
+    "background": "moss",
+    "likesCount": 1042,
+    "commentsCount": 42,
+    "isLiked": false,
+    "createdAt": "2026-06-05T18:31:07.038Z"
+  },
+  {
+    "id": "q_24",
+    "bookId": "b_46",
+    "book": {
+      "id": "b_46",
+      "title": "Benim Adım Kırmızı",
+      "authorName": "Orhan Pamuk",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "text": "Oxumaq ruhun idmanıdır; ondan imtina edən yavaş-yavaş kiçilir.",
+    "page": 15,
+    "background": "dusk",
+    "likesCount": 1740,
+    "commentsCount": 44,
+    "isLiked": false,
+    "createdAt": "2026-06-03T18:31:07.038Z"
+  },
+  {
+    "id": "q_16",
+    "bookId": "b_48",
+    "book": {
+      "id": "b_48",
+      "title": "Serenad",
+      "authorName": "Zülfü Livaneli",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "text": "İnsanın ən böyük düşməni öz vərdişləridir.",
+    "page": 29,
+    "background": "dusk",
+    "likesCount": 696,
+    "commentsCount": 7,
+    "isLiked": false,
+    "createdAt": "2026-06-02T18:31:07.038Z"
+  },
+  {
+    "id": "q_18",
+    "bookId": "b_4",
+    "book": {
+      "id": "b_4",
+      "title": "Mahmud və Məryəm",
+      "authorName": "Elçin",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "text": "Balaca işləri böyük sevgi ilə görmək lazımdır.",
+    "page": 26,
+    "background": "ember",
+    "likesCount": 1204,
+    "commentsCount": 44,
+    "isLiked": false,
+    "createdAt": "2026-05-28T18:31:07.038Z"
+  },
+  {
+    "id": "q_12",
+    "bookId": "b_20",
+    "book": {
+      "id": "b_20",
+      "title": "Böyük dayaq",
+      "authorName": "Mirzə İbrahimov",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "text": "Susmaq bəzən ən uca səslə deyilən cümlədir.",
+    "page": 88,
+    "background": "sea",
+    "likesCount": 1320,
+    "commentsCount": 12,
+    "isLiked": false,
+    "createdAt": "2026-05-25T18:31:07.038Z"
+  },
+  {
+    "id": "q_5",
+    "bookId": "b_29",
+    "book": {
+      "id": "b_29",
+      "title": "Yüz ilin tənhalığı",
+      "authorName": "Gabriel García Márquez",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_13",
+      "username": "aynur",
+      "name": "Aynur Hüseynova",
+      "avatarUrl": null
+    },
+    "text": "Bir insanı tanımaq istəyirsənsə, oxuduğu kitablara bax.",
+    "page": 305,
+    "background": "plum",
+    "likesCount": 1297,
+    "commentsCount": 50,
+    "isLiked": false,
+    "createdAt": "2026-05-21T18:31:07.038Z"
+  },
+  {
+    "id": "q_7",
+    "bookId": "b_43",
+    "book": {
+      "id": "b_43",
+      "title": "Simyaçı",
+      "authorName": "Paulo Coelho",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_5",
+      "username": "aysel",
+      "name": "Aysel Kərimli",
+      "avatarUrl": null
+    },
+    "text": "Sevgi baxışlarla başlayır, sözlə davam edir, susmaqla yaşayır.",
+    "page": 37,
+    "background": "moss",
+    "likesCount": 650,
+    "commentsCount": 57,
+    "isLiked": false,
+    "createdAt": "2026-05-20T18:31:07.038Z"
+  },
+  {
+    "id": "q_21",
+    "bookId": "b_25",
+    "book": {
+      "id": "b_25",
+      "title": "Anna Karenina",
+      "authorName": "Lev Tolstoy",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_5",
+      "username": "aysel",
+      "name": "Aysel Kərimli",
+      "avatarUrl": null
+    },
+    "text": "Ümid — yuxusuz gecələrin yeganə yoldaşıdır.",
+    "page": 133,
+    "background": "plum",
+    "likesCount": 232,
+    "commentsCount": 59,
+    "isLiked": false,
+    "createdAt": "2026-05-01T18:31:07.038Z"
+  },
+  {
+    "id": "q_20",
+    "bookId": "b_18",
+    "book": {
+      "id": "b_18",
+      "title": "Şeyx Sənan",
+      "authorName": "Hüseyn Cavid",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_2",
+      "username": "reshad",
+      "name": "Rəşad Quliyev",
+      "avatarUrl": null
+    },
+    "text": "Nə qədər az şeyə ehtiyacın varsa, o qədər azadsan.",
+    "page": 83,
+    "background": "sea",
+    "likesCount": 505,
+    "commentsCount": 23,
+    "isLiked": false,
+    "createdAt": "2026-04-27T18:31:07.038Z"
+  },
+  {
+    "id": "q_6",
+    "bookId": "b_36",
+    "book": {
+      "id": "b_36",
+      "title": "Harri Potter və Fəlsəfə Daşı",
+      "authorName": "J. K. Rowling",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_2",
+      "username": "reshad",
+      "name": "Rəşad Quliyev",
+      "avatarUrl": null
+    },
+    "text": "Ən uzun yol da ilk addımla başlayır, ən qalın kitab da ilk səhifə ilə.",
+    "page": 148,
+    "background": "rose",
+    "likesCount": 479,
+    "commentsCount": 31,
+    "isLiked": false,
+    "createdAt": "2026-04-18T18:31:07.038Z"
+  },
+  {
+    "id": "q_10",
+    "bookId": "b_6",
+    "book": {
+      "id": "b_6",
+      "title": "Yarımçıq əlyazma",
+      "authorName": "Kamal Abdulla",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "text": "Qorxu ağlın ən yaxşı müəllimidir, amma ən pis məsləhətçisidir.",
+    "page": 23,
+    "background": "ember",
+    "likesCount": 1235,
+    "commentsCount": 20,
+    "isLiked": false,
+    "createdAt": "2026-04-15T18:31:07.038Z"
+  },
+  {
+    "id": "q_3",
+    "bookId": "b_15",
+    "book": {
+      "id": "b_15",
+      "title": "Ölülər",
+      "authorName": "Cəlil Məmmədquluzadə",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "text": "Hər kəs dünyanı dəyişdirmək istəyir, amma heç kim özünü dəyişdirmək istəmir.",
+    "page": 113,
+    "background": "ink",
+    "likesCount": 1252,
+    "commentsCount": 29,
+    "isLiked": false,
+    "createdAt": "2026-04-10T18:31:07.038Z"
+  },
+  {
+    "id": "q_17",
+    "bookId": "b_55",
+    "book": {
+      "id": "b_55",
+      "title": "Yaxşıdan əlaya",
+      "authorName": "Jim Collins",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "text": "Doğru sual tapmaq, düzgün cavabdan qat-qat çətindir.",
+    "page": 57,
+    "background": "paper",
+    "likesCount": 941,
+    "commentsCount": 18,
+    "isLiked": false,
+    "createdAt": "2026-04-10T18:31:07.038Z"
+  },
+  {
+    "id": "q_14",
+    "bookId": "b_34",
+    "book": {
+      "id": "b_34",
+      "title": "Üzüklərin Hökmdarı: Üzük Qardaşlığı",
+      "authorName": "J. R. R. Tolkien",
+      "coverUrl": null
+    },
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "text": "Kitab oxumaq başqasının ağlı ilə düşünməkdir; düşünmək isə öz ağlınla oxumaqdır.",
+    "page": 173,
+    "background": "rose",
+    "likesCount": 1091,
+    "commentsCount": 61,
+    "isLiked": false,
+    "createdAt": "2026-04-08T18:31:07.038Z"
+  }
+]

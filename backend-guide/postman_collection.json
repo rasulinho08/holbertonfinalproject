@@ -1,0 +1,474 @@
+{
+  "info": {
+    "name": "KitabDostu API",
+    "description": "Request collection for the KitabDostu backend.\n\nSet the `baseUrl` variable, then run **Auth → Login**: the test script stores `accessToken` and `refreshToken` automatically, so every other request is authenticated.\n\nSee ENDPOINTS.md for the full contract.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000/api/v1" },
+    { "key": "accessToken", "value": "" },
+    { "key": "refreshToken", "value": "" },
+    { "key": "bookId", "value": "b_1" },
+    { "key": "username", "value": "leyla" },
+    { "key": "shelfId", "value": "" },
+    { "key": "quoteId", "value": "" },
+    { "key": "reviewId", "value": "" },
+    { "key": "orderId", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+  },
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Shared assertions for every request in the collection.",
+          "pm.test('responds within 2s', () => pm.expect(pm.response.responseTime).to.be.below(2000));",
+          "if (pm.response.code < 300 && pm.response.code !== 204) {",
+          "  pm.test('wraps the payload in { data }', () => {",
+          "    pm.expect(pm.response.json()).to.have.property('data');",
+          "  });",
+          "}",
+          "if (pm.response.code >= 400) {",
+          "  pm.test('uses the error envelope', () => {",
+          "    const body = pm.response.json();",
+          "    pm.expect(body).to.have.property('error');",
+          "    pm.expect(body.error).to.have.property('code');",
+          "  });",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test İstifadəçi\",\n  \"username\": \"test_user\",\n  \"email\": \"test@kitabdostu.az\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const { data } = pm.response.json();",
+                  "pm.collectionVariables.set('accessToken', data.accessToken);",
+                  "pm.collectionVariables.set('refreshToken', data.refreshToken);",
+                  "pm.test('returns a user', () => pm.expect(data.user).to.have.property('id'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"leyla@kitabdostu.az\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Me",
+          "request": { "method": "GET", "url": "{{baseUrl}}/auth/me" }
+        },
+        {
+          "name": "Refresh",
+          "request": {
+            "method": "POST",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/refresh",
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}" }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": { "method": "POST", "url": "{{baseUrl}}/auth/logout" }
+        }
+      ]
+    },
+    {
+      "name": "Books",
+      "item": [
+        {
+          "name": "Search (diacritic-insensitive)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books?q=eli&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["books"],
+              "query": [
+                { "key": "q", "value": "eli", "description": "should match 'Əli və Nino'" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by genre + language + rating",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books?genres=novel&genres=classic&languages=az&minRating=8&sort=rating",
+              "host": ["{{baseUrl}}"],
+              "path": ["books"],
+              "query": [
+                { "key": "genres", "value": "novel" },
+                { "key": "genres", "value": "classic" },
+                { "key": "languages", "value": "az" },
+                { "key": "minRating", "value": "8" },
+                { "key": "sort", "value": "rating" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Typo suggestion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const { data, meta } = pm.response.json();",
+                  "pm.test('no results', () => pm.expect(data).to.have.lengthOf(0));",
+                  "pm.test('offers a suggestion', () => pm.expect(meta).to.have.property('suggestion'));"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/books?q=dostoyefski" }
+        },
+        {
+          "name": "Book detail",
+          "request": { "method": "GET", "url": "{{baseUrl}}/books/{{bookId}}" }
+        },
+        { "name": "Similar books", "request": { "method": "GET", "url": "{{baseUrl}}/books/{{bookId}}/similar" } },
+        { "name": "Trending", "request": { "method": "GET", "url": "{{baseUrl}}/books/trending" } },
+        { "name": "Recommendations", "request": { "method": "GET", "url": "{{baseUrl}}/books/recommendations" } },
+        { "name": "Genres", "request": { "method": "GET", "url": "{{baseUrl}}/genres" } },
+        { "name": "Search suggest", "request": { "method": "GET", "url": "{{baseUrl}}/search/suggest?q=nino" } }
+      ]
+    },
+    {
+      "name": "Shelves",
+      "item": [
+        {
+          "name": "My shelves",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const { data } = pm.response.json();",
+                  "pm.test('has 4 default shelves', () => {",
+                  "  pm.expect(data.filter(s => s.isDefault)).to.have.lengthOf(4);",
+                  "});",
+                  "const reading = data.find(s => s.status === 'reading');",
+                  "if (reading) pm.collectionVariables.set('shelfId', reading.id);"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/shelves" }
+        },
+        {
+          "name": "Add book to shelf (User Flow 1)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/books/{{bookId}}/shelf",
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"reading\",\n  \"progressPage\": 42\n}" }
+          }
+        },
+        {
+          "name": "Update reading progress",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/books/{{bookId}}/progress",
+            "body": { "mode": "raw", "raw": "{\n  \"page\": 128\n}" }
+          }
+        },
+        { "name": "Books on a shelf", "request": { "method": "GET", "url": "{{baseUrl}}/shelves/{{shelfId}}/books" } },
+        {
+          "name": "Create custom shelf",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/shelves",
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Klassiklər\"\n}" }
+          }
+        },
+        {
+          "name": "Remove from shelf",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/books/{{bookId}}/shelf" }
+        }
+      ]
+    },
+    {
+      "name": "Social",
+      "item": [
+        {
+          "name": "Post a review",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 300) {",
+                  "  pm.collectionVariables.set('reviewId', pm.response.json().data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookId\": \"{{bookId}}\",\n  \"rating\": 9,\n  \"body\": \"Uzun müddətdir belə təsirli bir kitab oxumamışdım.\",\n  \"isSpoiler\": false\n}"
+            }
+          }
+        },
+        { "name": "Book reviews", "request": { "method": "GET", "url": "{{baseUrl}}/books/{{bookId}}/reviews" } },
+        { "name": "Like a review", "request": { "method": "POST", "url": "{{baseUrl}}/reviews/{{reviewId}}/like" } },
+        {
+          "name": "Share a quote",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 300) {",
+                  "  pm.collectionVariables.set('quoteId', pm.response.json().data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/quotes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookId\": \"{{bookId}}\",\n  \"text\": \"İnsan yalnız ürəyi ilə yaxşı görür.\",\n  \"page\": 112,\n  \"background\": \"ember\"\n}"
+            }
+          }
+        },
+        { "name": "Quote feed", "request": { "method": "GET", "url": "{{baseUrl}}/quotes?sort=newest" } },
+        { "name": "Like a quote", "request": { "method": "POST", "url": "{{baseUrl}}/quotes/{{quoteId}}/like" } },
+        {
+          "name": "Comment on a quote",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/quotes/{{quoteId}}/comments",
+            "body": { "mode": "raw", "raw": "{\n  \"body\": \"Çox doğru deyilib.\"\n}" }
+          }
+        },
+        { "name": "Profile", "request": { "method": "GET", "url": "{{baseUrl}}/users/{{username}}" } },
+        { "name": "Friends feed", "request": { "method": "GET", "url": "{{baseUrl}}/feed" } }
+      ]
+    },
+    {
+      "name": "Commerce",
+      "item": [
+        {
+          "name": "Add to cart",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/cart/items",
+            "body": { "mode": "raw", "raw": "{\n  \"bookId\": \"{{bookId}}\",\n  \"quantity\": 1\n}" }
+          }
+        },
+        {
+          "name": "Get cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const { data } = pm.response.json();",
+                  "pm.test('grouped by publisher', () => pm.expect(data.groups).to.be.an('array'));",
+                  "pm.test('total = subtotal + delivery - discount', () => {",
+                  "  const expected = +(data.subtotal + data.deliveryTotal - data.discount).toFixed(2);",
+                  "  pm.expect(data.total).to.eql(expected);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/cart" }
+        },
+        {
+          "name": "Redeem gift card",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/gift-cards/redeem",
+            "body": { "mode": "raw", "raw": "{\n  \"code\": \"KITAB10\"\n}" }
+          }
+        },
+        {
+          "name": "Checkout (User Flow 2)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const { data } = pm.response.json();",
+                  "pm.test('returns an array of orders', () => pm.expect(data).to.be.an('array'));",
+                  "pm.test('one order per publisher', () => {",
+                  "  const publishers = new Set(data.map(o => o.publisherId));",
+                  "  pm.expect(publishers.size).to.eql(data.length);",
+                  "});",
+                  "if (data[0]) pm.collectionVariables.set('orderId', data[0].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "url": "{{baseUrl}}/orders",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": {\n    \"fullName\": \"Leyla Məmmədova\",\n    \"phone\": \"+994501234567\",\n    \"city\": \"Bakı\",\n    \"line\": \"Nizami küç. 12, mənzil 5\",\n    \"note\": \"Zəng edin\"\n  },\n  \"deliveryMethod\": \"courier\",\n  \"paymentMethod\": \"cod\"\n}"
+            }
+          }
+        },
+        { "name": "My orders", "request": { "method": "GET", "url": "{{baseUrl}}/orders" } },
+        { "name": "Order detail", "request": { "method": "GET", "url": "{{baseUrl}}/orders/{{orderId}}" } },
+        { "name": "Receipt", "request": { "method": "GET", "url": "{{baseUrl}}/orders/{{orderId}}/receipt" } },
+        { "name": "Cancel order", "request": { "method": "POST", "url": "{{baseUrl}}/orders/{{orderId}}/cancel" } },
+        { "name": "Wallet", "request": { "method": "GET", "url": "{{baseUrl}}/wallet" } }
+      ]
+    },
+    {
+      "name": "Engagement",
+      "item": [
+        { "name": "Badges", "request": { "method": "GET", "url": "{{baseUrl}}/badges" } },
+        { "name": "Leaderboard (weekly, books)", "request": { "method": "GET", "url": "{{baseUrl}}/leaderboard?period=weekly&metric=books" } },
+        { "name": "Leaderboard (monthly, pages)", "request": { "method": "GET", "url": "{{baseUrl}}/leaderboard?period=monthly&metric=pages" } },
+        { "name": "Streak", "request": { "method": "GET", "url": "{{baseUrl}}/streak" } },
+        { "name": "Streak check-in", "request": { "method": "POST", "url": "{{baseUrl}}/streak/check-in" } },
+        { "name": "Notifications", "request": { "method": "GET", "url": "{{baseUrl}}/notifications" } },
+        { "name": "Mark all read", "request": { "method": "POST", "url": "{{baseUrl}}/notifications/read-all" } },
+        { "name": "Buddy reads", "request": { "method": "GET", "url": "{{baseUrl}}/buddy-reads" } }
+      ]
+    },
+    {
+      "name": "Publisher",
+      "item": [
+        { "name": "Stats", "request": { "method": "GET", "url": "{{baseUrl}}/publisher/stats" } },
+        { "name": "My books", "request": { "method": "GET", "url": "{{baseUrl}}/publisher/books" } },
+        {
+          "name": "Add a book",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/publisher/books",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Yeni Kitab\",\n  \"authorName\": \"Test Müəllif\",\n  \"isbn\": \"9789952999999\",\n  \"language\": \"az\",\n  \"genres\": [\"novel\"],\n  \"description\": \"Test təsviri.\",\n  \"pageCount\": 240,\n  \"publishedYear\": 2026,\n  \"price\": 16.9,\n  \"stock\": 50\n}"
+            }
+          }
+        },
+        { "name": "Publisher orders", "request": { "method": "GET", "url": "{{baseUrl}}/publisher/orders" } },
+        {
+          "name": "Advance order status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/publisher/orders/{{orderId}}/status",
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"shipped\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        { "name": "Stats", "request": { "method": "GET", "url": "{{baseUrl}}/admin/stats" } },
+        { "name": "Open reports", "request": { "method": "GET", "url": "{{baseUrl}}/admin/reports?status=open" } },
+        {
+          "name": "Resolve a report (remove)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/admin/reports/rp_1",
+            "body": { "mode": "raw", "raw": "{\n  \"action\": \"remove\"\n}" }
+          }
+        },
+        {
+          "name": "Report content",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/reports",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetType\": \"review\",\n  \"targetId\": \"{{reviewId}}\",\n  \"reason\": \"spoiler\",\n  \"note\": \"Finalı açıq yazıb.\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Media",
+      "item": [
+        {
+          "name": "OCR extract",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/ocr/extract",
+            "body": { "mode": "raw", "raw": "{\n  \"imageUri\": \"https://cdn.kitabdostu.az/uploads/sample-page.jpg\"\n}" }
+          }
+        },
+        {
+          "name": "Upload an image",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/uploads",
+            "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": [] }] }
+          }
+        }
+      ]
+    }
+  ]
+}

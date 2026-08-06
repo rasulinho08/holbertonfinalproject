@@ -1,0 +1,83 @@
+[
+  {
+    "id": "br_1",
+    "name": "Dostoyevski birlikdə",
+    "bookId": "b_23",
+    "book": {
+      "id": "b_23",
+      "title": "Cinayət və cəza",
+      "authorName": "Fyodor Dostoyevski",
+      "coverUrl": null,
+      "pageCount": 576
+    },
+    "ownerId": "u_1",
+    "members": [
+      {
+        "user": {
+          "id": "u_1",
+          "username": "leyla",
+          "name": "Leyla Məmmədova",
+          "avatarUrl": null
+        },
+        "progressPage": 184
+      },
+      {
+        "user": {
+          "id": "u_10",
+          "username": "orxan",
+          "name": "Orxan Rzayev",
+          "avatarUrl": null
+        },
+        "progressPage": 240
+      },
+      {
+        "user": {
+          "id": "u_3",
+          "username": "nigar",
+          "name": "Nigar Əliyeva",
+          "avatarUrl": null
+        },
+        "progressPage": 96
+      }
+    ],
+    "targetDate": "2026-08-27T18:31:07.038Z",
+    "messagesCount": 4,
+    "createdAt": "2026-07-25T18:31:07.038Z"
+  },
+  {
+    "id": "br_2",
+    "name": "Yay klassikləri",
+    "bookId": "b_1",
+    "book": {
+      "id": "b_1",
+      "title": "Əli və Nino",
+      "authorName": "Qurban Səid",
+      "coverUrl": null,
+      "pageCount": 288
+    },
+    "ownerId": "u_7",
+    "members": [
+      {
+        "user": {
+          "id": "u_7",
+          "username": "gunel",
+          "name": "Günel Səfərova",
+          "avatarUrl": null
+        },
+        "progressPage": 120
+      },
+      {
+        "user": {
+          "id": "u_5",
+          "username": "aysel",
+          "name": "Aysel Kərimli",
+          "avatarUrl": null
+        },
+        "progressPage": 88
+      }
+    ],
+    "targetDate": "2026-09-15T18:31:07.038Z",
+    "messagesCount": 2,
+    "createdAt": "2026-08-01T18:31:07.038Z"
+  }
+]

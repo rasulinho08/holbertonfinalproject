@@ -1,0 +1,2553 @@
+openapi: 3.1.0
+
+info:
+  title: KitabDostu API
+  version: 1.0.0
+  description: |
+    REST API for KitabDostu / Reader — Azerbaijan's social network and
+    marketplace for book lovers.
+
+    Every successful response is wrapped in `{ "data": … }`; list responses add
+    `"meta"`. Errors use `{ "error": { code, message, fields? } }`.
+    See `CONVENTIONS.md` for the full contract.
+
+    The React Native client in this repository already calls every path below.
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:4000/api/v1
+    description: Local development
+  - url: https://api.kitabdostu.az/api/v1
+    description: Production
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Auth
+  - name: Users
+  - name: Books
+  - name: Shelves
+  - name: Reviews
+  - name: Quotes
+  - name: Buddy reads
+  - name: Cart
+  - name: Orders
+  - name: Payments
+  - name: Gamification
+  - name: Notifications
+  - name: Publisher
+  - name: Admin
+  - name: Media
+
+# ---------------------------------------------------------------------------
+
+paths:
+  /health:
+    get:
+      tags: [Auth]
+      summary: Liveness probe
+      security: []
+      responses:
+        '200': { description: OK }
+
+  # ----------------------------- auth --------------------------------------
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Create an account
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, username, email, password]
+              properties:
+                name: { type: string, example: Leyla Məmmədova }
+                username: { type: string, pattern: '^[a-z0-9_]{3,20}$', example: leyla }
+                email: { type: string, format: email }
+                password: { type: string, minLength: 8 }
+      responses:
+        '201': { $ref: '#/components/responses/AuthSession' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Sign in with email and password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+                twoFactorCode: { type: string, pattern: '^\d{6}$' }
+      responses:
+        '200': { $ref: '#/components/responses/AuthSession' }
+        '401':
+          description: Invalid credentials, or a TOTP code is required
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorEnvelope' }
+
+  /auth/oauth/{provider}:
+    post:
+      tags: [Auth]
+      summary: Sign in with a social provider
+      security: []
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema: { type: string, enum: [google, apple, facebook] }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [idToken]
+              properties:
+                idToken: { type: string }
+      responses:
+        '200': { $ref: '#/components/responses/AuthSession' }
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Rotate the token pair
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken: { type: string }
+      responses:
+        '200':
+          description: New token pair
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      accessToken: { type: string }
+                      refreshToken: { type: string }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Revoke the current refresh token
+      responses:
+        '200': { description: Signed out }
+
+  /auth/forgot-password:
+    post:
+      tags: [Auth]
+      summary: Request a password reset link
+      description: Always returns 200, so the endpoint cannot enumerate accounts.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email: { type: string, format: email }
+      responses:
+        '200': { description: Accepted }
+
+  /auth/reset-password:
+    post:
+      tags: [Auth]
+      summary: Consume a reset token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, password]
+              properties:
+                token: { type: string }
+                password: { type: string, minLength: 8 }
+      responses:
+        '200': { description: Password changed }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /auth/change-password:
+    post:
+      tags: [Auth]
+      summary: Change password while signed in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currentPassword, newPassword]
+              properties:
+                currentPassword: { type: string }
+                newPassword: { type: string, minLength: 8 }
+      responses:
+        '200': { description: Password changed }
+
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Current user
+      responses:
+        '200':
+          description: The signed-in user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/User' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /auth/2fa/enable:
+    post:
+      tags: [Auth]
+      summary: Begin TOTP enrolment
+      responses:
+        '200':
+          description: Secret and otpauth URL
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      secret: { type: string }
+                      otpauthUrl: { type: string }
+
+  /auth/2fa/verify:
+    post:
+      tags: [Auth]
+      summary: Confirm TOTP enrolment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code]
+              properties:
+                code: { type: string, pattern: '^\d{6}$' }
+      responses:
+        '200': { description: Two-factor enabled }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /auth/2fa/disable:
+    post:
+      tags: [Auth]
+      summary: Disable TOTP
+      responses:
+        '200': { description: Two-factor disabled }
+
+  # ----------------------------- users -------------------------------------
+  /users/{username}:
+    get:
+      tags: [Users]
+      summary: Public profile
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Username'
+      responses:
+        '200':
+          description: Profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/User' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /users/me:
+    patch:
+      tags: [Users]
+      summary: Update own profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                username: { type: string }
+                bio: { type: string, maxLength: 240 }
+                avatarUrl: { type: string, nullable: true }
+      responses:
+        '200':
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/User' }
+    delete:
+      tags: [Users]
+      summary: Delete the account
+      responses:
+        '200': { description: Deleted }
+
+  /users/me/goal:
+    patch:
+      tags: [Users]
+      summary: Set the yearly reading goal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [target]
+              properties:
+                target: { type: integer, minimum: 1, maximum: 999 }
+      responses:
+        '200':
+          description: Updated goal
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/ReadingGoal' }
+
+  /users/me/preferences:
+    patch:
+      tags: [Users]
+      summary: Save onboarding quiz answers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                favoriteGenres:
+                  type: array
+                  items: { $ref: '#/components/schemas/GenreSlug' }
+                favoriteAuthorIds:
+                  type: array
+                  items: { type: string }
+      responses:
+        '200':
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/User' }
+
+  /users/{username}/stats:
+    get:
+      tags: [Users]
+      summary: Reading statistics
+      security: []
+      parameters: [{ $ref: '#/components/parameters/Username' }]
+      responses:
+        '200':
+          description: Statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/UserStats' }
+
+  /users/{username}/followers:
+    get:
+      tags: [Users]
+      summary: Followers
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Username'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200': { $ref: '#/components/responses/UserSummaryList' }
+
+  /users/{username}/following:
+    get:
+      tags: [Users]
+      summary: Following
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Username'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200': { $ref: '#/components/responses/UserSummaryList' }
+
+  /users/{userId}/follow:
+    post:
+      tags: [Users]
+      summary: Follow a user
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses:
+        '200': { $ref: '#/components/responses/FollowState' }
+    delete:
+      tags: [Users]
+      summary: Unfollow a user
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses:
+        '200': { $ref: '#/components/responses/FollowState' }
+
+  /users/{username}/activity:
+    get:
+      tags: [Users]
+      summary: Activity of one user
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Username'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200': { $ref: '#/components/responses/ActivityList' }
+
+  /users/{username}/badges:
+    get:
+      tags: [Gamification]
+      summary: Badges of one user
+      security: []
+      parameters: [{ $ref: '#/components/parameters/Username' }]
+      responses:
+        '200': { $ref: '#/components/responses/BadgeList' }
+
+  /feed:
+    get:
+      tags: [Users]
+      summary: Activity feed of followed users
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200': { $ref: '#/components/responses/ActivityList' }
+
+  # ----------------------------- books -------------------------------------
+  /books:
+    get:
+      tags: [Books]
+      summary: Search, filter and sort the catalogue
+      security: []
+      parameters:
+        - { name: q, in: query, schema: { type: string }, description: Title, author, ISBN or publisher }
+        - name: genres
+          in: query
+          style: form
+          explode: true
+          schema: { type: array, items: { $ref: '#/components/schemas/GenreSlug' } }
+        - name: languages
+          in: query
+          style: form
+          explode: true
+          schema: { type: array, items: { $ref: '#/components/schemas/BookLanguage' } }
+        - { name: minRating, in: query, schema: { type: number, minimum: 1, maximum: 10 } }
+        - { name: minPrice, in: query, schema: { type: number } }
+        - { name: maxPrice, in: query, schema: { type: number } }
+        - { name: authorId, in: query, schema: { type: string } }
+        - { name: publisherId, in: query, schema: { type: string } }
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [relevance, rating, newest, price_asc, price_desc]
+            default: relevance
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: |
+            Paginated books. When `q` yields nothing, `meta.suggestion` holds the
+            closest matching title or author name.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: '#/components/schemas/Book' }
+                      meta:
+                        allOf:
+                          - $ref: '#/components/schemas/PageMeta'
+                          - type: object
+                            properties:
+                              suggestion: { type: string, nullable: true }
+
+  /books/trending:
+    get:
+      tags: [Books]
+      summary: Trending books
+      security: []
+      parameters: [{ $ref: '#/components/parameters/Limit' }]
+      responses: { '200': { $ref: '#/components/responses/BookList' } }
+
+  /books/new-releases:
+    get:
+      tags: [Books]
+      summary: Newest releases
+      security: []
+      parameters: [{ $ref: '#/components/parameters/Limit' }]
+      responses: { '200': { $ref: '#/components/responses/BookList' } }
+
+  /books/recommendations:
+    get:
+      tags: [Books]
+      summary: Personalised recommendations
+      parameters: [{ $ref: '#/components/parameters/Limit' }]
+      responses: { '200': { $ref: '#/components/responses/BookList' } }
+
+  /books/{id}:
+    get:
+      tags: [Books]
+      summary: Book detail
+      security: []
+      parameters: [{ $ref: '#/components/parameters/BookId' }]
+      responses:
+        '200':
+          description: Book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Book' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /books/{id}/similar:
+    get:
+      tags: [Books]
+      summary: Readers who enjoyed this also liked
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+        - $ref: '#/components/parameters/Limit'
+      responses: { '200': { $ref: '#/components/responses/BookList' } }
+
+  /books/{id}/reviews:
+    get:
+      tags: [Reviews]
+      summary: Reviews for a book
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses: { '200': { $ref: '#/components/responses/ReviewList' } }
+
+  /books/{id}/quotes:
+    get:
+      tags: [Quotes]
+      summary: Quotes from a book
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses: { '200': { $ref: '#/components/responses/QuoteList' } }
+
+  /search/suggest:
+    get:
+      tags: [Books]
+      summary: Type-ahead suggestions
+      security: []
+      parameters:
+        - { name: q, in: query, required: true, schema: { type: string, minLength: 2 } }
+      responses:
+        '200':
+          description: Suggestions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      books:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id: { type: string }
+                            title: { type: string }
+                            authorName: { type: string }
+                      authors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id: { type: string }
+                            name: { type: string }
+                      recent:
+                        type: array
+                        items: { type: string }
+
+  /genres:
+    get:
+      tags: [Books]
+      summary: Genres with book counts
+      security: []
+      responses:
+        '200':
+          description: Genres
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        slug: { $ref: '#/components/schemas/GenreSlug' }
+                        bookCount: { type: integer }
+
+  /authors/{id}:
+    get:
+      tags: [Books]
+      summary: Author detail
+      security: []
+      parameters: [{ $ref: '#/components/parameters/AuthorId' }]
+      responses:
+        '200':
+          description: Author
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Author' }
+
+  /authors/{id}/books:
+    get:
+      tags: [Books]
+      summary: Books by an author
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/AuthorId'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses: { '200': { $ref: '#/components/responses/BookList' } }
+
+  /authors/{id}/follow:
+    post:
+      tags: [Books]
+      summary: Follow an author
+      parameters: [{ $ref: '#/components/parameters/AuthorId' }]
+      responses: { '200': { description: Following } }
+    delete:
+      tags: [Books]
+      summary: Unfollow an author
+      parameters: [{ $ref: '#/components/parameters/AuthorId' }]
+      responses: { '200': { description: Not following } }
+
+  # ---------------------------- shelves ------------------------------------
+  /shelves:
+    get:
+      tags: [Shelves]
+      summary: The caller's shelves
+      responses:
+        '200':
+          description: Shelves, default ones first
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Shelf' }
+    post:
+      tags: [Shelves]
+      summary: Create a custom shelf
+      description: Returns the complete shelf list, not just the new shelf.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name: { type: string, minLength: 2, maxLength: 40 }
+      responses:
+        '201':
+          description: Updated shelf list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Shelf' }
+
+  /shelves/{id}:
+    patch:
+      tags: [Shelves]
+      summary: Rename a custom shelf
+      parameters: [{ $ref: '#/components/parameters/ShelfId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+      responses:
+        '200': { description: Updated shelf list }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    delete:
+      tags: [Shelves]
+      summary: Delete a custom shelf
+      parameters: [{ $ref: '#/components/parameters/ShelfId' }]
+      responses:
+        '200': { description: Updated shelf list }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /shelves/{id}/books:
+    get:
+      tags: [Shelves]
+      summary: Entries on a shelf
+      parameters:
+        - $ref: '#/components/parameters/ShelfId'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Shelf entries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/ShelfEntry' }
+                  meta: { $ref: '#/components/schemas/PageMeta' }
+
+  /books/{bookId}/shelf:
+    put:
+      tags: [Shelves]
+      summary: Add a book to a shelf, or move it
+      description: Idempotent — the frontend's offline queue replays this.
+      parameters: [{ $ref: '#/components/parameters/BookIdPath' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status: { $ref: '#/components/schemas/ShelfStatus' }
+                shelfId: { type: string, description: Defaults to the matching default shelf }
+                progressPage: { type: integer, minimum: 0 }
+      responses:
+        '200':
+          description: The updated book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Book' }
+    delete:
+      tags: [Shelves]
+      summary: Remove a book from all shelves
+      parameters: [{ $ref: '#/components/parameters/BookIdPath' }]
+      responses:
+        '200':
+          description: The updated book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Book' }
+
+  /books/{bookId}/progress:
+    patch:
+      tags: [Shelves]
+      summary: Update reading progress
+      description: |
+        Clamped to `0..pageCount`. Reaching the last page moves the book to the
+        "read" shelf. Counts as reading activity for the streak.
+      parameters: [{ $ref: '#/components/parameters/BookIdPath' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [page]
+              properties:
+                page: { type: integer, minimum: 0 }
+      responses:
+        '200':
+          description: The updated book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Book' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ---------------------------- reviews ------------------------------------
+  /reviews:
+    post:
+      tags: [Reviews]
+      summary: Post a review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [bookId, rating]
+              properties:
+                bookId: { type: string }
+                rating: { type: integer, minimum: 1, maximum: 10 }
+                body: { type: string, maxLength: 5000 }
+                isSpoiler: { type: boolean, default: false }
+                photos: { type: array, items: { type: string }, maxItems: 4 }
+      responses:
+        '201':
+          description: Created review
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Review' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '409': { $ref: '#/components/responses/Conflict' }
+
+  /reviews/{id}:
+    get:
+      tags: [Reviews]
+      summary: Single review
+      security: []
+      parameters: [{ $ref: '#/components/parameters/ReviewId' }]
+      responses:
+        '200':
+          description: Review
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Review' }
+    patch:
+      tags: [Reviews]
+      summary: Edit own review
+      parameters: [{ $ref: '#/components/parameters/ReviewId' }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating: { type: integer, minimum: 1, maximum: 10 }
+                body: { type: string }
+                isSpoiler: { type: boolean }
+      responses:
+        '200': { description: Updated review }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    delete:
+      tags: [Reviews]
+      summary: Delete own review
+      parameters: [{ $ref: '#/components/parameters/ReviewId' }]
+      responses:
+        '200': { description: Deleted }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /reviews/{id}/like:
+    post:
+      tags: [Reviews]
+      summary: Like a review
+      parameters: [{ $ref: '#/components/parameters/ReviewId' }]
+      responses: { '200': { $ref: '#/components/responses/LikeState' } }
+    delete:
+      tags: [Reviews]
+      summary: Unlike a review
+      parameters: [{ $ref: '#/components/parameters/ReviewId' }]
+      responses: { '200': { $ref: '#/components/responses/LikeState' } }
+
+  /reviews/{id}/comments:
+    get:
+      tags: [Reviews]
+      summary: Comments on a review
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/ReviewId'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses: { '200': { $ref: '#/components/responses/CommentList' } }
+    post:
+      tags: [Reviews]
+      summary: Comment on a review
+      parameters: [{ $ref: '#/components/parameters/ReviewId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [body]
+              properties:
+                body: { type: string, minLength: 1, maxLength: 1000 }
+      responses:
+        '201':
+          description: Created comment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Comment' }
+
+  # ---------------------------- quotes -------------------------------------
+  /quotes:
+    get:
+      tags: [Quotes]
+      summary: Quote feed
+      security: []
+      parameters:
+        - { name: bookId, in: query, schema: { type: string } }
+        - { name: userId, in: query, schema: { type: string } }
+        - { name: sort, in: query, schema: { type: string, enum: [newest, popular], default: newest } }
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses: { '200': { $ref: '#/components/responses/QuoteList' } }
+    post:
+      tags: [Quotes]
+      summary: Share a quote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [bookId, text]
+              properties:
+                bookId: { type: string }
+                text: { type: string, minLength: 5, maxLength: 1000 }
+                page: { type: integer, nullable: true }
+                background:
+                  type: string
+                  enum: [paper, ember, ink, sea, plum, rose, moss, dusk]
+                  default: paper
+      responses:
+        '201':
+          description: Created quote
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Quote' }
+
+  /quotes/{id}:
+    get:
+      tags: [Quotes]
+      summary: Single quote
+      security: []
+      parameters: [{ $ref: '#/components/parameters/QuoteId' }]
+      responses:
+        '200':
+          description: Quote
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Quote' }
+    delete:
+      tags: [Quotes]
+      summary: Delete own quote
+      parameters: [{ $ref: '#/components/parameters/QuoteId' }]
+      responses:
+        '200': { description: Deleted }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /quotes/{id}/like:
+    post:
+      tags: [Quotes]
+      summary: Like a quote
+      parameters: [{ $ref: '#/components/parameters/QuoteId' }]
+      responses: { '200': { $ref: '#/components/responses/LikeState' } }
+    delete:
+      tags: [Quotes]
+      summary: Unlike a quote
+      parameters: [{ $ref: '#/components/parameters/QuoteId' }]
+      responses: { '200': { $ref: '#/components/responses/LikeState' } }
+
+  /quotes/{id}/comments:
+    get:
+      tags: [Quotes]
+      summary: Comments on a quote
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/QuoteId'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses: { '200': { $ref: '#/components/responses/CommentList' } }
+    post:
+      tags: [Quotes]
+      summary: Comment on a quote
+      parameters: [{ $ref: '#/components/parameters/QuoteId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [body]
+              properties:
+                body: { type: string, minLength: 1, maxLength: 1000 }
+      responses:
+        '201':
+          description: Created comment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Comment' }
+
+  # -------------------------- buddy reads ----------------------------------
+  /buddy-reads:
+    get:
+      tags: [Buddy reads]
+      summary: Buddy reads, the caller's groups first
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Buddy reads
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/BuddyRead' }
+                  meta: { $ref: '#/components/schemas/PageMeta' }
+    post:
+      tags: [Buddy reads]
+      summary: Create a buddy read
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, bookId]
+              properties:
+                name: { type: string, minLength: 2 }
+                bookId: { type: string }
+                targetDate: { type: string, format: date-time, nullable: true }
+      responses:
+        '201':
+          description: Created group
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/BuddyRead' }
+
+  /buddy-reads/{id}:
+    get:
+      tags: [Buddy reads]
+      summary: Buddy read detail
+      parameters: [{ $ref: '#/components/parameters/BuddyReadId' }]
+      responses:
+        '200':
+          description: Group
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/BuddyRead' }
+
+  /buddy-reads/{id}/join:
+    post:
+      tags: [Buddy reads]
+      summary: Join a buddy read
+      parameters: [{ $ref: '#/components/parameters/BuddyReadId' }]
+      responses: { '200': { description: Joined } }
+
+  /buddy-reads/{id}/members/me:
+    delete:
+      tags: [Buddy reads]
+      summary: Leave a buddy read
+      parameters: [{ $ref: '#/components/parameters/BuddyReadId' }]
+      responses: { '200': { description: Left } }
+
+  /buddy-reads/{id}/progress:
+    patch:
+      tags: [Buddy reads]
+      summary: Update own progress in the group
+      parameters: [{ $ref: '#/components/parameters/BuddyReadId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [page]
+              properties:
+                page: { type: integer, minimum: 0 }
+      responses: { '200': { description: Updated } }
+
+  /buddy-reads/{id}/messages:
+    get:
+      tags: [Buddy reads]
+      summary: Discussion messages, oldest first
+      parameters:
+        - $ref: '#/components/parameters/BuddyReadId'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/BuddyMessage' }
+                  meta: { $ref: '#/components/schemas/PageMeta' }
+    post:
+      tags: [Buddy reads]
+      summary: Post a message
+      parameters: [{ $ref: '#/components/parameters/BuddyReadId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [body]
+              properties:
+                body: { type: string, minLength: 1, maxLength: 2000 }
+                chapter: { type: integer, nullable: true }
+      responses: { '201': { description: Created message } }
+
+  # ----------------------------- cart --------------------------------------
+  /cart:
+    get:
+      tags: [Cart]
+      summary: Current cart, grouped by publisher
+      responses: { '200': { $ref: '#/components/responses/Cart' } }
+    delete:
+      tags: [Cart]
+      summary: Empty the cart
+      responses: { '200': { $ref: '#/components/responses/Cart' } }
+
+  /cart/items:
+    post:
+      tags: [Cart]
+      summary: Add a book to the cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [bookId]
+              properties:
+                bookId: { type: string }
+                quantity: { type: integer, minimum: 1, default: 1 }
+      responses:
+        '200': { $ref: '#/components/responses/Cart' }
+        '409': { $ref: '#/components/responses/Conflict' }
+
+  /cart/items/{bookId}:
+    patch:
+      tags: [Cart]
+      summary: Set the quantity of a line
+      description: A quantity of 0 removes the line.
+      parameters: [{ $ref: '#/components/parameters/BookIdPath' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quantity]
+              properties:
+                quantity: { type: integer, minimum: 0 }
+      responses:
+        '200': { $ref: '#/components/responses/Cart' }
+        '409': { $ref: '#/components/responses/Conflict' }
+    delete:
+      tags: [Cart]
+      summary: Remove a line
+      parameters: [{ $ref: '#/components/parameters/BookIdPath' }]
+      responses: { '200': { $ref: '#/components/responses/Cart' } }
+
+  # ---------------------------- orders -------------------------------------
+  /orders:
+    get:
+      tags: [Orders]
+      summary: The caller's orders
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Orders, newest first
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Order' }
+                  meta: { $ref: '#/components/schemas/PageMeta' }
+    post:
+      tags: [Orders]
+      summary: Checkout
+      description: |
+        Creates **one order per publisher** in the cart and returns them all.
+        Accepts an optional `Idempotency-Key` header.
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [address, deliveryMethod, paymentMethod]
+              properties:
+                address: { $ref: '#/components/schemas/Address' }
+                deliveryMethod: { $ref: '#/components/schemas/DeliveryMethod' }
+                paymentMethod: { $ref: '#/components/schemas/PaymentMethod' }
+                giftCardCode: { type: string }
+      responses:
+        '201':
+          description: The created orders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Order' }
+        '402': { description: Payment failed }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /orders/{id}:
+    get:
+      tags: [Orders]
+      summary: Order detail with the tracking timeline
+      parameters: [{ $ref: '#/components/parameters/OrderId' }]
+      responses:
+        '200':
+          description: Order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Order' }
+
+  /orders/{id}/cancel:
+    post:
+      tags: [Orders]
+      summary: Cancel an order
+      description: Allowed only while pending, confirmed or preparing.
+      parameters: [{ $ref: '#/components/parameters/OrderId' }]
+      responses:
+        '200': { description: Cancelled }
+        '409': { $ref: '#/components/responses/Conflict' }
+
+  /orders/{id}/receipt:
+    get:
+      tags: [Orders]
+      summary: E-receipt
+      parameters: [{ $ref: '#/components/parameters/OrderId' }]
+      responses:
+        '200':
+          description: Receipt payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Receipt' }
+
+  # --------------------------- payments ------------------------------------
+  /payments/initiate:
+    post:
+      tags: [Payments]
+      summary: Start a card payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [orderId, amount]
+              properties:
+                orderId: { type: string }
+                amount: { type: number }
+      responses:
+        '200':
+          description: Payment intent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      reference: { type: string }
+                      redirectUrl: { type: string, nullable: true }
+                      amount: { type: number }
+                      status: { type: string }
+
+  /payments/{reference}/verify:
+    post:
+      tags: [Payments]
+      summary: Poll payment status
+      parameters:
+        - { name: reference, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      status: { type: string, enum: [requires_confirmation, paid, failed, refunded] }
+
+  /wallet:
+    get:
+      tags: [Payments]
+      summary: Wallet balance
+      responses:
+        '200':
+          description: Balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      balance: { type: number }
+                      currency: { type: string, example: AZN }
+
+  /gift-cards/redeem:
+    post:
+      tags: [Payments]
+      summary: Validate a gift card
+      description: Validates only. The card is consumed at checkout.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code]
+              properties:
+                code: { type: string }
+      responses:
+        '200':
+          description: Valid card
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      code: { type: string }
+                      amount: { type: number }
+                      valid: { type: boolean }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  # -------------------------- gamification ---------------------------------
+  /badges:
+    get:
+      tags: [Gamification]
+      summary: All badges with the caller's progress
+      responses: { '200': { $ref: '#/components/responses/BadgeList' } }
+
+  /leaderboard:
+    get:
+      tags: [Gamification]
+      summary: Rankings
+      parameters:
+        - { name: period, in: query, schema: { type: string, enum: [weekly, monthly, all_time], default: weekly } }
+        - { name: metric, in: query, schema: { type: string, enum: [books, pages], default: books } }
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Ranked entries; the caller's row is always included
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/LeaderboardEntry' }
+                  meta: { $ref: '#/components/schemas/PageMeta' }
+
+  /streak:
+    get:
+      tags: [Gamification]
+      summary: Reading streak
+      responses: { '200': { $ref: '#/components/responses/Streak' } }
+
+  /streak/check-in:
+    post:
+      tags: [Gamification]
+      summary: Mark today as read
+      responses: { '200': { $ref: '#/components/responses/Streak' } }
+
+  # ------------------------- notifications ---------------------------------
+  /notifications:
+    get:
+      tags: [Notifications]
+      summary: Notifications, newest first
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Notifications
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Notification' }
+                  meta: { $ref: '#/components/schemas/PageMeta' }
+
+  /notifications/read-all:
+    post:
+      tags: [Notifications]
+      summary: Mark everything read
+      responses: { '200': { description: Done } }
+
+  /notifications/{id}/read:
+    patch:
+      tags: [Notifications]
+      summary: Mark one read
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses: { '200': { description: Done } }
+
+  /notifications/device-token:
+    post:
+      tags: [Notifications]
+      summary: Register a push token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, platform]
+              properties:
+                token: { type: string, example: 'ExponentPushToken[xxxx]' }
+                platform: { type: string, enum: [ios, android, web] }
+      responses: { '200': { description: Registered } }
+
+  # ---------------------------- reports ------------------------------------
+  /reports:
+    post:
+      tags: [Admin]
+      summary: Report a review or quote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [targetType, targetId, reason]
+              properties:
+                targetType: { type: string, enum: [review, quote] }
+                targetId: { type: string }
+                reason: { $ref: '#/components/schemas/ReportReason' }
+                note: { type: string }
+                snapshotText: { type: string }
+                snapshotAuthor: { type: string }
+                snapshotBook: { type: string, nullable: true }
+      responses:
+        '201':
+          description: Created report
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Report' }
+
+  # --------------------------- publisher -----------------------------------
+  /publisher/stats:
+    get:
+      tags: [Publisher]
+      summary: Dashboard metrics
+      responses:
+        '200':
+          description: Statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/PublisherStats' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /publisher/books:
+    get:
+      tags: [Publisher]
+      summary: The publisher's catalogue
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses: { '200': { $ref: '#/components/responses/BookList' } }
+    post:
+      tags: [Publisher]
+      summary: Add a book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BookDraft' }
+      responses:
+        '201':
+          description: Created book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Book' }
+
+  /publisher/books/{id}:
+    patch:
+      tags: [Publisher]
+      summary: Update a book
+      parameters: [{ $ref: '#/components/parameters/BookId' }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BookDraft' }
+      responses:
+        '200': { description: Updated book }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    delete:
+      tags: [Publisher]
+      summary: Remove a book
+      parameters: [{ $ref: '#/components/parameters/BookId' }]
+      responses:
+        '200': { description: Deleted }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /publisher/orders:
+    get:
+      tags: [Publisher]
+      summary: Orders for this publisher
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Orders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Order' }
+                  meta: { $ref: '#/components/schemas/PageMeta' }
+
+  /publisher/orders/{id}/status:
+    patch:
+      tags: [Publisher]
+      summary: Advance fulfilment status
+      parameters: [{ $ref: '#/components/parameters/OrderId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status: { $ref: '#/components/schemas/OrderStatus' }
+      responses:
+        '200': { description: Updated order }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  # ----------------------------- admin -------------------------------------
+  /admin/stats:
+    get:
+      tags: [Admin]
+      summary: Moderation overview
+      responses:
+        '200':
+          description: Statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      openReports: { type: integer }
+                      removedContent: { type: integer }
+                      activeUsers: { type: integer }
+                      newUsersThisWeek: { type: integer }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /admin/reports:
+    get:
+      tags: [Admin]
+      summary: Report queue
+      parameters:
+        - { name: status, in: query, schema: { type: string, enum: [open, kept, removed] } }
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Reports
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Report' }
+                  meta: { $ref: '#/components/schemas/PageMeta' }
+
+  /admin/reports/{id}:
+    patch:
+      tags: [Admin]
+      summary: Resolve a report
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action]
+              properties:
+                action: { type: string, enum: [keep, remove] }
+      responses:
+        '200':
+          description: Resolved report
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Report' }
+
+  /admin/reviews:
+    get:
+      tags: [Admin]
+      summary: All reviews
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses: { '200': { $ref: '#/components/responses/ReviewList' } }
+
+  /admin/reviews/{id}:
+    delete:
+      tags: [Admin]
+      summary: Remove a review
+      parameters: [{ $ref: '#/components/parameters/ReviewId' }]
+      responses: { '200': { description: Removed } }
+
+  /admin/quotes:
+    get:
+      tags: [Admin]
+      summary: All quotes
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses: { '200': { $ref: '#/components/responses/QuoteList' } }
+
+  /admin/quotes/{id}:
+    delete:
+      tags: [Admin]
+      summary: Remove a quote
+      parameters: [{ $ref: '#/components/parameters/QuoteId' }]
+      responses: { '200': { description: Removed } }
+
+  # ----------------------------- media -------------------------------------
+  /uploads:
+    post:
+      tags: [Media]
+      summary: Upload an image
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file: { type: string, format: binary }
+      responses:
+        '201':
+          description: Stored file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id: { type: string }
+                      url: { type: string }
+
+  /ocr/extract:
+    post:
+      tags: [Media]
+      summary: Extract text from a photo of a page
+      description: |
+        Powers the quote composer. Must handle Azerbaijani characters.
+        Low confidence is acceptable — the user reviews the text before posting.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [imageUri]
+              properties:
+                imageUri: { type: string, format: uri }
+      responses:
+        '200':
+          description: Extracted text
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      text: { type: string }
+                      confidence: { type: number, minimum: 0, maximum: 1 }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '429': { description: Rate limited }
+
+# ---------------------------------------------------------------------------
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    Page:
+      name: page
+      in: query
+      schema: { type: integer, minimum: 1, default: 1 }
+    Limit:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+    Username:
+      name: username
+      in: path
+      required: true
+      schema: { type: string }
+    UserId:
+      name: userId
+      in: path
+      required: true
+      schema: { type: string }
+    BookId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
+    BookIdPath:
+      name: bookId
+      in: path
+      required: true
+      schema: { type: string }
+    AuthorId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
+    ShelfId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
+    ReviewId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
+    QuoteId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
+    OrderId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
+    BuddyReadId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
+
+  responses:
+    AuthSession:
+      description: Tokens and the signed-in user
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  accessToken: { type: string }
+                  refreshToken: { type: string }
+                  user: { $ref: '#/components/schemas/User' }
+    BookList:
+      description: Paginated books
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items: { $ref: '#/components/schemas/Book' }
+              meta: { $ref: '#/components/schemas/PageMeta' }
+    ReviewList:
+      description: Paginated reviews
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items: { $ref: '#/components/schemas/Review' }
+              meta: { $ref: '#/components/schemas/PageMeta' }
+    QuoteList:
+      description: Paginated quotes
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items: { $ref: '#/components/schemas/Quote' }
+              meta: { $ref: '#/components/schemas/PageMeta' }
+    CommentList:
+      description: Paginated comments
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items: { $ref: '#/components/schemas/Comment' }
+              meta: { $ref: '#/components/schemas/PageMeta' }
+    UserSummaryList:
+      description: Paginated users
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/UserSummary'
+                    - type: object
+                      properties:
+                        isFollowing: { type: boolean }
+              meta: { $ref: '#/components/schemas/PageMeta' }
+    ActivityList:
+      description: Paginated activity items
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items: { $ref: '#/components/schemas/ActivityItem' }
+              meta: { $ref: '#/components/schemas/PageMeta' }
+    BadgeList:
+      description: Badges with progress
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items: { $ref: '#/components/schemas/Badge' }
+    Cart:
+      description: The full cart summary
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: { $ref: '#/components/schemas/CartSummary' }
+    LikeState:
+      description: Like state and the authoritative count
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  liked: { type: boolean }
+                  likesCount: { type: integer }
+    FollowState:
+      description: Follow state and the authoritative count
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  following: { type: boolean }
+                  followersCount: { type: integer }
+    Streak:
+      description: Streak state
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  current: { type: integer }
+                  longest: { type: integer }
+                  readToday: { type: boolean }
+                  weeklyPages:
+                    type: array
+                    items: { type: integer }
+    Unauthorized:
+      description: Missing or invalid token
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorEnvelope' }
+    Forbidden:
+      description: Not allowed
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorEnvelope' }
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorEnvelope' }
+    Conflict:
+      description: State conflict
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorEnvelope' }
+    ValidationError:
+      description: Validation failed
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorEnvelope' }
+
+  schemas:
+    ErrorEnvelope:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              enum:
+                [VALIDATION_ERROR, UNAUTHORIZED, INVALID_CREDENTIALS,
+                 TWO_FACTOR_REQUIRED, FORBIDDEN, NOT_FOUND, CONFLICT,
+                 EMAIL_TAKEN, USERNAME_TAKEN, OUT_OF_STOCK, PAYMENT_FAILED,
+                 RATE_LIMITED, SERVER_ERROR]
+            message: { type: string }
+            fields:
+              type: object
+              additionalProperties: { type: string }
+
+    PageMeta:
+      type: object
+      required: [page, limit, total, totalPages, hasMore]
+      properties:
+        page: { type: integer }
+        limit: { type: integer }
+        total: { type: integer }
+        totalPages: { type: integer }
+        hasMore: { type: boolean }
+
+    GenreSlug:
+      type: string
+      enum: [novel, mystery, scifi, fantasy, history, biography, poetry,
+             psychology, philosophy, business, children, classic, science, selfHelp]
+
+    BookLanguage:
+      type: string
+      enum: [az, en, tr, ru]
+
+    ShelfStatus:
+      type: string
+      enum: [reading, read, want_to_read, dnf]
+
+    OrderStatus:
+      type: string
+      enum: [pending, confirmed, preparing, shipped, out_for_delivery, delivered, cancelled]
+
+    PaymentMethod:
+      type: string
+      enum: [card, cod, pos_on_delivery, wallet]
+
+    DeliveryMethod:
+      type: string
+      enum: [courier, pickup, post]
+
+    ReportReason:
+      type: string
+      enum: [spam, offensive, spoiler, copyright, other]
+
+    UserSummary:
+      type: object
+      required: [id, username, name]
+      properties:
+        id: { type: string }
+        username: { type: string }
+        name: { type: string }
+        avatarUrl: { type: string, nullable: true }
+
+    UserStats:
+      type: object
+      properties:
+        booksRead: { type: integer }
+        pagesRead: { type: integer }
+        reviewsCount: { type: integer }
+        quotesCount: { type: integer }
+        streakDays: { type: integer }
+        longestStreak: { type: integer }
+        readToday: { type: boolean }
+        genreDistribution:
+          type: array
+          items:
+            type: object
+            properties:
+              genre: { $ref: '#/components/schemas/GenreSlug' }
+              count: { type: integer }
+        weeklyPages:
+          type: array
+          minItems: 7
+          maxItems: 7
+          items: { type: integer }
+
+    ReadingGoal:
+      type: object
+      properties:
+        year: { type: integer }
+        target: { type: integer }
+        completed: { type: integer }
+
+    User:
+      type: object
+      required: [id, username, name, role, stats, goal]
+      properties:
+        id: { type: string }
+        username: { type: string }
+        name: { type: string }
+        email: { type: string, format: email }
+        avatarUrl: { type: string, nullable: true }
+        bio: { type: string, nullable: true }
+        role: { type: string, enum: [user, publisher, admin] }
+        createdAt: { type: string, format: date-time }
+        followersCount: { type: integer }
+        followingCount: { type: integer }
+        isFollowing: { type: boolean }
+        stats: { $ref: '#/components/schemas/UserStats' }
+        goal: { $ref: '#/components/schemas/ReadingGoal' }
+        favoriteGenres:
+          type: array
+          items: { $ref: '#/components/schemas/GenreSlug' }
+        favoriteAuthorIds:
+          type: array
+          items: { type: string }
+        walletBalance: { type: number }
+        twoFactorEnabled: { type: boolean }
+        publisherId: { type: string }
+
+    Author:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        slug: { type: string }
+        bio: { type: string }
+        photoUrl: { type: string, nullable: true }
+        bookCount: { type: integer }
+        followersCount: { type: integer }
+        isFollowing: { type: boolean }
+
+    Book:
+      type: object
+      required: [id, title, authorId, authorName, price, pageCount]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        subtitle: { type: string, nullable: true }
+        authorId: { type: string }
+        authorName: { type: string }
+        publisherId: { type: string }
+        publisherName: { type: string }
+        isbn: { type: string }
+        language: { $ref: '#/components/schemas/BookLanguage' }
+        genres:
+          type: array
+          items: { $ref: '#/components/schemas/GenreSlug' }
+        coverUrl: { type: string, nullable: true }
+        description: { type: string }
+        pageCount: { type: integer }
+        publishedYear: { type: integer }
+        price: { type: number }
+        oldPrice: { type: number, nullable: true }
+        stock: { type: integer }
+        ratingAverage: { type: number, minimum: 0, maximum: 10 }
+        ratingCount: { type: integer }
+        reviewsCount: { type: integer }
+        quotesCount: { type: integer }
+        createdAt: { type: string, format: date-time }
+        shelfStatus:
+          allOf: [{ $ref: '#/components/schemas/ShelfStatus' }]
+          nullable: true
+          description: Present only for authenticated requests
+        progressPage: { type: integer }
+
+    BookDraft:
+      type: object
+      properties:
+        title: { type: string }
+        authorName: { type: string }
+        isbn: { type: string }
+        language: { $ref: '#/components/schemas/BookLanguage' }
+        genres:
+          type: array
+          items: { $ref: '#/components/schemas/GenreSlug' }
+        description: { type: string }
+        coverUrl: { type: string, nullable: true }
+        pageCount: { type: integer }
+        publishedYear: { type: integer }
+        price: { type: number }
+        stock: { type: integer }
+
+    Shelf:
+      type: object
+      properties:
+        id: { type: string }
+        userId: { type: string }
+        status:
+          allOf: [{ $ref: '#/components/schemas/ShelfStatus' }]
+          nullable: true
+        name: { type: string }
+        isDefault: { type: boolean }
+        booksCount: { type: integer }
+        coverUrls:
+          type: array
+          items: { type: string }
+
+    ShelfEntry:
+      type: object
+      properties:
+        id: { type: string }
+        shelfId: { type: string }
+        bookId: { type: string }
+        book: { $ref: '#/components/schemas/Book' }
+        status: { $ref: '#/components/schemas/ShelfStatus' }
+        progressPage: { type: integer }
+        startedAt: { type: string, format: date-time, nullable: true }
+        finishedAt: { type: string, format: date-time, nullable: true }
+        addedAt: { type: string, format: date-time }
+
+    Review:
+      type: object
+      properties:
+        id: { type: string }
+        bookId: { type: string }
+        user: { $ref: '#/components/schemas/UserSummary' }
+        rating: { type: integer, minimum: 1, maximum: 10 }
+        body: { type: string }
+        isSpoiler: { type: boolean }
+        photos:
+          type: array
+          items: { type: string }
+        likesCount: { type: integer }
+        commentsCount: { type: integer }
+        isLiked: { type: boolean }
+        createdAt: { type: string, format: date-time }
+
+    Quote:
+      type: object
+      properties:
+        id: { type: string }
+        bookId: { type: string }
+        book:
+          type: object
+          properties:
+            id: { type: string }
+            title: { type: string }
+            authorName: { type: string }
+            coverUrl: { type: string, nullable: true }
+        user: { $ref: '#/components/schemas/UserSummary' }
+        text: { type: string, maxLength: 1000 }
+        page: { type: integer, nullable: true }
+        background:
+          type: string
+          enum: [paper, ember, ink, sea, plum, rose, moss, dusk]
+        likesCount: { type: integer }
+        commentsCount: { type: integer }
+        isLiked: { type: boolean }
+        createdAt: { type: string, format: date-time }
+
+    Comment:
+      type: object
+      properties:
+        id: { type: string }
+        targetType: { type: string, enum: [review, quote] }
+        targetId: { type: string }
+        user: { $ref: '#/components/schemas/UserSummary' }
+        body: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    ActivityItem:
+      type: object
+      properties:
+        id: { type: string }
+        kind:
+          type: string
+          enum: [finished_book, started_book, posted_quote, posted_review, earned_badge]
+        user: { $ref: '#/components/schemas/UserSummary' }
+        book:
+          type: object
+          nullable: true
+          properties:
+            id: { type: string }
+            title: { type: string }
+            authorName: { type: string }
+            coverUrl: { type: string, nullable: true }
+        quoteId: { type: string, nullable: true }
+        reviewId: { type: string, nullable: true }
+        badgeName: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+
+    BuddyRead:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        bookId: { type: string }
+        book:
+          type: object
+          properties:
+            id: { type: string }
+            title: { type: string }
+            authorName: { type: string }
+            coverUrl: { type: string, nullable: true }
+            pageCount: { type: integer }
+        ownerId: { type: string }
+        members:
+          type: array
+          items:
+            type: object
+            properties:
+              user: { $ref: '#/components/schemas/UserSummary' }
+              progressPage: { type: integer }
+        targetDate: { type: string, format: date-time, nullable: true }
+        messagesCount: { type: integer }
+        createdAt: { type: string, format: date-time }
+
+    BuddyMessage:
+      type: object
+      properties:
+        id: { type: string }
+        buddyReadId: { type: string }
+        user: { $ref: '#/components/schemas/UserSummary' }
+        body: { type: string }
+        chapter: { type: integer, nullable: true }
+        createdAt: { type: string, format: date-time }
+
+    CartSummary:
+      type: object
+      properties:
+        groups:
+          type: array
+          description: One group per publisher — each ships separately
+          items:
+            type: object
+            properties:
+              publisherId: { type: string }
+              publisherName: { type: string }
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    bookId: { type: string }
+                    book: { $ref: '#/components/schemas/Book' }
+                    quantity: { type: integer }
+              subtotal: { type: number }
+              deliveryFee: { type: number }
+        itemCount: { type: integer }
+        subtotal: { type: number }
+        deliveryTotal: { type: number }
+        discount: { type: number }
+        total: { type: number }
+
+    Address:
+      type: object
+      required: [fullName, phone, city]
+      properties:
+        fullName: { type: string }
+        phone: { type: string, example: '+994501234567' }
+        city: { type: string, example: Bakı }
+        line: { type: string }
+        note: { type: string }
+
+    Order:
+      type: object
+      properties:
+        id: { type: string }
+        code: { type: string, example: '482913' }
+        userId: { type: string }
+        publisherId: { type: string }
+        publisherName: { type: string }
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              bookId: { type: string }
+              title: { type: string }
+              authorName: { type: string }
+              coverUrl: { type: string, nullable: true }
+              publisherId: { type: string }
+              publisherName: { type: string }
+              price: { type: number }
+              quantity: { type: integer }
+        subtotal: { type: number }
+        deliveryFee: { type: number }
+        discount: { type: number }
+        total: { type: number }
+        status: { $ref: '#/components/schemas/OrderStatus' }
+        paymentMethod: { $ref: '#/components/schemas/PaymentMethod' }
+        deliveryMethod: { $ref: '#/components/schemas/DeliveryMethod' }
+        address: { $ref: '#/components/schemas/Address' }
+        estimatedDelivery: { type: string, format: date-time }
+        timeline:
+          type: array
+          items:
+            type: object
+            properties:
+              status: { $ref: '#/components/schemas/OrderStatus' }
+              at: { type: string, format: date-time }
+              note: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    Receipt:
+      type: object
+      properties:
+        orderId: { type: string }
+        code: { type: string }
+        issuedAt: { type: string, format: date-time }
+        url: { type: string, nullable: true }
+        lines:
+          type: array
+          items:
+            type: object
+            properties:
+              title: { type: string }
+              quantity: { type: integer }
+              unitPrice: { type: number }
+              total: { type: number }
+        subtotal: { type: number }
+        deliveryFee: { type: number }
+        discount: { type: number }
+        total: { type: number }
+
+    Badge:
+      type: object
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        name: { type: string }
+        description: { type: string }
+        icon: { type: string, description: Emoji }
+        earned: { type: boolean }
+        earnedAt: { type: string, format: date-time, nullable: true }
+        progress: { type: integer }
+        target: { type: integer }
+
+    LeaderboardEntry:
+      type: object
+      properties:
+        rank: { type: integer }
+        user: { $ref: '#/components/schemas/UserSummary' }
+        books: { type: integer }
+        pages: { type: integer }
+        isMe: { type: boolean }
+
+    Notification:
+      type: object
+      properties:
+        id: { type: string }
+        type:
+          type: string
+          enum: [follow, new_book, order_shipped, review_comment, quote_like,
+                 buddy_invite, goal_reached, badge_earned]
+        params:
+          type: object
+          description: Interpolated into the client-side localized string
+          additionalProperties: true
+        actor:
+          allOf: [{ $ref: '#/components/schemas/UserSummary' }]
+          nullable: true
+        read: { type: boolean }
+        link: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+
+    Report:
+      type: object
+      properties:
+        id: { type: string }
+        targetType: { type: string, enum: [review, quote] }
+        targetId: { type: string }
+        reason: { $ref: '#/components/schemas/ReportReason' }
+        note: { type: string, nullable: true }
+        reportedBy: { $ref: '#/components/schemas/UserSummary' }
+        status: { type: string, enum: [open, kept, removed] }
+        createdAt: { type: string, format: date-time }
+        snapshot:
+          type: object
+          properties:
+            text: { type: string }
+            authorName: { type: string }
+            bookTitle: { type: string, nullable: true }
+
+    PublisherStats:
+      type: object
+      properties:
+        revenue: { type: number }
+        unitsSold: { type: integer }
+        pendingOrders: { type: integer }
+        activeBooks: { type: integer }
+        salesTrend:
+          type: array
+          items:
+            type: object
+            properties:
+              month: { type: string }
+              revenue: { type: number }
+        topBooks:
+          type: array
+          items:
+            type: object
+            properties:
+              book: { $ref: '#/components/schemas/Book' }
+              units: { type: integer }
+              revenue: { type: number }
+        revenueByGenre:
+          type: array
+          items:
+            type: object
+            properties:
+              genre: { $ref: '#/components/schemas/GenreSlug' }
+              revenue: { type: number }

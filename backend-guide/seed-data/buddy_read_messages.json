@@ -1,0 +1,80 @@
+[
+  {
+    "id": "bm_1",
+    "buddyReadId": "br_1",
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "body": "Raskolnikovun ilk monoloqunu oxuyanda adamın nəfəsi kəsilir. 2-ci hissəyə keçdim.",
+    "chapter": 2,
+    "createdAt": "2026-07-28T18:31:07.038Z"
+  },
+  {
+    "id": "bm_2",
+    "buddyReadId": "br_1",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "body": "Mən hələ 1-ci hissədəyəm, spoyler yazmayın 🙂",
+    "chapter": 1,
+    "createdAt": "2026-07-29T18:31:07.038Z"
+  },
+  {
+    "id": "bm_3",
+    "buddyReadId": "br_1",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "body": "Sonya obrazı haqqında sonda ayrıca danışaq, çox maraqlı yazılıb.",
+    "chapter": 3,
+    "createdAt": "2026-08-02T18:31:07.038Z"
+  },
+  {
+    "id": "bm_4",
+    "buddyReadId": "br_1",
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "body": "Həftə sonu 4-cü hissəni bitirməyi planlaşdırıram, qoşulan varmı?",
+    "chapter": 4,
+    "createdAt": "2026-08-05T18:31:07.038Z"
+  },
+  {
+    "id": "bm_5",
+    "buddyReadId": "br_2",
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "body": "Bakı təsvirləri möhtəşəmdir, şəhəri tanıyanlar üçün ayrı zövq.",
+    "chapter": 1,
+    "createdAt": "2026-08-03T18:31:07.038Z"
+  },
+  {
+    "id": "bm_6",
+    "buddyReadId": "br_2",
+    "user": {
+      "id": "u_5",
+      "username": "aysel",
+      "name": "Aysel Kərimli",
+      "avatarUrl": null
+    },
+    "body": "Razıyam. Nino obrazı gözlədiyimdən güclü çıxdı.",
+    "chapter": 2,
+    "createdAt": "2026-08-04T18:31:07.038Z"
+  }
+]

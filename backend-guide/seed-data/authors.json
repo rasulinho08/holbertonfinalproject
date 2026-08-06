@@ -1,0 +1,432 @@
+[
+  {
+    "id": "au_1",
+    "name": "Qurban Səid",
+    "slug": "qurban-səid",
+    "bio": "Öz dövrünün ən çox oxunan müəlliflərindən biri. Əsərləri onlarla dilə tərcümə olunub və bu gün də geniş oxucu kütləsi tərəfindən sevilir.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 13158,
+    "isFollowing": false
+  },
+  {
+    "id": "au_2",
+    "name": "Anar",
+    "slug": "anar",
+    "bio": "Yazıçı, esseist və tərcüməçi. Yaradıcılığında insan psixologiyası və cəmiyyət münasibətləri əsas yer tutur.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 21605,
+    "isFollowing": false
+  },
+  {
+    "id": "au_3",
+    "name": "Elçin",
+    "slug": "elçin",
+    "bio": "Ədəbi fəaliyyətə şeirlə başlayıb, sonradan nəsrə keçib. Bir sıra beynəlxalq mükafatın laureatıdır.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 11484,
+    "isFollowing": false
+  },
+  {
+    "id": "au_4",
+    "name": "Kamal Abdulla",
+    "slug": "kamal-abdulla",
+    "bio": "Əsərləri məktəb və universitet proqramlarına daxil edilmiş klassik müəllif.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 7081,
+    "isFollowing": false
+  },
+  {
+    "id": "au_5",
+    "name": "Əkrəm Əylisli",
+    "slug": "əkrəm-əylisli",
+    "bio": "Öz dövrünün ən çox oxunan müəlliflərindən biri. Əsərləri onlarla dilə tərcümə olunub və bu gün də geniş oxucu kütləsi tərəfindən sevilir.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 17199,
+    "isFollowing": false
+  },
+  {
+    "id": "au_6",
+    "name": "Məmməd Səid Ordubadi",
+    "slug": "məmməd-səid-ordubadi",
+    "bio": "Yazıçı, esseist və tərcüməçi. Yaradıcılığında insan psixologiyası və cəmiyyət münasibətləri əsas yer tutur.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 10914,
+    "isFollowing": false
+  },
+  {
+    "id": "au_7",
+    "name": "Xalq dastanı",
+    "slug": "xalq-dastanı",
+    "bio": "Ədəbi fəaliyyətə şeirlə başlayıb, sonradan nəsrə keçib. Bir sıra beynəlxalq mükafatın laureatıdır.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 4343,
+    "isFollowing": false
+  },
+  {
+    "id": "au_8",
+    "name": "Nizami Gəncəvi",
+    "slug": "nizami-gəncəvi",
+    "bio": "Əsərləri məktəb və universitet proqramlarına daxil edilmiş klassik müəllif.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 10764,
+    "isFollowing": false
+  },
+  {
+    "id": "au_9",
+    "name": "Məhəmməd Füzuli",
+    "slug": "məhəmməd-füzuli",
+    "bio": "Öz dövrünün ən çox oxunan müəlliflərindən biri. Əsərləri onlarla dilə tərcümə olunub və bu gün də geniş oxucu kütləsi tərəfindən sevilir.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 12272,
+    "isFollowing": false
+  },
+  {
+    "id": "au_10",
+    "name": "Mirzə Ələkbər Sabir",
+    "slug": "mirzə-ələkbər-sabir",
+    "bio": "Yazıçı, esseist və tərcüməçi. Yaradıcılığında insan psixologiyası və cəmiyyət münasibətləri əsas yer tutur.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 21237,
+    "isFollowing": false
+  },
+  {
+    "id": "au_11",
+    "name": "Cəlil Məmmədquluzadə",
+    "slug": "cəlil-məmmədquluzadə",
+    "bio": "Ədəbi fəaliyyətə şeirlə başlayıb, sonradan nəsrə keçib. Bir sıra beynəlxalq mükafatın laureatıdır.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 12956,
+    "isFollowing": false
+  },
+  {
+    "id": "au_12",
+    "name": "Mehdi Hüseyn",
+    "slug": "mehdi-hüseyn",
+    "bio": "Əsərləri məktəb və universitet proqramlarına daxil edilmiş klassik müəllif.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 19558,
+    "isFollowing": false
+  },
+  {
+    "id": "au_13",
+    "name": "Aqil Abbas",
+    "slug": "aqil-abbas",
+    "bio": "Öz dövrünün ən çox oxunan müəlliflərindən biri. Əsərləri onlarla dilə tərcümə olunub və bu gün də geniş oxucu kütləsi tərəfindən sevilir.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 11582,
+    "isFollowing": false
+  },
+  {
+    "id": "au_14",
+    "name": "Hüseyn Cavid",
+    "slug": "hüseyn-cavid",
+    "bio": "Yazıçı, esseist və tərcüməçi. Yaradıcılığında insan psixologiyası və cəmiyyət münasibətləri əsas yer tutur.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 16643,
+    "isFollowing": false
+  },
+  {
+    "id": "au_15",
+    "name": "Mirzə İbrahimov",
+    "slug": "mirzə-i-brahimov",
+    "bio": "Ədəbi fəaliyyətə şeirlə başlayıb, sonradan nəsrə keçib. Bir sıra beynəlxalq mükafatın laureatıdır.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 11414,
+    "isFollowing": false
+  },
+  {
+    "id": "au_16",
+    "name": "George Orwell",
+    "slug": "george-orwell",
+    "bio": "Əsərləri məktəb və universitet proqramlarına daxil edilmiş klassik müəllif.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 19525,
+    "isFollowing": false
+  },
+  {
+    "id": "au_17",
+    "name": "Fyodor Dostoyevski",
+    "slug": "fyodor-dostoyevski",
+    "bio": "Öz dövrünün ən çox oxunan müəlliflərindən biri. Əsərləri onlarla dilə tərcümə olunub və bu gün də geniş oxucu kütləsi tərəfindən sevilir.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 12873,
+    "isFollowing": false
+  },
+  {
+    "id": "au_18",
+    "name": "Lev Tolstoy",
+    "slug": "lev-tolstoy",
+    "bio": "Yazıçı, esseist və tərcüməçi. Yaradıcılığında insan psixologiyası və cəmiyyət münasibətləri əsas yer tutur.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 10485,
+    "isFollowing": false
+  },
+  {
+    "id": "au_19",
+    "name": "Antoine de Saint-Exupéry",
+    "slug": "antoine-de-saint-exup-ry",
+    "bio": "Ədəbi fəaliyyətə şeirlə başlayıb, sonradan nəsrə keçib. Bir sıra beynəlxalq mükafatın laureatıdır.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 20009,
+    "isFollowing": false
+  },
+  {
+    "id": "au_20",
+    "name": "Jane Austen",
+    "slug": "jane-austen",
+    "bio": "Əsərləri məktəb və universitet proqramlarına daxil edilmiş klassik müəllif.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 13621,
+    "isFollowing": false
+  },
+  {
+    "id": "au_21",
+    "name": "Gabriel García Márquez",
+    "slug": "gabriel-garc-a-m-rquez",
+    "bio": "Öz dövrünün ən çox oxunan müəlliflərindən biri. Əsərləri onlarla dilə tərcümə olunub və bu gün də geniş oxucu kütləsi tərəfindən sevilir.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 122,
+    "isFollowing": false
+  },
+  {
+    "id": "au_22",
+    "name": "J. D. Salinger",
+    "slug": "j-d-salinger",
+    "bio": "Yazıçı, esseist və tərcüməçi. Yaradıcılığında insan psixologiyası və cəmiyyət münasibətləri əsas yer tutur.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 8624,
+    "isFollowing": false
+  },
+  {
+    "id": "au_23",
+    "name": "F. Scott Fitzgerald",
+    "slug": "f-scott-fitzgerald",
+    "bio": "Ədəbi fəaliyyətə şeirlə başlayıb, sonradan nəsrə keçib. Bir sıra beynəlxalq mükafatın laureatıdır.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 2147,
+    "isFollowing": false
+  },
+  {
+    "id": "au_24",
+    "name": "Ray Bradbury",
+    "slug": "ray-bradbury",
+    "bio": "Əsərləri məktəb və universitet proqramlarına daxil edilmiş klassik müəllif.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 12343,
+    "isFollowing": false
+  },
+  {
+    "id": "au_25",
+    "name": "José Mauro de Vasconcelos",
+    "slug": "jos-mauro-de-vasconcelos",
+    "bio": "Öz dövrünün ən çox oxunan müəlliflərindən biri. Əsərləri onlarla dilə tərcümə olunub və bu gün də geniş oxucu kütləsi tərəfindən sevilir.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 5053,
+    "isFollowing": false
+  },
+  {
+    "id": "au_26",
+    "name": "J. R. R. Tolkien",
+    "slug": "j-r-r-tolkien",
+    "bio": "Yazıçı, esseist və tərcüməçi. Yaradıcılığında insan psixologiyası və cəmiyyət münasibətləri əsas yer tutur.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 18549,
+    "isFollowing": false
+  },
+  {
+    "id": "au_27",
+    "name": "J. K. Rowling",
+    "slug": "j-k-rowling",
+    "bio": "Ədəbi fəaliyyətə şeirlə başlayıb, sonradan nəsrə keçib. Bir sıra beynəlxalq mükafatın laureatıdır.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 17359,
+    "isFollowing": false
+  },
+  {
+    "id": "au_28",
+    "name": "Frank Herbert",
+    "slug": "frank-herbert",
+    "bio": "Əsərləri məktəb və universitet proqramlarına daxil edilmiş klassik müəllif.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 14582,
+    "isFollowing": false
+  },
+  {
+    "id": "au_29",
+    "name": "Arthur Conan Doyle",
+    "slug": "arthur-conan-doyle",
+    "bio": "Öz dövrünün ən çox oxunan müəlliflərindən biri. Əsərləri onlarla dilə tərcümə olunub və bu gün də geniş oxucu kütləsi tərəfindən sevilir.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 15045,
+    "isFollowing": false
+  },
+  {
+    "id": "au_30",
+    "name": "Agatha Christie",
+    "slug": "agatha-christie",
+    "bio": "Yazıçı, esseist və tərcüməçi. Yaradıcılığında insan psixologiyası və cəmiyyət münasibətləri əsas yer tutur.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 21611,
+    "isFollowing": false
+  },
+  {
+    "id": "au_31",
+    "name": "Haruki Murakami",
+    "slug": "haruki-murakami",
+    "bio": "Ədəbi fəaliyyətə şeirlə başlayıb, sonradan nəsrə keçib. Bir sıra beynəlxalq mükafatın laureatıdır.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 1571,
+    "isFollowing": false
+  },
+  {
+    "id": "au_32",
+    "name": "Paulo Coelho",
+    "slug": "paulo-coelho",
+    "bio": "Əsərləri məktəb və universitet proqramlarına daxil edilmiş klassik müəllif.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 20430,
+    "isFollowing": false
+  },
+  {
+    "id": "au_33",
+    "name": "Sabahattin Ali",
+    "slug": "sabahattin-ali",
+    "bio": "Öz dövrünün ən çox oxunan müəlliflərindən biri. Əsərləri onlarla dilə tərcümə olunub və bu gün də geniş oxucu kütləsi tərəfindən sevilir.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 4275,
+    "isFollowing": false
+  },
+  {
+    "id": "au_34",
+    "name": "Orhan Pamuk",
+    "slug": "orhan-pamuk",
+    "bio": "Yazıçı, esseist və tərcüməçi. Yaradıcılığında insan psixologiyası və cəmiyyət münasibətləri əsas yer tutur.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 19293,
+    "isFollowing": false
+  },
+  {
+    "id": "au_35",
+    "name": "Zülfü Livaneli",
+    "slug": "zülfü-livaneli",
+    "bio": "Ədəbi fəaliyyətə şeirlə başlayıb, sonradan nəsrə keçib. Bir sıra beynəlxalq mükafatın laureatıdır.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 6125,
+    "isFollowing": false
+  },
+  {
+    "id": "au_36",
+    "name": "Yuval Noah Harari",
+    "slug": "yuval-noah-harari",
+    "bio": "Əsərləri məktəb və universitet proqramlarına daxil edilmiş klassik müəllif.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 313,
+    "isFollowing": false
+  },
+  {
+    "id": "au_37",
+    "name": "James Clear",
+    "slug": "james-clear",
+    "bio": "Öz dövrünün ən çox oxunan müəlliflərindən biri. Əsərləri onlarla dilə tərcümə olunub və bu gün də geniş oxucu kütləsi tərəfindən sevilir.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 7304,
+    "isFollowing": false
+  },
+  {
+    "id": "au_38",
+    "name": "Daniel Kahneman",
+    "slug": "daniel-kahneman",
+    "bio": "Yazıçı, esseist və tərcüməçi. Yaradıcılığında insan psixologiyası və cəmiyyət münasibətləri əsas yer tutur.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 17430,
+    "isFollowing": false
+  },
+  {
+    "id": "au_39",
+    "name": "Viktor Frankl",
+    "slug": "viktor-frankl",
+    "bio": "Ədəbi fəaliyyətə şeirlə başlayıb, sonradan nəsrə keçib. Bir sıra beynəlxalq mükafatın laureatıdır.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 12352,
+    "isFollowing": false
+  },
+  {
+    "id": "au_40",
+    "name": "Robert Kiyosaki",
+    "slug": "robert-kiyosaki",
+    "bio": "Əsərləri məktəb və universitet proqramlarına daxil edilmiş klassik müəllif.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 1480,
+    "isFollowing": false
+  },
+  {
+    "id": "au_41",
+    "name": "Jim Collins",
+    "slug": "jim-collins",
+    "bio": "Öz dövrünün ən çox oxunan müəlliflərindən biri. Əsərləri onlarla dilə tərcümə olunub və bu gün də geniş oxucu kütləsi tərəfindən sevilir.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 17337,
+    "isFollowing": false
+  },
+  {
+    "id": "au_42",
+    "name": "Stephen Hawking",
+    "slug": "stephen-hawking",
+    "bio": "Yazıçı, esseist və tərcüməçi. Yaradıcılığında insan psixologiyası və cəmiyyət münasibətləri əsas yer tutur.",
+    "photoUrl": null,
+    "bookCount": 2,
+    "followersCount": 372,
+    "isFollowing": false
+  },
+  {
+    "id": "au_43",
+    "name": "Walter Isaacson",
+    "slug": "walter-isaacson",
+    "bio": "Ədəbi fəaliyyətə şeirlə başlayıb, sonradan nəsrə keçib. Bir sıra beynəlxalq mükafatın laureatıdır.",
+    "photoUrl": null,
+    "bookCount": 1,
+    "followersCount": 7798,
+    "isFollowing": false
+  }
+]

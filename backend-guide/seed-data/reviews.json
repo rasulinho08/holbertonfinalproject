@@ -1,0 +1,2918 @@
+[
+  {
+    "id": "r_1",
+    "bookId": "b_1",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 149,
+    "commentsCount": 15,
+    "isLiked": false,
+    "createdAt": "2026-04-19T18:31:07.038Z"
+  },
+  {
+    "id": "r_2",
+    "bookId": "b_1",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 85,
+    "commentsCount": 17,
+    "isLiked": false,
+    "createdAt": "2026-02-12T18:31:07.038Z"
+  },
+  {
+    "id": "r_3",
+    "bookId": "b_1",
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 9,
+    "commentsCount": 1,
+    "isLiked": false,
+    "createdAt": "2025-08-12T18:31:07.038Z"
+  },
+  {
+    "id": "r_4",
+    "bookId": "b_1",
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 42,
+    "commentsCount": 6,
+    "isLiked": false,
+    "createdAt": "2025-06-09T18:31:07.038Z"
+  },
+  {
+    "id": "r_5",
+    "bookId": "b_1",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 126,
+    "commentsCount": 0,
+    "isLiked": false,
+    "createdAt": "2025-04-01T18:31:07.038Z"
+  },
+  {
+    "id": "r_6",
+    "bookId": "b_2",
+    "user": {
+      "id": "u_13",
+      "username": "aynur",
+      "name": "Aynur Hüseynova",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 202,
+    "commentsCount": 7,
+    "isLiked": false,
+    "createdAt": "2025-09-22T18:31:07.038Z"
+  },
+  {
+    "id": "r_7",
+    "bookId": "b_2",
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 167,
+    "commentsCount": 5,
+    "isLiked": false,
+    "createdAt": "2025-09-05T18:31:07.038Z"
+  },
+  {
+    "id": "r_8",
+    "bookId": "b_2",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 174,
+    "commentsCount": 3,
+    "isLiked": false,
+    "createdAt": "2025-06-21T18:31:07.038Z"
+  },
+  {
+    "id": "r_9",
+    "bookId": "b_3",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 51,
+    "commentsCount": 9,
+    "isLiked": false,
+    "createdAt": "2026-04-21T18:31:07.038Z"
+  },
+  {
+    "id": "r_10",
+    "bookId": "b_3",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Klassik olmasına baxmayaraq, heç köhnəlməyib. Hər kəsə oxumağı məsləhət görürəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 155,
+    "commentsCount": 8,
+    "isLiked": false,
+    "createdAt": "2026-07-30T18:31:07.038Z"
+  },
+  {
+    "id": "r_11",
+    "bookId": "b_3",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Klassik olmasına baxmayaraq, heç köhnəlməyib. Hər kəsə oxumağı məsləhət görürəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 238,
+    "commentsCount": 7,
+    "isLiked": false,
+    "createdAt": "2025-08-11T18:31:07.038Z"
+  },
+  {
+    "id": "r_12",
+    "bookId": "b_4",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 142,
+    "commentsCount": 11,
+    "isLiked": false,
+    "createdAt": "2026-06-15T18:31:07.038Z"
+  },
+  {
+    "id": "r_13",
+    "bookId": "b_4",
+    "user": {
+      "id": "u_5",
+      "username": "aysel",
+      "name": "Aysel Kərimli",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 43,
+    "commentsCount": 14,
+    "isLiked": false,
+    "createdAt": "2025-10-15T18:31:07.038Z"
+  },
+  {
+    "id": "r_14",
+    "bookId": "b_4",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 93,
+    "commentsCount": 8,
+    "isLiked": false,
+    "createdAt": "2025-07-23T18:31:07.038Z"
+  },
+  {
+    "id": "r_15",
+    "bookId": "b_4",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 211,
+    "commentsCount": 4,
+    "isLiked": false,
+    "createdAt": "2025-09-20T18:31:07.038Z"
+  },
+  {
+    "id": "r_16",
+    "bookId": "b_4",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 115,
+    "commentsCount": 18,
+    "isLiked": false,
+    "createdAt": "2026-01-05T18:31:07.038Z"
+  },
+  {
+    "id": "r_17",
+    "bookId": "b_5",
+    "user": {
+      "id": "u_2",
+      "username": "reshad",
+      "name": "Rəşad Quliyev",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 10,
+    "commentsCount": 2,
+    "isLiked": false,
+    "createdAt": "2026-02-03T18:31:07.038Z"
+  },
+  {
+    "id": "r_18",
+    "bookId": "b_5",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 103,
+    "commentsCount": 15,
+    "isLiked": false,
+    "createdAt": "2025-09-05T18:31:07.038Z"
+  },
+  {
+    "id": "r_19",
+    "bookId": "b_5",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 152,
+    "commentsCount": 14,
+    "isLiked": false,
+    "createdAt": "2025-12-05T18:31:07.038Z"
+  },
+  {
+    "id": "r_20",
+    "bookId": "b_5",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Klassik olmasına baxmayaraq, heç köhnəlməyib. Hər kəsə oxumağı məsləhət görürəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 73,
+    "commentsCount": 14,
+    "isLiked": false,
+    "createdAt": "2026-06-09T18:31:07.038Z"
+  },
+  {
+    "id": "r_21",
+    "bookId": "b_5",
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 87,
+    "commentsCount": 12,
+    "isLiked": false,
+    "createdAt": "2026-04-15T18:31:07.038Z"
+  },
+  {
+    "id": "r_22",
+    "bookId": "b_6",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 152,
+    "commentsCount": 4,
+    "isLiked": false,
+    "createdAt": "2026-04-30T18:31:07.038Z"
+  },
+  {
+    "id": "r_23",
+    "bookId": "b_6",
+    "user": {
+      "id": "u_13",
+      "username": "aynur",
+      "name": "Aynur Hüseynova",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 133,
+    "commentsCount": 15,
+    "isLiked": false,
+    "createdAt": "2025-06-24T18:31:07.038Z"
+  },
+  {
+    "id": "r_24",
+    "bookId": "b_6",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 145,
+    "commentsCount": 6,
+    "isLiked": false,
+    "createdAt": "2025-06-03T18:31:07.038Z"
+  },
+  {
+    "id": "r_25",
+    "bookId": "b_7",
+    "user": {
+      "id": "u_13",
+      "username": "aynur",
+      "name": "Aynur Hüseynova",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 194,
+    "commentsCount": 8,
+    "isLiked": false,
+    "createdAt": "2026-01-04T18:31:07.038Z"
+  },
+  {
+    "id": "r_26",
+    "bookId": "b_7",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 95,
+    "commentsCount": 4,
+    "isLiked": false,
+    "createdAt": "2026-03-19T18:31:07.038Z"
+  },
+  {
+    "id": "r_27",
+    "bookId": "b_7",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 185,
+    "commentsCount": 14,
+    "isLiked": false,
+    "createdAt": "2025-10-22T18:31:07.038Z"
+  },
+  {
+    "id": "r_28",
+    "bookId": "b_7",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 5,
+    "commentsCount": 17,
+    "isLiked": false,
+    "createdAt": "2025-09-20T18:31:07.038Z"
+  },
+  {
+    "id": "r_29",
+    "bookId": "b_7",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 12,
+    "commentsCount": 6,
+    "isLiked": false,
+    "createdAt": "2025-07-25T18:31:07.038Z"
+  },
+  {
+    "id": "r_30",
+    "bookId": "b_8",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 151,
+    "commentsCount": 15,
+    "isLiked": false,
+    "createdAt": "2025-09-06T18:31:07.038Z"
+  },
+  {
+    "id": "r_31",
+    "bookId": "b_8",
+    "user": {
+      "id": "u_11",
+      "username": "leman",
+      "name": "Ləman Abbasova",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 2,
+    "commentsCount": 17,
+    "isLiked": false,
+    "createdAt": "2026-07-27T18:31:07.038Z"
+  },
+  {
+    "id": "r_32",
+    "bookId": "b_8",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 134,
+    "commentsCount": 15,
+    "isLiked": false,
+    "createdAt": "2026-04-20T18:31:07.038Z"
+  },
+  {
+    "id": "r_33",
+    "bookId": "b_8",
+    "user": {
+      "id": "u_5",
+      "username": "aysel",
+      "name": "Aysel Kərimli",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 82,
+    "commentsCount": 7,
+    "isLiked": false,
+    "createdAt": "2025-12-12T18:31:07.038Z"
+  },
+  {
+    "id": "r_34",
+    "bookId": "b_8",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 145,
+    "commentsCount": 9,
+    "isLiked": false,
+    "createdAt": "2025-11-16T18:31:07.038Z"
+  },
+  {
+    "id": "r_35",
+    "bookId": "b_9",
+    "user": {
+      "id": "u_11",
+      "username": "leman",
+      "name": "Ləman Abbasova",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 91,
+    "commentsCount": 7,
+    "isLiked": false,
+    "createdAt": "2025-12-09T18:31:07.038Z"
+  },
+  {
+    "id": "r_36",
+    "bookId": "b_9",
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Klassik olmasına baxmayaraq, heç köhnəlməyib. Hər kəsə oxumağı məsləhət görürəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 103,
+    "commentsCount": 14,
+    "isLiked": false,
+    "createdAt": "2026-05-07T18:31:07.038Z"
+  },
+  {
+    "id": "r_37",
+    "bookId": "b_9",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 40,
+    "commentsCount": 9,
+    "isLiked": false,
+    "createdAt": "2026-05-03T18:31:07.038Z"
+  },
+  {
+    "id": "r_38",
+    "bookId": "b_9",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 234,
+    "commentsCount": 16,
+    "isLiked": false,
+    "createdAt": "2025-12-23T18:31:07.038Z"
+  },
+  {
+    "id": "r_39",
+    "bookId": "b_10",
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 140,
+    "commentsCount": 10,
+    "isLiked": false,
+    "createdAt": "2026-06-09T18:31:07.038Z"
+  },
+  {
+    "id": "r_40",
+    "bookId": "b_10",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 56,
+    "commentsCount": 2,
+    "isLiked": false,
+    "createdAt": "2025-05-09T18:31:07.038Z"
+  },
+  {
+    "id": "r_41",
+    "bookId": "b_11",
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 233,
+    "commentsCount": 8,
+    "isLiked": false,
+    "createdAt": "2026-04-22T18:31:07.038Z"
+  },
+  {
+    "id": "r_42",
+    "bookId": "b_11",
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Klassik olmasına baxmayaraq, heç köhnəlməyib. Hər kəsə oxumağı məsləhət görürəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 211,
+    "commentsCount": 13,
+    "isLiked": false,
+    "createdAt": "2025-12-26T18:31:07.038Z"
+  },
+  {
+    "id": "r_43",
+    "bookId": "b_11",
+    "user": {
+      "id": "u_5",
+      "username": "aysel",
+      "name": "Aysel Kərimli",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 148,
+    "commentsCount": 14,
+    "isLiked": false,
+    "createdAt": "2025-12-17T18:31:07.038Z"
+  },
+  {
+    "id": "r_44",
+    "bookId": "b_11",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Klassik olmasına baxmayaraq, heç köhnəlməyib. Hər kəsə oxumağı məsləhət görürəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 138,
+    "commentsCount": 4,
+    "isLiked": false,
+    "createdAt": "2025-11-04T18:31:07.038Z"
+  },
+  {
+    "id": "r_45",
+    "bookId": "b_12",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 53,
+    "commentsCount": 5,
+    "isLiked": false,
+    "createdAt": "2026-05-21T18:31:07.038Z"
+  },
+  {
+    "id": "r_46",
+    "bookId": "b_12",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 57,
+    "commentsCount": 15,
+    "isLiked": false,
+    "createdAt": "2026-01-26T18:31:07.038Z"
+  },
+  {
+    "id": "r_47",
+    "bookId": "b_12",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 7,
+    "commentsCount": 9,
+    "isLiked": false,
+    "createdAt": "2026-05-20T18:31:07.038Z"
+  },
+  {
+    "id": "r_48",
+    "bookId": "b_14",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 235,
+    "commentsCount": 2,
+    "isLiked": false,
+    "createdAt": "2025-09-23T18:31:07.038Z"
+  },
+  {
+    "id": "r_49",
+    "bookId": "b_14",
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Klassik olmasına baxmayaraq, heç köhnəlməyib. Hər kəsə oxumağı məsləhət görürəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 233,
+    "commentsCount": 18,
+    "isLiked": false,
+    "createdAt": "2025-08-24T18:31:07.038Z"
+  },
+  {
+    "id": "r_50",
+    "bookId": "b_14",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 18,
+    "commentsCount": 0,
+    "isLiked": false,
+    "createdAt": "2025-05-05T18:31:07.038Z"
+  },
+  {
+    "id": "r_51",
+    "bookId": "b_14",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 134,
+    "commentsCount": 16,
+    "isLiked": false,
+    "createdAt": "2025-03-31T18:31:07.038Z"
+  },
+  {
+    "id": "r_52",
+    "bookId": "b_14",
+    "user": {
+      "id": "u_5",
+      "username": "aysel",
+      "name": "Aysel Kərimli",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 219,
+    "commentsCount": 13,
+    "isLiked": false,
+    "createdAt": "2026-07-07T18:31:07.038Z"
+  },
+  {
+    "id": "r_53",
+    "bookId": "b_15",
+    "user": {
+      "id": "u_2",
+      "username": "reshad",
+      "name": "Rəşad Quliyev",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 156,
+    "commentsCount": 7,
+    "isLiked": false,
+    "createdAt": "2025-09-08T18:31:07.038Z"
+  },
+  {
+    "id": "r_54",
+    "bookId": "b_15",
+    "user": {
+      "id": "u_2",
+      "username": "reshad",
+      "name": "Rəşad Quliyev",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 169,
+    "commentsCount": 6,
+    "isLiked": false,
+    "createdAt": "2026-05-08T18:31:07.038Z"
+  },
+  {
+    "id": "r_55",
+    "bookId": "b_15",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 103,
+    "commentsCount": 6,
+    "isLiked": false,
+    "createdAt": "2026-02-13T18:31:07.038Z"
+  },
+  {
+    "id": "r_56",
+    "bookId": "b_16",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 190,
+    "commentsCount": 4,
+    "isLiked": false,
+    "createdAt": "2026-01-14T18:31:07.038Z"
+  },
+  {
+    "id": "r_57",
+    "bookId": "b_16",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 66,
+    "commentsCount": 10,
+    "isLiked": false,
+    "createdAt": "2026-07-03T18:31:07.038Z"
+  },
+  {
+    "id": "r_58",
+    "bookId": "b_17",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 38,
+    "commentsCount": 11,
+    "isLiked": false,
+    "createdAt": "2025-09-03T18:31:07.038Z"
+  },
+  {
+    "id": "r_59",
+    "bookId": "b_17",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 153,
+    "commentsCount": 18,
+    "isLiked": false,
+    "createdAt": "2025-05-15T18:31:07.038Z"
+  },
+  {
+    "id": "r_60",
+    "bookId": "b_17",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 227,
+    "commentsCount": 13,
+    "isLiked": false,
+    "createdAt": "2026-03-21T18:31:07.038Z"
+  },
+  {
+    "id": "r_61",
+    "bookId": "b_17",
+    "user": {
+      "id": "u_5",
+      "username": "aysel",
+      "name": "Aysel Kərimli",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 192,
+    "commentsCount": 14,
+    "isLiked": false,
+    "createdAt": "2026-03-19T18:31:07.038Z"
+  },
+  {
+    "id": "r_62",
+    "bookId": "b_19",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 147,
+    "commentsCount": 5,
+    "isLiked": false,
+    "createdAt": "2025-06-16T18:31:07.038Z"
+  },
+  {
+    "id": "r_63",
+    "bookId": "b_20",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 31,
+    "commentsCount": 3,
+    "isLiked": false,
+    "createdAt": "2026-07-03T18:31:07.038Z"
+  },
+  {
+    "id": "r_64",
+    "bookId": "b_20",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 16,
+    "commentsCount": 17,
+    "isLiked": false,
+    "createdAt": "2025-12-05T18:31:07.038Z"
+  },
+  {
+    "id": "r_65",
+    "bookId": "b_21",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 151,
+    "commentsCount": 7,
+    "isLiked": false,
+    "createdAt": "2026-06-21T18:31:07.038Z"
+  },
+  {
+    "id": "r_66",
+    "bookId": "b_22",
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 237,
+    "commentsCount": 8,
+    "isLiked": false,
+    "createdAt": "2026-03-25T18:31:07.038Z"
+  },
+  {
+    "id": "r_67",
+    "bookId": "b_22",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Klassik olmasına baxmayaraq, heç köhnəlməyib. Hər kəsə oxumağı məsləhət görürəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 153,
+    "commentsCount": 13,
+    "isLiked": false,
+    "createdAt": "2026-07-23T18:31:07.038Z"
+  },
+  {
+    "id": "r_68",
+    "bookId": "b_23",
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 105,
+    "commentsCount": 0,
+    "isLiked": false,
+    "createdAt": "2026-06-23T18:31:07.038Z"
+  },
+  {
+    "id": "r_69",
+    "bookId": "b_23",
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 191,
+    "commentsCount": 0,
+    "isLiked": false,
+    "createdAt": "2025-09-09T18:31:07.038Z"
+  },
+  {
+    "id": "r_70",
+    "bookId": "b_24",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 176,
+    "commentsCount": 5,
+    "isLiked": false,
+    "createdAt": "2025-09-21T18:31:07.038Z"
+  },
+  {
+    "id": "r_71",
+    "bookId": "b_24",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 78,
+    "commentsCount": 13,
+    "isLiked": false,
+    "createdAt": "2026-02-24T18:31:07.038Z"
+  },
+  {
+    "id": "r_72",
+    "bookId": "b_24",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 85,
+    "commentsCount": 0,
+    "isLiked": false,
+    "createdAt": "2025-09-29T18:31:07.038Z"
+  },
+  {
+    "id": "r_73",
+    "bookId": "b_25",
+    "user": {
+      "id": "u_2",
+      "username": "reshad",
+      "name": "Rəşad Quliyev",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 43,
+    "commentsCount": 18,
+    "isLiked": false,
+    "createdAt": "2026-07-14T18:31:07.038Z"
+  },
+  {
+    "id": "r_74",
+    "bookId": "b_25",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 104,
+    "commentsCount": 2,
+    "isLiked": false,
+    "createdAt": "2025-10-17T18:31:07.038Z"
+  },
+  {
+    "id": "r_75",
+    "bookId": "b_25",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 26,
+    "commentsCount": 13,
+    "isLiked": false,
+    "createdAt": "2026-07-18T18:31:07.038Z"
+  },
+  {
+    "id": "r_76",
+    "bookId": "b_25",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 138,
+    "commentsCount": 1,
+    "isLiked": false,
+    "createdAt": "2025-10-20T18:31:07.038Z"
+  },
+  {
+    "id": "r_77",
+    "bookId": "b_26",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 50,
+    "commentsCount": 17,
+    "isLiked": false,
+    "createdAt": "2026-02-19T18:31:07.038Z"
+  },
+  {
+    "id": "r_78",
+    "bookId": "b_26",
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 96,
+    "commentsCount": 8,
+    "isLiked": false,
+    "createdAt": "2025-07-13T18:31:07.038Z"
+  },
+  {
+    "id": "r_79",
+    "bookId": "b_26",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 169,
+    "commentsCount": 13,
+    "isLiked": false,
+    "createdAt": "2026-02-19T18:31:07.038Z"
+  },
+  {
+    "id": "r_80",
+    "bookId": "b_26",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 90,
+    "commentsCount": 4,
+    "isLiked": false,
+    "createdAt": "2025-08-16T18:31:07.038Z"
+  },
+  {
+    "id": "r_81",
+    "bookId": "b_27",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 128,
+    "commentsCount": 3,
+    "isLiked": false,
+    "createdAt": "2025-07-20T18:31:07.038Z"
+  },
+  {
+    "id": "r_82",
+    "bookId": "b_28",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 51,
+    "commentsCount": 15,
+    "isLiked": false,
+    "createdAt": "2025-04-04T18:31:07.038Z"
+  },
+  {
+    "id": "r_83",
+    "bookId": "b_28",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 28,
+    "commentsCount": 4,
+    "isLiked": false,
+    "createdAt": "2026-05-19T18:31:07.038Z"
+  },
+  {
+    "id": "r_84",
+    "bookId": "b_29",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 39,
+    "commentsCount": 11,
+    "isLiked": false,
+    "createdAt": "2026-04-15T18:31:07.038Z"
+  },
+  {
+    "id": "r_85",
+    "bookId": "b_29",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 60,
+    "commentsCount": 10,
+    "isLiked": false,
+    "createdAt": "2026-02-28T18:31:07.038Z"
+  },
+  {
+    "id": "r_86",
+    "bookId": "b_29",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 34,
+    "commentsCount": 15,
+    "isLiked": false,
+    "createdAt": "2026-03-26T18:31:07.038Z"
+  },
+  {
+    "id": "r_87",
+    "bookId": "b_29",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 202,
+    "commentsCount": 0,
+    "isLiked": false,
+    "createdAt": "2025-08-10T18:31:07.038Z"
+  },
+  {
+    "id": "r_88",
+    "bookId": "b_29",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 238,
+    "commentsCount": 0,
+    "isLiked": false,
+    "createdAt": "2025-10-11T18:31:07.038Z"
+  },
+  {
+    "id": "r_89",
+    "bookId": "b_30",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 37,
+    "commentsCount": 6,
+    "isLiked": false,
+    "createdAt": "2025-05-31T18:31:07.038Z"
+  },
+  {
+    "id": "r_90",
+    "bookId": "b_30",
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 98,
+    "commentsCount": 3,
+    "isLiked": false,
+    "createdAt": "2025-06-12T18:31:07.038Z"
+  },
+  {
+    "id": "r_91",
+    "bookId": "b_30",
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 40,
+    "commentsCount": 8,
+    "isLiked": false,
+    "createdAt": "2026-01-18T18:31:07.038Z"
+  },
+  {
+    "id": "r_92",
+    "bookId": "b_31",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 56,
+    "commentsCount": 7,
+    "isLiked": false,
+    "createdAt": "2025-09-25T18:31:07.038Z"
+  },
+  {
+    "id": "r_93",
+    "bookId": "b_31",
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 74,
+    "commentsCount": 17,
+    "isLiked": false,
+    "createdAt": "2026-04-24T18:31:07.038Z"
+  },
+  {
+    "id": "r_94",
+    "bookId": "b_31",
+    "user": {
+      "id": "u_11",
+      "username": "leman",
+      "name": "Ləman Abbasova",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 64,
+    "commentsCount": 11,
+    "isLiked": false,
+    "createdAt": "2026-05-21T18:31:07.038Z"
+  },
+  {
+    "id": "r_95",
+    "bookId": "b_31",
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 42,
+    "commentsCount": 11,
+    "isLiked": false,
+    "createdAt": "2025-12-08T18:31:07.038Z"
+  },
+  {
+    "id": "r_96",
+    "bookId": "b_31",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 217,
+    "commentsCount": 12,
+    "isLiked": false,
+    "createdAt": "2025-06-23T18:31:07.038Z"
+  },
+  {
+    "id": "r_97",
+    "bookId": "b_32",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 103,
+    "commentsCount": 2,
+    "isLiked": false,
+    "createdAt": "2026-02-25T18:31:07.038Z"
+  },
+  {
+    "id": "r_98",
+    "bookId": "b_32",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 162,
+    "commentsCount": 3,
+    "isLiked": false,
+    "createdAt": "2025-06-06T18:31:07.038Z"
+  },
+  {
+    "id": "r_99",
+    "bookId": "b_33",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 83,
+    "commentsCount": 9,
+    "isLiked": false,
+    "createdAt": "2025-03-27T18:31:07.038Z"
+  },
+  {
+    "id": "r_100",
+    "bookId": "b_33",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 204,
+    "commentsCount": 18,
+    "isLiked": false,
+    "createdAt": "2026-01-12T18:31:07.038Z"
+  },
+  {
+    "id": "r_101",
+    "bookId": "b_34",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 36,
+    "commentsCount": 13,
+    "isLiked": false,
+    "createdAt": "2026-02-11T18:31:07.038Z"
+  },
+  {
+    "id": "r_102",
+    "bookId": "b_34",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 59,
+    "commentsCount": 10,
+    "isLiked": false,
+    "createdAt": "2025-07-15T18:31:07.038Z"
+  },
+  {
+    "id": "r_103",
+    "bookId": "b_34",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 194,
+    "commentsCount": 10,
+    "isLiked": false,
+    "createdAt": "2026-04-23T18:31:07.038Z"
+  },
+  {
+    "id": "r_104",
+    "bookId": "b_34",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 215,
+    "commentsCount": 18,
+    "isLiked": false,
+    "createdAt": "2026-03-19T18:31:07.038Z"
+  },
+  {
+    "id": "r_105",
+    "bookId": "b_34",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 86,
+    "commentsCount": 17,
+    "isLiked": false,
+    "createdAt": "2025-09-11T18:31:07.038Z"
+  },
+  {
+    "id": "r_106",
+    "bookId": "b_35",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 202,
+    "commentsCount": 14,
+    "isLiked": false,
+    "createdAt": "2025-06-13T18:31:07.038Z"
+  },
+  {
+    "id": "r_107",
+    "bookId": "b_35",
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 222,
+    "commentsCount": 18,
+    "isLiked": false,
+    "createdAt": "2026-02-04T18:31:07.038Z"
+  },
+  {
+    "id": "r_108",
+    "bookId": "b_35",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 239,
+    "commentsCount": 13,
+    "isLiked": false,
+    "createdAt": "2025-07-09T18:31:07.038Z"
+  },
+  {
+    "id": "r_109",
+    "bookId": "b_35",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 116,
+    "commentsCount": 14,
+    "isLiked": false,
+    "createdAt": "2025-07-06T18:31:07.038Z"
+  },
+  {
+    "id": "r_110",
+    "bookId": "b_35",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 55,
+    "commentsCount": 17,
+    "isLiked": false,
+    "createdAt": "2025-04-24T18:31:07.038Z"
+  },
+  {
+    "id": "r_111",
+    "bookId": "b_36",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 170,
+    "commentsCount": 9,
+    "isLiked": false,
+    "createdAt": "2025-04-04T18:31:07.038Z"
+  },
+  {
+    "id": "r_112",
+    "bookId": "b_37",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 127,
+    "commentsCount": 18,
+    "isLiked": false,
+    "createdAt": "2026-04-11T18:31:07.038Z"
+  },
+  {
+    "id": "r_113",
+    "bookId": "b_37",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 51,
+    "commentsCount": 1,
+    "isLiked": false,
+    "createdAt": "2025-07-04T18:31:07.038Z"
+  },
+  {
+    "id": "r_114",
+    "bookId": "b_37",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 220,
+    "commentsCount": 5,
+    "isLiked": false,
+    "createdAt": "2026-04-28T18:31:07.038Z"
+  },
+  {
+    "id": "r_115",
+    "bookId": "b_38",
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 53,
+    "commentsCount": 7,
+    "isLiked": false,
+    "createdAt": "2025-08-09T18:31:07.038Z"
+  },
+  {
+    "id": "r_116",
+    "bookId": "b_38",
+    "user": {
+      "id": "u_11",
+      "username": "leman",
+      "name": "Ləman Abbasova",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 185,
+    "commentsCount": 9,
+    "isLiked": false,
+    "createdAt": "2026-05-25T18:31:07.038Z"
+  },
+  {
+    "id": "r_117",
+    "bookId": "b_39",
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 11,
+    "commentsCount": 8,
+    "isLiked": false,
+    "createdAt": "2025-10-07T18:31:07.038Z"
+  },
+  {
+    "id": "r_118",
+    "bookId": "b_39",
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 215,
+    "commentsCount": 5,
+    "isLiked": false,
+    "createdAt": "2025-11-10T18:31:07.038Z"
+  },
+  {
+    "id": "r_119",
+    "bookId": "b_39",
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 82,
+    "commentsCount": 12,
+    "isLiked": false,
+    "createdAt": "2025-04-28T18:31:07.038Z"
+  },
+  {
+    "id": "r_120",
+    "bookId": "b_39",
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 225,
+    "commentsCount": 7,
+    "isLiked": false,
+    "createdAt": "2025-11-25T18:31:07.038Z"
+  },
+  {
+    "id": "r_121",
+    "bookId": "b_39",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 21,
+    "commentsCount": 2,
+    "isLiked": false,
+    "createdAt": "2026-06-20T18:31:07.038Z"
+  },
+  {
+    "id": "r_122",
+    "bookId": "b_40",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 186,
+    "commentsCount": 14,
+    "isLiked": false,
+    "createdAt": "2025-10-31T18:31:07.038Z"
+  },
+  {
+    "id": "r_123",
+    "bookId": "b_41",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Klassik olmasına baxmayaraq, heç köhnəlməyib. Hər kəsə oxumağı məsləhət görürəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 175,
+    "commentsCount": 0,
+    "isLiked": false,
+    "createdAt": "2026-03-30T18:31:07.038Z"
+  },
+  {
+    "id": "r_124",
+    "bookId": "b_41",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 204,
+    "commentsCount": 18,
+    "isLiked": false,
+    "createdAt": "2025-05-20T18:31:07.038Z"
+  },
+  {
+    "id": "r_125",
+    "bookId": "b_41",
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 13,
+    "commentsCount": 5,
+    "isLiked": false,
+    "createdAt": "2026-03-26T18:31:07.038Z"
+  },
+  {
+    "id": "r_126",
+    "bookId": "b_42",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 102,
+    "commentsCount": 2,
+    "isLiked": false,
+    "createdAt": "2025-11-20T18:31:07.038Z"
+  },
+  {
+    "id": "r_127",
+    "bookId": "b_42",
+    "user": {
+      "id": "u_13",
+      "username": "aynur",
+      "name": "Aynur Hüseynova",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 63,
+    "commentsCount": 13,
+    "isLiked": false,
+    "createdAt": "2025-09-21T18:31:07.038Z"
+  },
+  {
+    "id": "r_128",
+    "bookId": "b_43",
+    "user": {
+      "id": "u_13",
+      "username": "aynur",
+      "name": "Aynur Hüseynova",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Klassik olmasına baxmayaraq, heç köhnəlməyib. Hər kəsə oxumağı məsləhət görürəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 156,
+    "commentsCount": 17,
+    "isLiked": false,
+    "createdAt": "2026-01-25T18:31:07.038Z"
+  },
+  {
+    "id": "r_129",
+    "bookId": "b_43",
+    "user": {
+      "id": "u_10",
+      "username": "orxan",
+      "name": "Orxan Rzayev",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 70,
+    "commentsCount": 3,
+    "isLiked": false,
+    "createdAt": "2026-01-03T18:31:07.038Z"
+  },
+  {
+    "id": "r_130",
+    "bookId": "b_43",
+    "user": {
+      "id": "u_13",
+      "username": "aynur",
+      "name": "Aynur Hüseynova",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 82,
+    "commentsCount": 5,
+    "isLiked": false,
+    "createdAt": "2026-08-02T18:31:07.038Z"
+  },
+  {
+    "id": "r_131",
+    "bookId": "b_43",
+    "user": {
+      "id": "u_13",
+      "username": "aynur",
+      "name": "Aynur Hüseynova",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 207,
+    "commentsCount": 18,
+    "isLiked": false,
+    "createdAt": "2026-03-06T18:31:07.038Z"
+  },
+  {
+    "id": "r_132",
+    "bookId": "b_44",
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 108,
+    "commentsCount": 10,
+    "isLiked": false,
+    "createdAt": "2026-07-04T18:31:07.038Z"
+  },
+  {
+    "id": "r_133",
+    "bookId": "b_44",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 142,
+    "commentsCount": 10,
+    "isLiked": false,
+    "createdAt": "2025-06-03T18:31:07.038Z"
+  },
+  {
+    "id": "r_134",
+    "bookId": "b_46",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 147,
+    "commentsCount": 11,
+    "isLiked": false,
+    "createdAt": "2025-08-14T18:31:07.038Z"
+  },
+  {
+    "id": "r_135",
+    "bookId": "b_46",
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 122,
+    "commentsCount": 11,
+    "isLiked": false,
+    "createdAt": "2025-09-10T18:31:07.038Z"
+  },
+  {
+    "id": "r_136",
+    "bookId": "b_47",
+    "user": {
+      "id": "u_9",
+      "username": "sebine",
+      "name": "Səbinə Vəliyeva",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 39,
+    "commentsCount": 12,
+    "isLiked": false,
+    "createdAt": "2025-06-19T18:31:07.038Z"
+  },
+  {
+    "id": "r_137",
+    "bookId": "b_48",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 4,
+    "commentsCount": 1,
+    "isLiked": false,
+    "createdAt": "2026-06-16T18:31:07.038Z"
+  },
+  {
+    "id": "r_138",
+    "bookId": "b_48",
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 53,
+    "commentsCount": 8,
+    "isLiked": false,
+    "createdAt": "2025-05-06T18:31:07.038Z"
+  },
+  {
+    "id": "r_139",
+    "bookId": "b_48",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 20,
+    "commentsCount": 6,
+    "isLiked": false,
+    "createdAt": "2026-02-26T18:31:07.038Z"
+  },
+  {
+    "id": "r_140",
+    "bookId": "b_49",
+    "user": {
+      "id": "u_13",
+      "username": "aynur",
+      "name": "Aynur Hüseynova",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 186,
+    "commentsCount": 15,
+    "isLiked": false,
+    "createdAt": "2025-03-31T18:31:07.038Z"
+  },
+  {
+    "id": "r_141",
+    "bookId": "b_49",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Klassik olmasına baxmayaraq, heç köhnəlməyib. Hər kəsə oxumağı məsləhət görürəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 207,
+    "commentsCount": 13,
+    "isLiked": false,
+    "createdAt": "2026-05-02T18:31:07.038Z"
+  },
+  {
+    "id": "r_142",
+    "bookId": "b_49",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 225,
+    "commentsCount": 5,
+    "isLiked": false,
+    "createdAt": "2025-04-03T18:31:07.038Z"
+  },
+  {
+    "id": "r_143",
+    "bookId": "b_49",
+    "user": {
+      "id": "u_3",
+      "username": "nigar",
+      "name": "Nigar Əliyeva",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 131,
+    "commentsCount": 10,
+    "isLiked": false,
+    "createdAt": "2026-04-18T18:31:07.038Z"
+  },
+  {
+    "id": "r_144",
+    "bookId": "b_50",
+    "user": {
+      "id": "u_11",
+      "username": "leman",
+      "name": "Ləman Abbasova",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 20,
+    "commentsCount": 11,
+    "isLiked": false,
+    "createdAt": "2025-08-24T18:31:07.038Z"
+  },
+  {
+    "id": "r_145",
+    "bookId": "b_52",
+    "user": {
+      "id": "u_2",
+      "username": "reshad",
+      "name": "Rəşad Quliyev",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 196,
+    "commentsCount": 16,
+    "isLiked": false,
+    "createdAt": "2025-10-15T18:31:07.038Z"
+  },
+  {
+    "id": "r_146",
+    "bookId": "b_52",
+    "user": {
+      "id": "u_5",
+      "username": "aysel",
+      "name": "Aysel Kərimli",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 52,
+    "commentsCount": 10,
+    "isLiked": false,
+    "createdAt": "2026-04-10T18:31:07.038Z"
+  },
+  {
+    "id": "r_147",
+    "bookId": "b_53",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 27,
+    "commentsCount": 16,
+    "isLiked": false,
+    "createdAt": "2025-11-03T18:31:07.038Z"
+  },
+  {
+    "id": "r_148",
+    "bookId": "b_53",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 85,
+    "commentsCount": 10,
+    "isLiked": false,
+    "createdAt": "2025-06-07T18:31:07.038Z"
+  },
+  {
+    "id": "r_149",
+    "bookId": "b_53",
+    "user": {
+      "id": "u_12",
+      "username": "ferid",
+      "name": "Fərid Musayev",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 214,
+    "commentsCount": 12,
+    "isLiked": false,
+    "createdAt": "2026-06-27T18:31:07.038Z"
+  },
+  {
+    "id": "r_150",
+    "bookId": "b_53",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 65,
+    "commentsCount": 6,
+    "isLiked": false,
+    "createdAt": "2026-01-24T18:31:07.038Z"
+  },
+  {
+    "id": "r_151",
+    "bookId": "b_53",
+    "user": {
+      "id": "u_14",
+      "username": "vuqar",
+      "name": "Vüqar Salmanov",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Kitabın atmosferi möhtəşəmdir. Oxuyarkən özünüzü hadisələrin içində hiss edirsiniz.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 116,
+    "commentsCount": 11,
+    "isLiked": false,
+    "createdAt": "2025-10-25T18:31:07.038Z"
+  },
+  {
+    "id": "r_152",
+    "bookId": "b_54",
+    "user": {
+      "id": "u_5",
+      "username": "aysel",
+      "name": "Aysel Kərimli",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": true,
+    "photos": [],
+    "likesCount": 119,
+    "commentsCount": 2,
+    "isLiked": false,
+    "createdAt": "2026-07-19T18:31:07.038Z"
+  },
+  {
+    "id": "r_153",
+    "bookId": "b_54",
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "rating": 10,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 47,
+    "commentsCount": 15,
+    "isLiked": false,
+    "createdAt": "2026-01-16T18:31:07.038Z"
+  },
+  {
+    "id": "r_154",
+    "bookId": "b_54",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 7,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 173,
+    "commentsCount": 8,
+    "isLiked": false,
+    "createdAt": "2025-05-06T18:31:07.038Z"
+  },
+  {
+    "id": "r_155",
+    "bookId": "b_55",
+    "user": {
+      "id": "u_4",
+      "username": "tural",
+      "name": "Tural Həsənov",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "İkinci dəfə oxuyuram və hər dəfə yeni detal tapıram. Rəfimin ən qiymətli kitablarından biridir.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 177,
+    "commentsCount": 0,
+    "isLiked": false,
+    "createdAt": "2025-08-25T18:31:07.038Z"
+  },
+  {
+    "id": "r_156",
+    "bookId": "b_56",
+    "user": {
+      "id": "u_5",
+      "username": "aysel",
+      "name": "Aysel Kərimli",
+      "avatarUrl": null
+    },
+    "rating": 5,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 193,
+    "commentsCount": 16,
+    "isLiked": false,
+    "createdAt": "2025-11-15T18:31:07.038Z"
+  },
+  {
+    "id": "r_157",
+    "bookId": "b_56",
+    "user": {
+      "id": "u_1",
+      "username": "leyla",
+      "name": "Leyla Məmmədova",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Gözləntilərimi tam qarşılamadı. Ideya güclü idi, amma orta hissə lazımsız uzadılmışdı.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 235,
+    "commentsCount": 17,
+    "isLiked": false,
+    "createdAt": "2025-04-10T18:31:07.038Z"
+  },
+  {
+    "id": "r_158",
+    "bookId": "b_57",
+    "user": {
+      "id": "u_8",
+      "username": "kamran",
+      "name": "Kamran Nəbiyev",
+      "avatarUrl": null
+    },
+    "rating": 9,
+    "body": "Tərcümə keyfiyyəti yaxşıdır, dil axıcıdır. Mövzu isə bu gün üçün də aktualdır.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 53,
+    "commentsCount": 9,
+    "isLiked": false,
+    "createdAt": "2026-06-15T18:31:07.038Z"
+  },
+  {
+    "id": "r_159",
+    "bookId": "b_57",
+    "user": {
+      "id": "u_2",
+      "username": "reshad",
+      "name": "Rəşad Quliyev",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Müəllifin üslubu çox səmimidir. Kitabı bitirdikdən sonra bir neçə gün düşündüm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 83,
+    "commentsCount": 11,
+    "isLiked": false,
+    "createdAt": "2025-09-24T18:31:07.038Z"
+  },
+  {
+    "id": "r_160",
+    "bookId": "b_57",
+    "user": {
+      "id": "u_6",
+      "username": "elvin",
+      "name": "Elvin Bayramov",
+      "avatarUrl": null
+    },
+    "rating": 4,
+    "body": "Başlanğıcı bir az ağır gəldi, amma 100-cü səhifədən sonra əlimdən yerə qoya bilmədim. Tövsiyə edirəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 44,
+    "commentsCount": 1,
+    "isLiked": false,
+    "createdAt": "2025-04-19T18:31:07.038Z"
+  },
+  {
+    "id": "r_161",
+    "bookId": "b_57",
+    "user": {
+      "id": "u_11",
+      "username": "leman",
+      "name": "Ləman Abbasova",
+      "avatarUrl": null
+    },
+    "rating": 8,
+    "body": "Uzun müddətdir belə təsirli bir kitab oxumamışdım. Personajların dialoqları çox təbii səslənir, final isə gözlənilməz idi.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 130,
+    "commentsCount": 5,
+    "isLiked": false,
+    "createdAt": "2025-05-17T18:31:07.038Z"
+  },
+  {
+    "id": "r_162",
+    "bookId": "b_58",
+    "user": {
+      "id": "u_7",
+      "username": "gunel",
+      "name": "Günel Səfərova",
+      "avatarUrl": null
+    },
+    "rating": 6,
+    "body": "Klassik olmasına baxmayaraq, heç köhnəlməyib. Hər kəsə oxumağı məsləhət görürəm.",
+    "isSpoiler": false,
+    "photos": [],
+    "likesCount": 82,
+    "commentsCount": 0,
+    "isLiked": false,
+    "createdAt": "2025-10-08T18:31:07.038Z"
+  }
+]
