@@ -4,7 +4,13 @@ import { useRouter } from 'expo-router';
 import { Award, CalendarDays, ChevronRight } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
-import { useBadges, useShelves, useToggleFollow, useUserActivity } from '@/api/hooks';
+import {
+  useBadges,
+  useReadingStats,
+  useShelves,
+  useToggleFollow,
+  useUserActivity,
+} from '@/api/hooks';
 import { formatCount, formatDate } from '@/lib/format';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
@@ -35,6 +41,7 @@ export function ProfileView({ user, isMe }: ProfileViewProps) {
   const { data: shelves } = useShelves();
   const { data: badges } = useBadges();
   const { data: activity } = useUserActivity(user.username);
+  const { data: readingStats } = useReadingStats(30);
   const toggleFollow = useToggleFollow();
 
   const earned = badges?.filter((b) => b.earned) ?? [];
@@ -156,6 +163,44 @@ export function ProfileView({ user, isMe }: ProfileViewProps) {
           <BarChart data={weekly} />
         </Card>
       </Section>
+
+      {/* Session-derived stats. Only the signed-in reader has sessions to
+          aggregate — the API scopes them to the caller. */}
+      {isMe && readingStats && readingStats.sessionCount > 0 ? (
+        <Section
+          title={t('session.statsTitle')}
+          action={
+            <Pressable accessibilityRole="button" onPress={() => router.push('/sessions')}>
+              <ChevronRight size={18} color={theme.colors.fgSubtle} />
+            </Pressable>
+          }
+        >
+          <Card level={0} style={{ gap: theme.spacing.lg }}>
+            <View style={{ flexDirection: 'row' }}>
+              <StatTile
+                value={t('session.minutes', { count: readingStats.totalMinutes })}
+                label={t('session.totalMinutes')}
+              />
+              <StatTile value={readingStats.totalPages} label={t('session.totalPages')} />
+              <StatTile
+                value={readingStats.pagesPerHour}
+                label={t('session.pagesPerHour')}
+                tone="primary"
+              />
+              <StatTile value={readingStats.sessionCount} label={t('session.sessionCount')} />
+            </View>
+
+            <BarChart
+              data={readingStats.dailyMinutes.map((value, i) => ({
+                label: WEEKDAY_KEYS[i],
+                value,
+                highlight: i === readingStats.dailyMinutes.length - 1,
+              }))}
+              height={110}
+            />
+          </Card>
+        </Section>
+      ) : null}
 
       {isMe ? (
         <Section

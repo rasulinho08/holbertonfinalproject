@@ -4,9 +4,10 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Search, SlidersHorizontal, X } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
-import { useBooks, useGenres, useSearchSuggestions } from '@/api/hooks';
+import { useBookLists, useBooks, useGenres, useSearchSuggestions } from '@/api/hooks';
 import { useDebounced } from '@/lib/hooks';
 import { BookCard, BookCardSkeleton } from '@/components/book/BookCard';
+import { BookListCard } from '@/components/book/BookListCard';
 import { FilterSheet, type Filters, EMPTY_FILTERS, activeFilterCount } from '@/components/book/FilterSheet';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { Badge } from '@/components/ui/Badge';
@@ -33,6 +34,8 @@ export default function ExploreScreen() {
   const debouncedQuery = useDebounced(query, 350);
   const { data: genres } = useGenres();
   const { data: suggestions } = useSearchSuggestions(query);
+  const listsQuery = useBookLists('all');
+  const featuredLists = listsQuery.data?.pages[0]?.data.slice(0, 3) ?? [];
 
   const booksQuery = useBooks({ ...filters, q: debouncedQuery || undefined });
 
@@ -131,7 +134,11 @@ export default function ExploreScreen() {
             void booksQuery.fetchNextPage();
           }
         }}
-        renderItem={({ item }) => <BookCard book={item} width={CARD_WIDTH} />}
+        // The stagger resets every page, so an infinite scroll does not
+        // accumulate an ever-longer delay on later rows.
+        renderItem={({ item, index }) => (
+          <BookCard book={item} index={index % 20} width={CARD_WIDTH} />
+        )}
         ListHeaderComponent={
           <View style={{ gap: theme.spacing.lg }}>
             {/* Type-ahead: direct hits jump straight to the book. */}
@@ -172,6 +179,32 @@ export default function ExploreScreen() {
                       count={genre.bookCount}
                       onPress={() => setFilters((f) => ({ ...f, genres: [genre.slug] }))}
                     />
+                  ))}
+                </View>
+              </View>
+            ) : null}
+
+            {/* Curated lists — a way into a 1000-book catalogue that is not
+                search or a genre chip. */}
+            {browsing && featuredLists.length > 0 ? (
+              <View style={{ gap: theme.spacing.md }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Text variant="h3">{t('list.title')}</Text>
+                  <Pressable accessibilityRole="button" onPress={() => router.push('/lists')}>
+                    <Text variant="smallStrong" color="primary">
+                      {t('common.seeAll')}
+                    </Text>
+                  </Pressable>
+                </View>
+                <View style={{ gap: theme.spacing.sm }}>
+                  {featuredLists.map((list, i) => (
+                    <BookListCard key={list.id} list={list} index={i} />
                   ))}
                 </View>
               </View>

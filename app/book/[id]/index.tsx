@@ -6,6 +6,7 @@ import {
   ChevronRight,
   Package,
   ShoppingCart,
+  Timer,
   Users,
 } from 'lucide-react-native';
 import { useTheme } from '@/theme';
@@ -15,12 +16,14 @@ import {
   useBook,
   useBookQuotes,
   useBookReviews,
+  useListsForBook,
   useSimilarBooks,
   useToggleReviewLike,
 } from '@/api/hooks';
 import { formatIsbn, formatPrice, readingPercent } from '@/lib/format';
 import { serverMessage } from '@/api/errors';
 import { BookCover } from '@/components/book/BookCover';
+import { BookListCard } from '@/components/book/BookListCard';
 import { BookRail } from '@/components/book/BookRail';
 import { ProgressSheet } from '@/components/book/ProgressSheet';
 import { ShelfPicker } from '@/components/book/ShelfPicker';
@@ -48,6 +51,7 @@ export default function BookDetailScreen() {
   const { data: reviews } = useBookReviews(id);
   const { data: quotes } = useBookQuotes(id);
   const { data: similar, isLoading: similarLoading } = useSimilarBooks(id);
+  const { data: bookLists } = useListsForBook(id);
   const addToCart = useAddToCart();
   const toggleReviewLike = useToggleReviewLike();
 
@@ -185,13 +189,32 @@ export default function BookDetailScreen() {
           </Card>
         </Section>
 
-        {/* buddy read entry point */}
-        <Button
-          title={t('book.startBuddyRead')}
-          variant="outline"
-          icon={<Users size={16} color={theme.colors.fg} />}
-          onPress={() => router.push({ pathname: '/buddy-reads', params: { bookId: book.id } })}
-        />
+        {/* reading + buddy read entry points */}
+        <View style={{ gap: theme.spacing.md }}>
+          <Button
+            title={t('session.startSession')}
+            variant="secondary"
+            icon={<Timer size={16} color={theme.colors.primary} />}
+            onPress={() => router.push({ pathname: '/read/[id]', params: { id: book.id } })}
+          />
+          <Button
+            title={t('book.startBuddyRead')}
+            variant="outline"
+            icon={<Users size={16} color={theme.colors.fg} />}
+            onPress={() => router.push({ pathname: '/buddy-reads', params: { bookId: book.id } })}
+          />
+        </View>
+
+        {/* lists this book appears on */}
+        {bookLists && bookLists.length > 0 ? (
+          <Section title={t('list.inLists')}>
+            <View style={{ gap: theme.spacing.sm }}>
+              {bookLists.slice(0, 3).map((list, i) => (
+                <BookListCard key={list.id} list={list} index={i} />
+              ))}
+            </View>
+          </Section>
+        ) : null}
 
         {/* quotes */}
         {quotes && quotes.length > 0 ? (
