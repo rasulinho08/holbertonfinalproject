@@ -8,12 +8,26 @@ import { formatCount, formatPrice } from '@/lib/format';
 import { BarChart } from '@/components/charts/BarChart';
 import { PieChart } from '@/components/charts/PieChart';
 import { AppHeader } from '@/components/layout/AppHeader';
+import { RoleGate } from '@/components/layout/RoleGate';
 import { Card } from '@/components/ui/Card';
 import { Screen, Section } from '@/components/ui/Screen';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Text } from '@/components/ui/Text';
 
 export default function PublisherAnalyticsScreen() {
+  const { t } = useI18n();
+
+  return (
+    <>
+      <AppHeader back title={t('publisher.analytics')} />
+      <RoleGate role="publisher">
+        <PublisherAnalytics />
+      </RoleGate>
+    </>
+  );
+}
+
+function PublisherAnalytics() {
   const theme = useTheme();
   const { t, locale } = useI18n();
 
@@ -22,8 +36,6 @@ export default function PublisherAnalyticsScreen() {
 
   return (
     <>
-      <AppHeader back title={t('publisher.analytics')} />
-
       <Screen>
         {isLoading || !stats ? (
           <View style={{ gap: theme.spacing.md }}>

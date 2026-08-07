@@ -7,6 +7,7 @@ export { EmptyState } from './EmptyState';
 export { IconButton } from './IconButton';
 export { Input } from './Input';
 export { ListGroup, ListRow } from './ListRow';
+export { FadeIn, PressableScale, useCountUp } from './Motion';
 export { Progress } from './Progress';
 export { RatingInput, RatingStars } from './Rating';
 export { Screen, Section } from './Screen';

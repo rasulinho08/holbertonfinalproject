@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, type ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import { useTheme } from '@/theme';
@@ -16,6 +16,10 @@ export interface AvatarProps {
 
 export function Avatar({ name, uri, size = 40, ring = false, style }: AvatarProps) {
   const theme = useTheme();
+  // Avatars are remote (generated portraits, or an author photo from Open
+  // Library) and a 404 must not leave a blank disc, so a failed load falls
+  // back to initials exactly as a missing URL does.
+  const [failed, setFailed] = useState(false);
 
   return (
     <View
@@ -34,12 +38,14 @@ export function Avatar({ name, uri, size = 40, ring = false, style }: AvatarProp
         style,
       ]}
     >
-      {uri ? (
+      {uri && !failed ? (
         <Image
           source={{ uri }}
+          onError={() => setFailed(true)}
           style={{ width: '100%', height: '100%' }}
           contentFit="cover"
-          transition={150}
+          transition={theme.duration(theme.motion.fast)}
+          cachePolicy="memory-disk"
           accessibilityLabel={name}
         />
       ) : (

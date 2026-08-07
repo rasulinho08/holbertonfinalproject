@@ -17,32 +17,51 @@ export interface RatingStarsProps {
   size?: number;
   /** Appends the numeric value, e.g. "8.4". */
   showValue?: boolean;
+  /**
+   * Renders a single star plus the number instead of the full five.
+   *
+   * Five stars at 11px plus "8.0" needs about 90px; on a 118px book card that
+   * left no room for the price beside it, and the two collided. One star says
+   * the same thing in a third of the width.
+   */
+  compact?: boolean;
   count?: number;
   style?: ViewStyle;
 }
 
-export function RatingStars({ value, size = 14, showValue = true, count, style }: RatingStarsProps) {
+export function RatingStars({
+  value,
+  size = 14,
+  showValue = true,
+  compact = false,
+  count,
+  style,
+}: RatingStarsProps) {
   const theme = useTheme();
   const outOfFive = value / 2;
 
   return (
     <View style={[{ flexDirection: 'row', alignItems: 'center', gap: 4 }, style]}>
-      <View style={{ flexDirection: 'row', gap: 1 }}>
-        {[0, 1, 2, 3, 4].map((i) => {
-          const filled = outOfFive - i;
-          return (
-            <Star
-              key={i}
-              size={size}
-              color={theme.colors.rating}
-              fill={filled >= 0.75 ? theme.colors.rating : 'transparent'}
-              strokeWidth={2}
-              opacity={filled >= 0.25 ? 1 : 0.35}
-            />
-          );
-        })}
-      </View>
-      {showValue ? (
+      {compact ? (
+        <Star size={size} color={theme.colors.rating} fill={theme.colors.rating} strokeWidth={2} />
+      ) : (
+        <View style={{ flexDirection: 'row', gap: 1 }}>
+          {[0, 1, 2, 3, 4].map((i) => {
+            const filled = outOfFive - i;
+            return (
+              <Star
+                key={i}
+                size={size}
+                color={theme.colors.rating}
+                fill={filled >= 0.75 ? theme.colors.rating : 'transparent'}
+                strokeWidth={2}
+                opacity={filled >= 0.25 ? 1 : 0.35}
+              />
+            );
+          })}
+        </View>
+      )}
+      {showValue || compact ? (
         <Text variant="smallStrong" color="fgMuted">
           {value.toFixed(1)}
         </Text>
