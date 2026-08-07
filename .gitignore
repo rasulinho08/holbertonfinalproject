@@ -30,6 +30,12 @@ ios/
 
 # e2e artefacts
 e2e/screenshots/
+e2e/audit-*/
+e2e/palettes/
+
+# catalogue build cache — raw Open Library responses, rebuilt on demand.
+# `src/api/mock/catalog.json` (the output) IS committed.
+scripts/.ol-cache.json
 
 # debug
 npm-debug.*

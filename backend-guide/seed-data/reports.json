@@ -9,34 +9,34 @@
       "id": "u_4",
       "username": "tural",
       "name": "Tural Həsənov",
-      "avatarUrl": null
+      "avatarUrl": "https://api.dicebear.com/9.x/thumbs/png?seed=tural&size=160"
     },
     "status": "open",
-    "createdAt": "2026-08-04T18:31:07.038Z",
+    "createdAt": "2026-08-05T21:08:04.711Z",
     "snapshot": {
       "text": "Sonda baş qəhrəman ölür və bütün plan alt-üst olur, ona görə oxumağa dəyməz.",
       "authorName": "Kamran Nəbiyev",
-      "bookTitle": "1984"
+      "bookTitle": "A Game of Thrones"
     }
   },
   {
     "id": "rp_2",
     "targetType": "quote",
-    "targetId": "q_4",
+    "targetId": "q_7",
     "reason": "copyright",
     "note": "Kitabın bütöv bir səhifəsi şəkil kimi paylaşılıb.",
     "reportedBy": {
       "id": "u_6",
       "username": "elvin",
       "name": "Elvin Bayramov",
-      "avatarUrl": null
+      "avatarUrl": "https://api.dicebear.com/9.x/thumbs/png?seed=elvin&size=160"
     },
     "status": "open",
-    "createdAt": "2026-08-02T18:31:07.038Z",
+    "createdAt": "2026-08-03T21:08:04.711Z",
     "snapshot": {
       "text": "Tam səhifə mətn şəkli paylaşılıb — 3 abzas ardıcıl kopyalanıb.",
       "authorName": "Fərid Musayev",
-      "bookTitle": "Qılınc və qələm"
+      "bookTitle": "On kiçik hindu"
     }
   },
   {
@@ -49,34 +49,34 @@
       "id": "u_2",
       "username": "reshad",
       "name": "Rəşad Quliyev",
-      "avatarUrl": null
+      "avatarUrl": "https://api.dicebear.com/9.x/thumbs/png?seed=reshad&size=160"
     },
     "status": "open",
-    "createdAt": "2026-08-05T18:31:07.038Z",
+    "createdAt": "2026-08-06T21:08:04.711Z",
     "snapshot": {
       "text": "Bu cür kitab yazanlar ümumiyyətlə qələmə əl vurmamalıdır, tam vaxt itkisidir.",
       "authorName": "Aynur Hüseynova",
-      "bookTitle": "Fahrenheit 451"
+      "bookTitle": "Harry Potter and the Prisoner of Azkaban"
     }
   },
   {
     "id": "rp_4",
     "targetType": "quote",
-    "targetId": "q_19",
+    "targetId": "q_14",
     "reason": "spam",
     "note": "Sitat deyil, reklam linki paylaşılıb.",
     "reportedBy": {
       "id": "u_9",
       "username": "sebine",
       "name": "Səbinə Vəliyeva",
-      "avatarUrl": null
+      "avatarUrl": "https://api.dicebear.com/9.x/thumbs/png?seed=sebine&size=160"
     },
     "status": "open",
-    "createdAt": "2026-07-31T18:31:07.038Z",
+    "createdAt": "2026-08-01T21:08:04.711Z",
     "snapshot": {
       "text": "Ən ucuz kitablar üçün bizim kanala qoşulun → t.me/…",
       "authorName": "Ləman Abbasova",
-      "bookTitle": "Ölülər"
+      "bookTitle": "Sapiens: Bəşəriyyətin qısa tarixi"
     }
   },
   {
@@ -89,14 +89,14 @@
       "id": "u_3",
       "username": "nigar",
       "name": "Nigar Əliyeva",
-      "avatarUrl": null
+      "avatarUrl": "https://api.dicebear.com/9.x/thumbs/png?seed=nigar&size=160"
     },
     "status": "kept",
-    "createdAt": "2026-07-26T18:31:07.038Z",
+    "createdAt": "2026-07-27T21:08:04.711Z",
     "snapshot": {
       "text": "Filmi kitabdan daha yaxşı çəkiblər, rejissora afərin.",
       "authorName": "Vüqar Salmanov",
-      "bookTitle": "Mahmud və Məryəm"
+      "bookTitle": "Um casamento arranjado"
     }
   }
 ]

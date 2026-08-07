@@ -1,14 +1,14 @@
 [
   {
     "id": "br_1",
-    "name": "Dostoyevski birlikdə",
-    "bookId": "b_23",
+    "name": "Birlikdə oxuyuruq",
+    "bookId": "b_754",
     "book": {
-      "id": "b_23",
-      "title": "Cinayət və cəza",
-      "authorName": "Fyodor Dostoyevski",
-      "coverUrl": null,
-      "pageCount": 576
+      "id": "b_754",
+      "title": "Um casamento arranjado",
+      "authorName": "Zana Kheiron",
+      "coverUrl": "https://covers.openlibrary.org/b/id/14321120-M.jpg",
+      "pageCount": 160
     },
     "ownerId": "u_1",
     "members": [
@@ -17,43 +17,43 @@
           "id": "u_1",
           "username": "leyla",
           "name": "Leyla Məmmədova",
-          "avatarUrl": null
+          "avatarUrl": "https://api.dicebear.com/9.x/thumbs/png?seed=leyla&size=160"
         },
-        "progressPage": 184
+        "progressPage": 64
       },
       {
         "user": {
           "id": "u_10",
           "username": "orxan",
           "name": "Orxan Rzayev",
-          "avatarUrl": null
+          "avatarUrl": "https://api.dicebear.com/9.x/thumbs/png?seed=orxan&size=160"
         },
-        "progressPage": 240
+        "progressPage": 96
       },
       {
         "user": {
           "id": "u_3",
           "username": "nigar",
           "name": "Nigar Əliyeva",
-          "avatarUrl": null
+          "avatarUrl": "https://api.dicebear.com/9.x/thumbs/png?seed=nigar&size=160"
         },
-        "progressPage": 96
+        "progressPage": 32
       }
     ],
-    "targetDate": "2026-08-27T18:31:07.038Z",
+    "targetDate": "2026-08-28T21:08:04.711Z",
     "messagesCount": 4,
-    "createdAt": "2026-07-25T18:31:07.038Z"
+    "createdAt": "2026-07-26T21:08:04.711Z"
   },
   {
     "id": "br_2",
     "name": "Yay klassikləri",
-    "bookId": "b_1",
+    "bookId": "b_42",
     "book": {
-      "id": "b_1",
-      "title": "Əli və Nino",
-      "authorName": "Qurban Səid",
-      "coverUrl": null,
-      "pageCount": 288
+      "id": "b_42",
+      "title": "Simyaçı",
+      "authorName": "Paulo Coelho",
+      "coverUrl": "https://covers.openlibrary.org/b/id/7414780-M.jpg",
+      "pageCount": 208
     },
     "ownerId": "u_7",
     "members": [
@@ -62,22 +62,22 @@
           "id": "u_7",
           "username": "gunel",
           "name": "Günel Səfərova",
-          "avatarUrl": null
+          "avatarUrl": "https://api.dicebear.com/9.x/thumbs/png?seed=gunel&size=160"
         },
-        "progressPage": 120
+        "progressPage": 104
       },
       {
         "user": {
           "id": "u_5",
           "username": "aysel",
           "name": "Aysel Kərimli",
-          "avatarUrl": null
+          "avatarUrl": "https://api.dicebear.com/9.x/thumbs/png?seed=aysel&size=160"
         },
-        "progressPage": 88
+        "progressPage": 62
       }
     ],
-    "targetDate": "2026-09-15T18:31:07.038Z",
+    "targetDate": "2026-09-16T21:08:04.711Z",
     "messagesCount": 2,
-    "createdAt": "2026-08-01T18:31:07.038Z"
+    "createdAt": "2026-08-02T21:08:04.711Z"
   }
 ]

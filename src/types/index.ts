@@ -235,6 +235,89 @@ export interface ActivityItem {
   createdAt: ISODate;
 }
 
+/* --------------------------- reading sessions ---------------------------- */
+
+/**
+ * One sitting with a book.
+ *
+ * The app tracks streaks and a weekly pages chart, but until now nothing
+ * actually recorded *when* someone read — progress was only ever a page number
+ * on a shelf entry. A session is the event those aggregates are derived from:
+ * it is what makes the streak honest and what the reading-speed estimate is
+ * computed over.
+ */
+export interface ReadingSession {
+  id: ID;
+  userId: ID;
+  bookId: ID;
+  book?: Pick<Book, 'id' | 'title' | 'authorName' | 'coverUrl' | 'pageCount'>;
+  /** Page the reader was on when the session started. */
+  startPage: number;
+  /** Page reached when it ended. */
+  endPage: number;
+  /** Elapsed reading time in seconds, excluding paused time. */
+  durationSeconds: number;
+  note: string | null;
+  startedAt: ISODate;
+  endedAt: ISODate;
+}
+
+export interface ReadingSessionDraft {
+  bookId: ID;
+  startPage: number;
+  endPage: number;
+  durationSeconds: number;
+  note?: string;
+}
+
+export interface ReadingStats {
+  /** Sessions logged in the period. */
+  sessionCount: number;
+  totalMinutes: number;
+  totalPages: number;
+  /** Pages per hour, across every session with a non-zero duration. */
+  pagesPerHour: number;
+  /** Minutes read per day for the last 7 days, oldest first. */
+  dailyMinutes: number[];
+  longestSessionMinutes: number;
+}
+
+/* ------------------------------- book lists ------------------------------ */
+
+/**
+ * A curated, shareable collection of books — "Başlanğıc üçün 10 klassik".
+ *
+ * Distinct from a shelf: a shelf is private reading state (am I reading this?),
+ * a list is an editorial artefact other readers follow and discuss.
+ */
+export interface BookList {
+  id: ID;
+  slug: string;
+  title: string;
+  description: string;
+  owner: UserSummary;
+  /** Curated by staff rather than a reader; drives the Explore rail. */
+  isOfficial: boolean;
+  bookCount: number;
+  followersCount: number;
+  isFollowing: boolean;
+  /** Up to 4 covers for the list thumbnail stack. */
+  coverUrls: string[];
+  createdAt: ISODate;
+}
+
+export interface BookListDetail extends BookList {
+  items: BookListItem[];
+}
+
+export interface BookListItem {
+  bookId: ID;
+  book: Book;
+  /** Why this book is on the list — the curator's one-liner. */
+  note: string | null;
+  position: number;
+}
+
 /* ------------------------------ buddy reads ------------------------------ */
 
 export interface BuddyMember {
