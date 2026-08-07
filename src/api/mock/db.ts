@@ -8,12 +8,13 @@ import type {
   Order,
   Publisher,
   Quote,
+  ReadingSession,
   Report,
   Review,
   User,
   UserRole,
 } from '@/types';
-import { seed, type SeedShelf, type SeedShelfEntry } from './seed';
+import { seed, type SeedBookList, type SeedShelf, type SeedShelfEntry } from './seed';
 
 /**
  * In-memory database behind the mock API.
@@ -38,6 +39,8 @@ export interface MockDb {
   buddyReads: BuddyRead[];
   buddyMessages: BuddyMessage[];
   reports: Report[];
+  readingSessions: ReadingSession[];
+  bookLists: SeedBookList[];
   orders: Order[];
   notifications: AppNotification[];
   cart: { bookId: string; quantity: number }[];
@@ -54,7 +57,9 @@ export interface MockDb {
   giftCards: { code: string; amount: number; used: boolean }[];
 }
 
-const SCHEMA_VERSION = 3;
+// 4: catalogue moved to Open Library data — book ids, covers and prices all
+// changed shape, so any state persisted against v3 has to be dropped.
+const SCHEMA_VERSION = 4;
 
 const PERSISTED_KEYS = [
   'users',
@@ -65,6 +70,8 @@ const PERSISTED_KEYS = [
   'buddyReads',
   'buddyMessages',
   'reports',
+  'readingSessions',
+  'bookLists',
   'orders',
   'notifications',
   'cart',
@@ -92,6 +99,8 @@ function buildInitialDb(): MockDb {
     buddyReads: structuredCopy(seed.buddyReads),
     buddyMessages: structuredCopy(seed.buddyMessages),
     reports: structuredCopy(seed.reports),
+    readingSessions: structuredCopy(seed.readingSessions),
+    bookLists: structuredCopy(seed.bookLists),
     orders: [],
     notifications: buildInitialNotifications(),
     cart: [],

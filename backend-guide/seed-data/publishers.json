@@ -54,5 +54,19 @@
     "slug": "libraff-nəşriyyat",
     "logoUrl": null,
     "city": "Bakı"
+  },
+  {
+    "id": "pub_9",
+    "name": "Teas Press Uşaq",
+    "slug": "teas-press-uşaq",
+    "logoUrl": null,
+    "city": "Bakı"
+  },
+  {
+    "id": "pub_10",
+    "name": "Elm və Təhsil",
+    "slug": "elm-və-təhsil",
+    "logoUrl": null,
+    "city": "Bakı"
   }
 ]
