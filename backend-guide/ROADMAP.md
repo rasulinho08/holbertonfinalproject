@@ -83,7 +83,6 @@ deliberately thrown error returns the error envelope with a request id.
 - [ ] `DELETE /books/:bookId/shelf`
 - [ ] `PATCH /books/:bookId/progress`
 - [ ] `shelfStatus` / `progressPage` attached to every `Book` for authed requests
-- [ ] `reading_sessions` written on progress updates
 - [ ] `GET /users/:username`, `/users/:username/stats` with computed statistics
 
 **Acceptance — this is the spec's User Flow 1**
@@ -97,6 +96,35 @@ Also verify:
 - Default shelves cannot be renamed or deleted (`403`).
 
 **App screens live:** `/(tabs)/shelves`, `/shelf/[id]`, `/(tabs)/index`, `/(tabs)/profile`.
+
+---
+
+## Milestone 3b — Reading sessions (½ day) → unblocks the session timer
+
+Split out from Milestone 3 because `reading_sessions` is now a first-class
+resource with its own screens, not a side effect of a progress update.
+
+- [ ] `POST /reading-sessions` with the four side effects listed in
+      [`ENDPOINTS.md` §18](./ENDPOINTS.md#18-reading-sessions) — raise progress,
+      promote `want_to_read` → `reading`, complete at `page_count`, recompute streak
+- [ ] `GET /reading-sessions`, `GET /books/:id/reading-sessions`
+- [ ] `DELETE /reading-sessions/:id` with an ownership check
+- [ ] `GET /reading-sessions/stats` — `dailyMinutes` bucketed in the account's timezone
+- [ ] `started_at` derived server-side from `ended_at - duration_seconds`
+
+**Acceptance**
+Open a book → "Oxu seansı başlat" → run the timer → enter an end page → save.
+The shelf entry's page advances, the streak counts today, and the profile's
+reading-stats card appears with a non-zero pages-per-hour.
+
+Also verify:
+- Two sessions for the same book on the same day both persist (the old schema
+  forbade this).
+- A session with `durationSeconds: 0` saves, and does **not** drag
+  `pagesPerHour` towards zero.
+- `endPage` beyond `book.pageCount` returns `422`, not a clamped save.
+
+**App screens live:** `/read/[id]`, `/sessions`, the stats card on `/(tabs)/profile`.
 
 ---
 

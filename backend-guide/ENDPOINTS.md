@@ -21,6 +21,7 @@ Every route below has a working reference implementation in the frontend repo at
 10. [Orders](#10-orders) · 11. [Payments & wallet](#11-payments--wallet) · 12. [Gamification](#12-gamification)
 13. [Notifications](#13-notifications) · 14. [Reports](#14-reports) · 15. [Publisher](#15-publisher)
 16. [Admin](#16-admin) · 17. [Uploads & OCR](#17-uploads--ocr)
+18. [Reading sessions](#18-reading-sessions) · 19. [Book lists](#19-book-lists)
 
 ---
 
@@ -977,6 +978,144 @@ provider options. The user always reviews and edits the result, so imperfect
 recognition is acceptable; returning an error is not.
 
 Rate limit: 30/hour/user. `422` if the image cannot be read.
+
+---
+
+## 18. Reading sessions
+
+A session is one sitting with a book. It is the event the streak, the weekly
+activity chart and the reading-speed estimate are all derived from — before it
+existed, "progress" was only a page number the reader typed in, and the streak
+had nothing real behind it.
+
+| Method | Path | Auth | Purpose |
+|---|---|---|---|
+| GET | `/reading-sessions` | auth | Caller's sessions, newest first |
+| POST | `/reading-sessions` | auth | Log a session |
+| DELETE | `/reading-sessions/:id` | auth (owner) | Delete one |
+| GET | `/reading-sessions/stats` | auth | Aggregates over a window |
+| GET | `/books/:id/reading-sessions` | auth | Caller's sessions for one book |
+
+```jsonc
+{ "id": "rs_1", "userId": "u_1", "bookId": "b_23",
+  "book": { "id": "b_23", "title": "Əli və Nino", "authorName": "Qurban Səid",
+            "coverUrl": "https://covers.openlibrary.org/b/id/8231856-M.jpg",
+            "pageCount": 288 },
+  "startPage": 96, "endPage": 134,
+  "durationSeconds": 2820,
+  "note": "Metroda oxudum.",     // nullable, max 280 chars
+  "startedAt": "2026-08-07T19:12:00Z",
+  "endedAt": "2026-08-07T19:59:00Z" }
+```
+
+### POST `/reading-sessions`
+
+```jsonc
+// request
+{ "bookId": "b_23", "startPage": 96, "endPage": 134,
+  "durationSeconds": 2820, "note": "Metroda oxudum." }
+```
+
+Validation:
+
+- `endPage >= startPage`, else `422` with `fields.endPage = "invalid"`.
+- `endPage <= book.pageCount`, else `422` with `fields.endPage = "out_of_range"`.
+- `durationSeconds >= 0`. Zero is allowed — a reader logging yesterday's reading
+  after the fact has no stopwatch value, and those rows are simply excluded from
+  the speed calculation rather than rejected.
+
+**Side effects.** Creating a session is also a progress update, and the backend
+owns that consequence rather than making the client fire a second request:
+
+1. If `endPage` exceeds the shelf entry's `progress_page`, raise it.
+2. If the book was on `want_to_read`, move it to `reading` and stamp `started_at`.
+3. If `endPage >= book.page_count`, move it to `read` and stamp `finished_at`.
+4. Recompute the streak for the calling user (see §12) and re-evaluate badges.
+
+`startedAt` is derived server-side as `endedAt - durationSeconds`; do not trust a
+client-supplied `startedAt`, since it would let a client forge streak history.
+
+### GET `/reading-sessions/stats`
+
+Query: `days` (default `30`).
+
+```jsonc
+{ "data": {
+  "sessionCount": 46,
+  "totalMinutes": 1884,
+  "totalPages": 1420,
+  "pagesPerHour": 45,          // over sessions with durationSeconds > 0 only
+  "dailyMinutes": [42, 0, 65, 30, 51, 0, 38],  // last 7 days, oldest first
+  "longestSessionMinutes": 95
+}}
+```
+
+`dailyMinutes` is always seven entries regardless of `days`, and buckets by the
+**caller's** local day. The mock uses the server's timezone; production should
+take an IANA timezone from the account (or an `X-Timezone` header) so a reader in
+Baku does not lose a streak to a UTC day boundary.
+
+---
+
+## 19. Book lists
+
+A curated, shareable collection — "Bir gecəyə sığan kitablar". Distinct from a
+shelf: a shelf is private reading state, a list is an editorial artefact other
+readers follow.
+
+| Method | Path | Auth | Purpose |
+|---|---|---|---|
+| GET | `/lists` | public | Browse; `scope`, `q`, pagination |
+| POST | `/lists` | auth | Create |
+| GET | `/lists/:id` | public | Detail, including items |
+| PATCH | `/lists/:id` | auth (owner) | Rename / re-describe |
+| DELETE | `/lists/:id` | auth (owner) | Delete |
+| POST | `/lists/:id/follow` | auth | `{ follow: boolean }` |
+| POST | `/lists/:id/books` | auth (owner) | Add a book |
+| DELETE | `/lists/:id/books/:bookId` | auth (owner) | Remove a book |
+| GET | `/books/:id/lists` | public | Lists featuring this book |
+
+`GET /lists` query: `scope` = `mine` \| `following` (omit for all), `q` for a
+title/description search, plus the usual `page` / `limit`. Ordering is official
+lists first, then by `followersCount` descending.
+
+`:id` accepts either the id or the slug, so `/lists/azerbaycan-klassikleri` is a
+shareable URL.
+
+```jsonc
+// BookList — the browse shape
+{ "id": "bl_1", "slug": "azerbaycan-klassikleri",
+  "title": "Azərbaycan klassikləri",
+  "description": "Məktəb proqramından tanıdığın, amma yenidən oxumağa dəyən əsərlər.",
+  "owner": { /* UserSummary */ },
+  "isOfficial": true,
+  "bookCount": 20,
+  "followersCount": 1732,
+  "isFollowing": false,
+  "coverUrls": ["https://covers.openlibrary.org/b/id/8231856-M.jpg", "…"], // ≤ 4
+  "createdAt": "2026-05-02T…" }
+```
+
+`GET /lists/:id` returns the same object plus `items`:
+
+```jsonc
+{ "items": [
+  { "bookId": "b_12", "book": { /* full Book, decorated with shelfStatus */ },
+    "note": "Siyahının ən yaxşı başlanğıc nöqtəsi.",   // nullable, max 200
+    "position": 0 }
+]}
+```
+
+Rules:
+
+- `title` at least 3 characters, else `422` with `fields.title = "too_short"`.
+- Adding a book already on the list is `409 CONFLICT`, not a silent no-op — the
+  client shows "already on this list".
+- `position` is contiguous from 0. Removing an item re-packs the remaining
+  positions; do not leave gaps, the client renders by `position`.
+- `isOfficial` is set by staff only. Never let `POST /lists` accept it from the
+  body — it is what the verified badge in the UI is keyed on.
+- `isFollowing` requires the caller; return `false` for anonymous requests.
 
 ---
 
