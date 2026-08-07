@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { Flame, Target } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
+import { useCountUp } from '@/components/ui/Motion';
 import { Progress } from '@/components/ui/Progress';
 import { Text } from '@/components/ui/Text';
 import type { ReadingGoal } from '@/types';
@@ -20,6 +21,7 @@ export function StreakCard({
 }) {
   const theme = useTheme();
   const { t } = useI18n();
+  const shown = useCountUp(days);
 
   return (
     <Pressable
@@ -43,7 +45,7 @@ export function StreakCard({
           color={readToday ? theme.colors.streak : theme.colors.fgSubtle}
           fill={readToday ? theme.colors.streak : 'transparent'}
         />
-        <Text variant="h1">{days}</Text>
+        <Text variant="h1">{shown}</Text>
       </View>
       <Text variant="caption" color="fgSubtle" numberOfLines={1}>
         {t('game.streakTitle')}
@@ -62,6 +64,7 @@ export function GoalCard({ goal, onPress }: { goal: ReadingGoal; onPress?: () =>
 
   const percent = goal.target > 0 ? Math.min(100, (goal.completed / goal.target) * 100) : 0;
   const remaining = Math.max(0, goal.target - goal.completed);
+  const shown = useCountUp(goal.completed);
 
   return (
     <Pressable
@@ -82,7 +85,7 @@ export function GoalCard({ goal, onPress }: { goal: ReadingGoal; onPress?: () =>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}>
         <Target size={20} color={theme.colors.primary} />
         <Text variant="h1">
-          {goal.completed}
+          {shown}
           <Text variant="small" color="fgSubtle">
             /{goal.target}
           </Text>

@@ -7,6 +7,7 @@ import { useCurrentUser } from '@/store/auth';
 import { useAdminRemoveReview, useAdminReviews } from '@/api/hooks';
 import { formatRelative } from '@/lib/format';
 import { AppHeader } from '@/components/layout/AppHeader';
+import { RoleGate } from '@/components/layout/RoleGate';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
@@ -17,6 +18,19 @@ import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
 
 export default function AdminReviewsScreen() {
+  const { t } = useI18n();
+
+  return (
+    <>
+      <AppHeader back title={t('admin.reviews')} />
+      <RoleGate role="admin">
+        <AdminReviews />
+      </RoleGate>
+    </>
+  );
+}
+
+function AdminReviews() {
   const theme = useTheme();
   const { t, locale } = useI18n();
   const toast = useToast();
@@ -27,8 +41,6 @@ export default function AdminReviewsScreen() {
 
   return (
     <>
-      <AppHeader back title={t('admin.reviews')} />
-
       <FlatList
         data={reviews}
         keyExtractor={(item) => item.id}

@@ -68,9 +68,10 @@ export function BookRail({
           keyExtractor={(item) => item.id}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ gap: theme.spacing.md, paddingRight: theme.spacing.lg }}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <BookCard
               book={item}
+              index={index}
               width={cardWidth}
               showProgress={showProgress}
               showPrice={showPrice}

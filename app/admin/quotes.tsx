@@ -7,6 +7,7 @@ import { useCurrentUser } from '@/store/auth';
 import { useAdminQuotes, useAdminRemoveQuote } from '@/api/hooks';
 import { formatRelative } from '@/lib/format';
 import { AppHeader } from '@/components/layout/AppHeader';
+import { RoleGate } from '@/components/layout/RoleGate';
 import { Avatar } from '@/components/ui/Avatar';
 import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -16,6 +17,19 @@ import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
 
 export default function AdminQuotesScreen() {
+  const { t } = useI18n();
+
+  return (
+    <>
+      <AppHeader back title={t('admin.quotes')} />
+      <RoleGate role="admin">
+        <AdminQuotes />
+      </RoleGate>
+    </>
+  );
+}
+
+function AdminQuotes() {
   const theme = useTheme();
   const { t, locale } = useI18n();
   const toast = useToast();
@@ -26,8 +40,6 @@ export default function AdminQuotesScreen() {
 
   return (
     <>
-      <AppHeader back title={t('admin.quotes')} />
-
       <FlatList
         data={quotes}
         keyExtractor={(item) => item.id}

@@ -21,7 +21,15 @@ export interface BookListItemProps {
   style?: ViewStyle;
 }
 
-/** Horizontal row used in shelves, search results and order lines. */
+/**
+ * Horizontal row used in shelves, search results and order lines.
+ *
+ * The card is a plain `View` and only the cover-plus-title region is pressable.
+ * Wrapping the whole row in one `Pressable` was simpler, but callers pass an
+ * interactive `right` slot ("Update progress", a cart stepper) — which nested a
+ * button inside a button. That is invalid HTML on web (React logs a hydration
+ * error) and, worse, meant tapping the stepper also navigated to the book.
+ */
 export function BookListItem({ book, right, showProgress, onPress, style }: BookListItemProps) {
   const theme = useTheme();
   const router = useRouter();
@@ -33,11 +41,8 @@ export function BookListItem({ book, right, showProgress, onPress, style }: Book
       : null;
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={`${book.title}, ${book.authorName}`}
-      onPress={onPress ?? (() => router.push(`/book/${book.id}`))}
-      style={({ pressed }) => [
+    <View
+      style={[
         {
           flexDirection: 'row',
           gap: theme.spacing.md,
@@ -46,44 +51,55 @@ export function BookListItem({ book, right, showProgress, onPress, style }: Book
           backgroundColor: theme.colors.card,
           borderWidth: 1,
           borderColor: theme.colors.border,
-          opacity: pressed ? 0.85 : 1,
         },
         style,
       ]}
     >
-      <BookCover title={book.title} authorName={book.authorName} uri={book.coverUrl} width={56} />
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`${book.title}, ${book.authorName}`}
+        onPress={onPress ?? (() => router.push(`/book/${book.id}`))}
+        style={({ pressed }) => ({
+          flex: 1,
+          flexDirection: 'row',
+          gap: theme.spacing.md,
+          opacity: pressed ? 0.85 : 1,
+        })}
+      >
+        <BookCover title={book.title} authorName={book.authorName} uri={book.coverUrl} width={56} />
 
-      <View style={{ flex: 1, gap: 4, justifyContent: 'center' }}>
-        <Text variant="bodyStrong" numberOfLines={2}>
-          {book.title}
-        </Text>
-        <Text variant="small" color="fgMuted" numberOfLines={1}>
-          {book.authorName}
-        </Text>
+        <View style={{ flex: 1, gap: 4, justifyContent: 'center' }}>
+          <Text variant="bodyStrong" numberOfLines={2}>
+            {book.title}
+          </Text>
+          <Text variant="small" color="fgMuted" numberOfLines={1}>
+            {book.authorName}
+          </Text>
 
-        {percent !== null ? (
-          <View style={{ gap: 4, marginTop: 2 }}>
-            <Progress value={percent} height={5} />
-            <Text variant="caption" color="fgSubtle">
-              {book.progressPage}/{book.pageCount} {t('common.pages')} · {percent}%
-            </Text>
-          </View>
-        ) : (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: theme.spacing.sm,
-              marginTop: 2,
-            }}
-          >
-            <RatingStars value={book.ratingAverage} size={12} />
-            {book.shelfStatus ? (
-              <Badge label={t(`shelf.${shelfKey(book.shelfStatus)}`)} tone="neutral" />
-            ) : null}
-          </View>
-        )}
-      </View>
+          {percent !== null ? (
+            <View style={{ gap: 4, marginTop: 2 }}>
+              <Progress value={percent} height={5} />
+              <Text variant="caption" color="fgSubtle">
+                {book.progressPage}/{book.pageCount} {t('common.pages')} · {percent}%
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: theme.spacing.sm,
+                marginTop: 2,
+              }}
+            >
+              <RatingStars value={book.ratingAverage} size={12} />
+              {book.shelfStatus ? (
+                <Badge label={t(`shelf.${shelfKey(book.shelfStatus)}`)} tone="neutral" />
+              ) : null}
+            </View>
+          )}
+        </View>
+      </Pressable>
 
       {right ?? (
         <View style={{ justifyContent: 'center' }}>
@@ -92,6 +108,6 @@ export function BookListItem({ book, right, showProgress, onPress, style }: Book
           </Text>
         </View>
       )}
-    </Pressable>
+    </View>
   );
 }

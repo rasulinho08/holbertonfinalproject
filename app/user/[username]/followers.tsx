@@ -54,28 +54,40 @@ export default function FollowersScreen() {
           />
         }
         renderItem={({ item }) => (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={item.name}
-            onPress={() => router.push(`/user/${item.username}`)}
-            style={({ pressed }) => ({
+          // Only the avatar-and-name region opens the profile; the follow
+          // button is a sibling. Nesting it inside the row's Pressable put a
+          // <button> inside a <button>, so following someone also navigated.
+          <View
+            style={{
               flexDirection: 'row',
               alignItems: 'center',
               gap: theme.spacing.md,
-              padding: theme.spacing.md,
-              borderRadius: theme.radius.md,
-              backgroundColor: pressed ? theme.colors.subtle : 'transparent',
-            })}
+              paddingHorizontal: theme.spacing.md,
+              paddingVertical: theme.spacing.sm,
+            }}
           >
-            <Avatar name={item.name} uri={item.avatarUrl} size={44} />
-            <View style={{ flex: 1 }}>
-              <Text variant="bodyStrong" numberOfLines={1}>
-                {item.name}
-              </Text>
-              <Text variant="small" color="fgSubtle">
-                @{item.username}
-              </Text>
-            </View>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={item.name}
+              onPress={() => router.push(`/user/${item.username}`)}
+              style={({ pressed }) => ({
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: theme.spacing.md,
+                opacity: pressed ? 0.7 : 1,
+              })}
+            >
+              <Avatar name={item.name} uri={item.avatarUrl} size={44} />
+              <View style={{ flex: 1 }}>
+                <Text variant="bodyStrong" numberOfLines={1}>
+                  {item.name}
+                </Text>
+                <Text variant="small" color="fgSubtle">
+                  @{item.username}
+                </Text>
+              </View>
+            </Pressable>
             <Button
               title={item.isFollowing ? t('profile.unfollow') : t('profile.follow')}
               variant={item.isFollowing ? 'outline' : 'secondary'}
@@ -85,7 +97,7 @@ export default function FollowersScreen() {
                 toggleFollow.mutate({ userId: item.id, follow: !item.isFollowing })
               }
             />
-          </Pressable>
+          </View>
         )}
         ListEmptyComponent={
           active.isLoading ? (
