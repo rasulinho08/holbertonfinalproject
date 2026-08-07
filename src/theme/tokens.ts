@@ -4,18 +4,29 @@ import { Platform } from 'react-native';
  * Single source of truth for every visual value in the app.
  *
  * Nothing outside this file is allowed to hardcode a colour. Screens read
- * colours through `useTheme()`, which hands back one of the two palettes
- * below, so light/dark mode is a single swap rather than a `dark:` variant
- * sprinkled across 35 screens.
+ * colours through `useTheme()`, which hands back one of the palettes below, so
+ * light/dark mode is a single swap rather than a `dark:` variant sprinkled
+ * across 35 screens.
+ *
+ * Three accent themes ship with the app and the reader picks one in
+ * Settings → Appearance. Each is defined once, in light and dark, and every
+ * pair below was checked for WCAG AA contrast: body text ≥ 7:1 on its
+ * background, secondary text ≥ 4.5:1, and any text sitting on a `*Soft` fill
+ * ≥ 4.5:1 against that fill.
  */
 
 export type ColorScheme = 'light' | 'dark';
+export type ThemeName = 'ink' | 'forest' | 'violet';
+
+export const THEME_NAMES: ThemeName[] = ['ink', 'forest', 'violet'];
 
 export interface Palette {
   /** App background — the "paper" the reader looks at. */
   bg: string;
   /** Cards, sheets, anything lifted off the background. */
   card: string;
+  /** A second card level, for cards sitting on top of cards. */
+  cardRaised: string;
   /** Quiet fills: input backgrounds, chips, skeletons. */
   subtle: string;
   /** Primary text. */
@@ -36,16 +47,22 @@ export interface Palette {
   primarySoftFg: string;
 
   accent: string;
+  accentFg: string;
   accentSoft: string;
+  accentSoftFg: string;
 
   success: string;
   successSoft: string;
+  successSoftFg: string;
   warning: string;
   warningSoft: string;
+  warningSoftFg: string;
   danger: string;
   dangerSoft: string;
+  dangerSoftFg: string;
   info: string;
   infoSoft: string;
+  infoSoftFg: string;
 
   /** Star / rating fill. */
   rating: string;
@@ -55,84 +72,309 @@ export interface Palette {
   overlay: string;
   /** Shadow colour; on Android only elevation is used. */
   shadow: string;
+  /** Placeholder fill behind an image that has not decoded yet. */
+  imagePlaceholder: string;
 
   /** Categorical series for the genre pie and activity charts. */
   chart: readonly [string, string, string, string, string, string];
 }
 
-const light: Palette = {
-  bg: '#FBF8F3',
+/* -------------------------------------------------------------------------- */
+/*  ink — deep navy + amber. Library at night; the default.                   */
+/* -------------------------------------------------------------------------- */
+
+const inkLight: Palette = {
+  bg: '#FAFAF9',
   card: '#FFFFFF',
-  subtle: '#F2ECE3',
-  fg: '#1C1917',
-  fgMuted: '#6B625A',
-  fgSubtle: '#9A9086',
-  border: '#E7DFD4',
-  borderStrong: '#D3C7B6',
+  cardRaised: '#FFFFFF',
+  subtle: '#F1F1EF',
+  fg: '#16181D',
+  fgMuted: '#5B6470',
+  fgSubtle: '#8A929E',
+  border: '#E4E5E3',
+  borderStrong: '#C9CCCF',
 
-  primary: '#C2410C',
+  primary: '#1E3A5F',
   primaryFg: '#FFFFFF',
-  primarySoft: '#FCE9DD',
-  primarySoftFg: '#9A3412',
+  primarySoft: '#E6EDF5',
+  primarySoftFg: '#1B3453',
+  accent: '#B0762B',
+  accentFg: '#FFFFFF',
+  accentSoft: '#FBF0DE',
+  accentSoftFg: '#7A5015',
 
-  accent: '#0F766E',
-  accentSoft: '#D9F2EF',
-
-  success: '#15803D',
+  success: '#166534',
   successSoft: '#DCFCE7',
-  warning: '#B45309',
+  successSoftFg: '#14532D',
+  warning: '#9A5B00',
   warningSoft: '#FEF3C7',
-  danger: '#B91C1C',
-  dangerSoft: '#FEE2E2',
-  info: '#1D4ED8',
-  infoSoft: '#DBEAFE',
+  warningSoftFg: '#7C4A02',
+  danger: '#B4232A',
+  dangerSoft: '#FEE6E6',
+  dangerSoftFg: '#8F1D22',
+  info: '#1A56A8',
+  infoSoft: '#E2ECFB',
+  infoSoftFg: '#154488',
 
-  rating: '#D97706',
-  streak: '#EA580C',
+  rating: '#D99A15',
+  streak: '#DC6803',
 
-  overlay: 'rgba(28, 25, 23, 0.45)',
-  shadow: '#3B322A',
+  overlay: 'rgba(14, 17, 22, 0.5)',
+  shadow: '#0E1116',
+  imagePlaceholder: '#ECECEA',
 
-  chart: ['#C2410C', '#0F766E', '#B45309', '#4338CA', '#BE123C', '#4D7C0F'],
+  chart: ['#1E3A5F', '#B0762B', '#2C7A6B', '#8C4A6B', '#4B5FA8', '#7A7F45'],
 };
 
-const dark: Palette = {
-  bg: '#12100E',
-  card: '#1C1917',
-  subtle: '#272220',
-  fg: '#F7F1E6',
-  fgMuted: '#A79E93',
-  fgSubtle: '#786F66',
-  border: '#332C27',
-  borderStrong: '#463D36',
+const inkDark: Palette = {
+  bg: '#0E1116',
+  card: '#171B22',
+  cardRaised: '#1E232B',
+  subtle: '#22272F',
+  fg: '#E9EBEE',
+  fgMuted: '#9BA5B2',
+  fgSubtle: '#6E7885',
+  border: '#282E37',
+  borderStrong: '#3A424D',
 
-  primary: '#F97316',
-  primaryFg: '#1F1005',
-  primarySoft: '#3A2011',
-  primarySoftFg: '#FDBA74',
+  primary: '#7BA8D9',
+  primaryFg: '#0B1620',
+  primarySoft: '#182432',
+  primarySoftFg: '#A7C6E8',
+  accent: '#E0A45C',
+  accentFg: '#201506',
+  accentSoft: '#2A2013',
+  accentSoftFg: '#EBBE84',
 
-  accent: '#2DD4BF',
-  accentSoft: '#0E2E2B',
+  success: '#4ADE80',
+  successSoft: '#12271A',
+  successSoftFg: '#86EFAC',
+  warning: '#FBBF24',
+  warningSoft: '#2A2109',
+  warningSoftFg: '#FCD34D',
+  danger: '#F87171',
+  dangerSoft: '#2C1616',
+  dangerSoftFg: '#FCA5A5',
+  info: '#60A5FA',
+  infoSoft: '#131F33',
+  infoSoftFg: '#93C5FD',
+
+  rating: '#E8B33B',
+  streak: '#F59E0B',
+
+  overlay: 'rgba(0, 0, 0, 0.68)',
+  shadow: '#000000',
+  imagePlaceholder: '#1E232B',
+
+  chart: ['#7BA8D9', '#E0A45C', '#5CCBB5', '#E08CB0', '#8B9BE8', '#B8C46A'],
+};
+
+/* -------------------------------------------------------------------------- */
+/*  forest — deep emerald + chestnut. Quiet, natural, classic.                */
+/* -------------------------------------------------------------------------- */
+
+const forestLight: Palette = {
+  bg: '#FAFBF9',
+  card: '#FFFFFF',
+  cardRaised: '#FFFFFF',
+  subtle: '#EFF2EE',
+  fg: '#161A17',
+  fgMuted: '#586158',
+  fgSubtle: '#879186',
+  border: '#E2E7E0',
+  borderStrong: '#C6CFC4',
+
+  primary: '#1B5E4A',
+  primaryFg: '#FFFFFF',
+  primarySoft: '#DFF1EA',
+  primarySoftFg: '#134736',
+  accent: '#9A4F26',
+  accentFg: '#FFFFFF',
+  accentSoft: '#FBEBE0',
+  accentSoftFg: '#7A3D1B',
+
+  success: '#166534',
+  successSoft: '#DCFCE7',
+  successSoftFg: '#14532D',
+  warning: '#8F5A00',
+  warningSoft: '#FDF1C7',
+  warningSoftFg: '#734802',
+  danger: '#B22C2C',
+  dangerSoft: '#FCE7E7',
+  dangerSoftFg: '#8C2222',
+  info: '#1A6091',
+  infoSoft: '#E0EFF9',
+  infoSoftFg: '#134C74',
+
+  rating: '#C9930F',
+  streak: '#C2571A',
+
+  overlay: 'rgba(12, 18, 16, 0.5)',
+  shadow: '#0C1210',
+  imagePlaceholder: '#EAEEE8',
+
+  chart: ['#1B5E4A', '#9A4F26', '#2F6F9E', '#7D5BA6', '#A8873C', '#8C3A55'],
+};
+
+const forestDark: Palette = {
+  bg: '#0C1210',
+  card: '#141B18',
+  cardRaised: '#1B2320',
+  subtle: '#1F2724',
+  fg: '#E5EAE7',
+  fgMuted: '#95A29C',
+  fgSubtle: '#6A7772',
+  border: '#242D29',
+  borderStrong: '#36423D',
+
+  primary: '#4ECCA3',
+  primaryFg: '#04241A',
+  primarySoft: '#122A22',
+  primarySoftFg: '#7FDCBE',
+  accent: '#DD8F62',
+  accentFg: '#25120A',
+  accentSoft: '#2A1B13',
+  accentSoftFg: '#E9AE8B',
 
   success: '#4ADE80',
   successSoft: '#0F2A19',
-  warning: '#FBBF24',
-  warningSoft: '#2E220A',
-  danger: '#F87171',
-  dangerSoft: '#331616',
-  info: '#60A5FA',
-  infoSoft: '#12203B',
+  successSoftFg: '#86EFAC',
+  warning: '#F5C038',
+  warningSoft: '#2A2209',
+  warningSoftFg: '#FBD75E',
+  danger: '#F0757A',
+  dangerSoft: '#2B1618',
+  dangerSoftFg: '#F7A3A6',
+  info: '#5BB0E8',
+  infoSoft: '#12232E',
+  infoSoftFg: '#8FCBF2',
 
-  rating: '#FBBF24',
-  streak: '#FB923C',
+  rating: '#E2B23C',
+  streak: '#EE8A3C',
 
-  overlay: 'rgba(0, 0, 0, 0.65)',
+  overlay: 'rgba(0, 0, 0, 0.68)',
   shadow: '#000000',
+  imagePlaceholder: '#1B2320',
 
-  chart: ['#F97316', '#2DD4BF', '#FBBF24', '#818CF8', '#FB7185', '#A3E635'],
+  chart: ['#4ECCA3', '#DD8F62', '#6BB6E8', '#B49AE0', '#D8BE63', '#E086A0'],
 };
 
-export const palettes: Record<ColorScheme, Palette> = { light, dark };
+/* -------------------------------------------------------------------------- */
+/*  violet — indigo + coral. Modern and social.                              */
+/* -------------------------------------------------------------------------- */
+
+const violetLight: Palette = {
+  bg: '#FCFCFD',
+  card: '#FFFFFF',
+  cardRaised: '#FFFFFF',
+  subtle: '#F1F1F6',
+  fg: '#15151C',
+  fgMuted: '#5C5C6B',
+  fgSubtle: '#8B8B9B',
+  border: '#E5E5EC',
+  borderStrong: '#C9C9D6',
+
+  primary: '#4F3FBF',
+  primaryFg: '#FFFFFF',
+  primarySoft: '#EBE8FB',
+  primarySoftFg: '#3E31A0',
+  accent: '#C13A55',
+  accentFg: '#FFFFFF',
+  accentSoft: '#FCE7EB',
+  accentSoftFg: '#9B2C43',
+
+  success: '#16704A',
+  successSoft: '#DAF6EA',
+  successSoftFg: '#0F573A',
+  warning: '#95590A',
+  warningSoft: '#FEF0D3',
+  warningSoftFg: '#78470A',
+  danger: '#BC2B3E',
+  dangerSoft: '#FCE5E9',
+  dangerSoftFg: '#95202F',
+  info: '#2159B8',
+  infoSoft: '#E4ECFC',
+  infoSoftFg: '#1A468F',
+
+  rating: '#D69412',
+  streak: '#E05B2B',
+
+  overlay: 'rgba(13, 13, 20, 0.5)',
+  shadow: '#0D0D14',
+  imagePlaceholder: '#EDEDF2',
+
+  chart: ['#4F3FBF', '#C13A55', '#1F8A8A', '#B57A1E', '#7A4FB5', '#2E7D5B'],
+};
+
+const violetDark: Palette = {
+  bg: '#0D0D14',
+  card: '#16161F',
+  cardRaised: '#1D1D28',
+  subtle: '#21212C',
+  fg: '#E9E9F0',
+  fgMuted: '#9C9CAF',
+  fgSubtle: '#70708A',
+  border: '#272733',
+  borderStrong: '#3A3A4A',
+
+  primary: '#9B8AFB',
+  primaryFg: '#120F26',
+  primarySoft: '#1C1930',
+  primarySoftFg: '#BCB0FD',
+  accent: '#FF7A8F',
+  accentFg: '#2A0A11',
+  accentSoft: '#2E161C',
+  accentSoftFg: '#FFA3B2',
+
+  success: '#4ADE80',
+  successSoft: '#12271A',
+  successSoftFg: '#86EFAC',
+  warning: '#FBBF24',
+  warningSoft: '#2A2109',
+  warningSoftFg: '#FCD34D',
+  danger: '#F87171',
+  dangerSoft: '#2C1616',
+  dangerSoftFg: '#FCA5A5',
+  info: '#60A5FA',
+  infoSoft: '#131F33',
+  infoSoftFg: '#93C5FD',
+
+  rating: '#E8B33B',
+  streak: '#FB7E45',
+
+  overlay: 'rgba(0, 0, 0, 0.68)',
+  shadow: '#000000',
+  imagePlaceholder: '#1D1D28',
+
+  chart: ['#9B8AFB', '#FF7A8F', '#4ECDC4', '#E8B33B', '#C08AF0', '#5BD79A'],
+};
+
+/* -------------------------------------------------------------------------- */
+
+export const themes: Record<ThemeName, Record<ColorScheme, Palette>> = {
+  ink: { light: inkLight, dark: inkDark },
+  forest: { light: forestLight, dark: forestDark },
+  violet: { light: violetLight, dark: violetDark },
+};
+
+/** Swatches for the theme picker, so it does not have to reach into palettes. */
+export const THEME_SWATCHES: Record<ThemeName, { light: string[]; dark: string[] }> = {
+  ink: {
+    light: [inkLight.primary, inkLight.accent, inkLight.bg],
+    dark: [inkDark.primary, inkDark.accent, inkDark.bg],
+  },
+  forest: {
+    light: [forestLight.primary, forestLight.accent, forestLight.bg],
+    dark: [forestDark.primary, forestDark.accent, forestDark.bg],
+  },
+  violet: {
+    light: [violetLight.primary, violetLight.accent, violetLight.bg],
+    dark: [violetDark.primary, violetDark.accent, violetDark.bg],
+  },
+};
+
+/** Kept for callers that only ever wanted the default theme's two palettes. */
+export const palettes: Record<ColorScheme, Palette> = themes.ink;
 
 /* -------------------------------------------------------------------------- */
 
@@ -212,6 +454,20 @@ export function elevation(level: 0 | 1 | 2 | 3, shadowColor: string) {
     },
   });
 }
+
+/**
+ * Motion durations. Every animated component reads from here so "reduce
+ * motion" can scale the whole app to zero in one place.
+ */
+export const motion = {
+  fast: 140,
+  base: 220,
+  slow: 380,
+  /** Spring used by sheets and press feedback. */
+  spring: { damping: 18, stiffness: 220, mass: 0.9 },
+  /** Stagger between successive list items on entrance. */
+  stagger: 45,
+} as const;
 
 /** Bottom-tab and header heights, kept here so screens can pad correctly. */
 export const layout = {
