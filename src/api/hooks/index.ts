@@ -9,5 +9,6 @@ export * from './books';
 export * from './commerce';
 export * from './engagement';
 export * from './management';
+export * from './reading';
 export * from './shelves';
 export * from './social';

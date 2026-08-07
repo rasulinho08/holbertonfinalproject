@@ -64,6 +64,20 @@ export const qk = {
     comments: (id: string) => ['reviews', id, 'comments'] as const,
   },
 
+  sessions: {
+    all: ['reading-sessions'] as const,
+    list: ['reading-sessions', 'list'] as const,
+    stats: ['reading-sessions', 'stats'] as const,
+    forBook: (bookId: string) => ['reading-sessions', 'book', bookId] as const,
+  },
+
+  lists: {
+    all: ['lists'] as const,
+    list: (params: Record<string, unknown>) => ['lists', 'list', params] as const,
+    detail: (id: string) => ['lists', 'detail', id] as const,
+    forBook: (bookId: string) => ['lists', 'book', bookId] as const,
+  },
+
   buddyReads: {
     all: ['buddy-reads'] as const,
     detail: (id: string) => ['buddy-reads', id] as const,

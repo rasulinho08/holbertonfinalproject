@@ -105,6 +105,28 @@ export const Endpoints = {
     create: '/uploads',
   },
 
+  sessions: {
+    list: '/reading-sessions',
+    create: '/reading-sessions',
+    remove: (id: string) => `/reading-sessions/${id}`,
+    /** Aggregates over the signed-in reader's sessions. */
+    stats: '/reading-sessions/stats',
+    forBook: (bookId: string) => `/books/${bookId}/reading-sessions`,
+  },
+
+  lists: {
+    list: '/lists',
+    detail: (id: string) => `/lists/${id}`,
+    create: '/lists',
+    update: (id: string) => `/lists/${id}`,
+    remove: (id: string) => `/lists/${id}`,
+    follow: (id: string) => `/lists/${id}/follow`,
+    addBook: (id: string) => `/lists/${id}/books`,
+    removeBook: (id: string, bookId: string) => `/lists/${id}/books/${bookId}`,
+    /** Lists a given book appears on — shown on the book detail screen. */
+    forBook: (bookId: string) => `/books/${bookId}/lists`,
+  },
+
   buddyReads: {
     list: '/buddy-reads',
     create: '/buddy-reads',

@@ -9,6 +9,8 @@ import type {
   Badge,
   Book,
   BookLanguage,
+  BookList,
+  BookListDetail,
   BuddyRead,
   CartGroup,
   CartSummary,
@@ -19,6 +21,8 @@ import type {
   Paginated,
   PublisherStats,
   Quote,
+  ReadingSession,
+  ReadingStats,
   Report,
   Review,
   Shelf,
@@ -28,7 +32,7 @@ import type {
   UserRole,
   UserStats,
 } from '@/types';
-import { BADGE_DEFS, seed, toSummary } from './seed';
+import { BADGE_DEFS, seed, toSummary, type SeedBookList } from './seed';
 import { CURRENT_USER_ID, ensureDbReady, getDb, nextId, nowIso, persistDb } from './db';
 
 /* ------------------------------ tiny helpers ------------------------------ */
@@ -1936,6 +1940,339 @@ route('DELETE', '/admin/quotes/:id', ({ params }) => {
   db.quotes = db.quotes.filter((qt) => qt.id !== params.id);
   persistDb();
   return { success: true };
+});
+
+/* ---- reading sessions ---- */
+
+function sessionWithBook(session: ReadingSession): ReadingSession {
+  const book = getDb().books.find((b) => b.id === session.bookId);
+  return {
+    ...session,
+    book: book
+      ? {
+          id: book.id,
+          title: book.title,
+          authorName: book.authorName,
+          coverUrl: book.coverUrl,
+          pageCount: book.pageCount,
+        }
+      : undefined,
+  };
+}
+
+const mySessions = () =>
+  getDb()
+    .readingSessions.filter((s) => s.userId === CURRENT_USER_ID)
+    .sort((a, b) => +new Date(b.startedAt) - +new Date(a.startedAt));
+
+route('GET', '/reading-sessions', ({ query }) =>
+  paginate(mySessions().map(sessionWithBook), query),
+);
+
+route('GET', '/books/:id/reading-sessions', ({ params, query }) =>
+  paginate(
+    mySessions()
+      .filter((s) => s.bookId === params.id)
+      .map(sessionWithBook),
+    query,
+  ),
+);
+
+route('GET', '/reading-sessions/stats', ({ query }) => {
+  // `days` bounds the window; the daily chart always covers the last 7.
+  const windowDays = qNum(query, 'days') ?? 30;
+  const since = Date.now() - windowDays * 86_400_000;
+  const sessions = mySessions().filter((s) => +new Date(s.startedAt) >= since);
+
+  const totalSeconds = sessions.reduce((sum, s) => sum + s.durationSeconds, 0);
+  const totalPages = sessions.reduce((sum, s) => sum + Math.max(0, s.endPage - s.startPage), 0);
+
+  // Only sessions with a real duration may feed the speed estimate; a
+  // logged-after-the-fact session with 0 seconds would divide by zero.
+  const timed = sessions.filter((s) => s.durationSeconds > 0);
+  const timedSeconds = timed.reduce((sum, s) => sum + s.durationSeconds, 0);
+  const timedPages = timed.reduce((sum, s) => sum + Math.max(0, s.endPage - s.startPage), 0);
+
+  const dailyMinutes = Array.from({ length: 7 }, (_, i) => {
+    const dayStart = new Date();
+    dayStart.setHours(0, 0, 0, 0);
+    dayStart.setDate(dayStart.getDate() - (6 - i));
+    const dayEnd = +dayStart + 86_400_000;
+    return Math.round(
+      sessions
+        .filter((s) => {
+          const at = +new Date(s.startedAt);
+          return at >= +dayStart && at < dayEnd;
+        })
+        .reduce((sum, s) => sum + s.durationSeconds, 0) / 60,
+    );
+  });
+
+  return {
+    sessionCount: sessions.length,
+    totalMinutes: Math.round(totalSeconds / 60),
+    totalPages,
+    pagesPerHour: timedSeconds > 0 ? Math.round((timedPages / timedSeconds) * 3600) : 0,
+    dailyMinutes,
+    longestSessionMinutes: Math.round(
+      sessions.length === 0 ? 0 : Math.max(...sessions.map((s) => s.durationSeconds)) / 60,
+    ),
+  } satisfies ReadingStats;
+});
+
+route('POST', '/reading-sessions', ({ body }) => {
+  const db = getDb();
+  const book = db.books.find((b) => b.id === body?.bookId);
+  if (!book) throw new ApiError('NOT_FOUND', 'Book not found', 404);
+
+  const startPage = Math.max(0, Number(body?.startPage ?? 0));
+  const endPage = Number(body?.endPage ?? 0);
+  const durationSeconds = Math.max(0, Math.round(Number(body?.durationSeconds ?? 0)));
+
+  if (!Number.isFinite(endPage) || endPage < startPage) {
+    throw new ApiError('VALIDATION_ERROR', 'End page must be at or after the start page', 422, {
+      endPage: 'invalid',
+    });
+  }
+  if (endPage > book.pageCount) {
+    throw new ApiError('VALIDATION_ERROR', 'End page is beyond the book', 422, {
+      endPage: 'out_of_range',
+    });
+  }
+
+  const endedAt = new Date();
+  const session: ReadingSession = {
+    id: nextId('rs'),
+    userId: CURRENT_USER_ID,
+    bookId: book.id,
+    startPage,
+    endPage,
+    durationSeconds,
+    note: body?.note ? String(body.note).slice(0, 280) : null,
+    startedAt: new Date(+endedAt - durationSeconds * 1000).toISOString(),
+    endedAt: endedAt.toISOString(),
+  };
+  db.readingSessions.push(session);
+
+  // A session is also a progress update: logging one has to move the shelf
+  // entry, otherwise the book screen still shows the page you were on before.
+  const entry = db.shelfEntries.find(
+    (e) => e.userId === CURRENT_USER_ID && e.bookId === book.id,
+  );
+  if (entry && endPage > entry.progressPage) {
+    entry.progressPage = endPage;
+    if (entry.status === 'want_to_read') {
+      entry.status = 'reading';
+      const readingShelf = db.shelves.find(
+        (s) => s.userId === CURRENT_USER_ID && s.status === 'reading',
+      );
+      if (readingShelf) entry.shelfId = readingShelf.id;
+      entry.startedAt = entry.startedAt ?? nowIso();
+    }
+    if (endPage >= book.pageCount) {
+      entry.status = 'read';
+      entry.finishedAt = nowIso();
+      const readShelf = db.shelves.find(
+        (s) => s.userId === CURRENT_USER_ID && s.status === 'read',
+      );
+      if (readShelf) entry.shelfId = readShelf.id;
+    }
+  }
+
+  persistDb();
+  return sessionWithBook(session);
+});
+
+route('DELETE', '/reading-sessions/:id', ({ params }) => {
+  const db = getDb();
+  const before = db.readingSessions.length;
+  db.readingSessions = db.readingSessions.filter(
+    (s) => !(s.id === params.id && s.userId === CURRENT_USER_ID),
+  );
+  if (db.readingSessions.length === before) {
+    throw new ApiError('NOT_FOUND', 'Session not found', 404);
+  }
+  persistDb();
+  return { success: true };
+});
+
+/* ---- book lists ---- */
+
+function toBookList(raw: SeedBookList): BookList {
+  const db = getDb();
+  const owner = db.users.find((u) => u.id === raw.ownerId) ?? db.users[0];
+  const covers = raw.items
+    .slice(0, 4)
+    .map((item) => db.books.find((b) => b.id === item.bookId)?.coverUrl)
+    .filter((url): url is string => !!url);
+
+  return {
+    id: raw.id,
+    slug: raw.slug,
+    title: raw.title,
+    description: raw.description,
+    owner: toSummary(owner),
+    isOfficial: raw.isOfficial,
+    bookCount: raw.items.length,
+    followersCount: raw.followersCount,
+    isFollowing: raw.followerIds.includes(CURRENT_USER_ID),
+    coverUrls: covers,
+    createdAt: raw.createdAt,
+  };
+}
+
+route('GET', '/lists', ({ query }) => {
+  const db = getDb();
+  const scope = q(query, 'scope'); // 'mine' | 'following' | undefined (all)
+  const term = q(query, 'q');
+
+  let lists = db.bookLists;
+  if (scope === 'mine') lists = lists.filter((l) => l.ownerId === CURRENT_USER_ID);
+  if (scope === 'following') lists = lists.filter((l) => l.followerIds.includes(CURRENT_USER_ID));
+  if (term) {
+    const needle = normalize(term);
+    lists = lists.filter(
+      (l) => normalize(l.title).includes(needle) || normalize(l.description).includes(needle),
+    );
+  }
+
+  // Official lists first, then by follower count — the Explore rail wants the
+  // editorial ones at the front.
+  const sorted = [...lists].sort(
+    (a, b) => Number(b.isOfficial) - Number(a.isOfficial) || b.followersCount - a.followersCount,
+  );
+  return paginate(sorted.map(toBookList), query);
+});
+
+route('GET', '/lists/:id', ({ params }) => {
+  const db = getDb();
+  const raw = db.bookLists.find((l) => l.id === params.id || l.slug === params.id);
+  if (!raw) throw new ApiError('NOT_FOUND', 'List not found', 404);
+
+  const items = raw.items
+    .slice()
+    .sort((a, b) => a.position - b.position)
+    .map((item) => {
+      const book = db.books.find((b) => b.id === item.bookId);
+      if (!book) return null;
+      return {
+        bookId: item.bookId,
+        book: decorateBook(book),
+        note: item.note,
+        position: item.position,
+      };
+    })
+    .filter((x): x is NonNullable<typeof x> => x !== null);
+
+  return { ...toBookList(raw), items } satisfies BookListDetail;
+});
+
+route('GET', '/books/:id/lists', ({ params, query }) => {
+  const lists = getDb()
+    .bookLists.filter((l) => l.items.some((item) => item.bookId === params.id))
+    .map(toBookList);
+  return paginate(lists, query);
+});
+
+route('POST', '/lists', ({ body }) => {
+  const db = getDb();
+  const title = String(body?.title ?? '').trim();
+  if (title.length < 3) {
+    throw new ApiError('VALIDATION_ERROR', 'Title is too short', 422, { title: 'too_short' });
+  }
+
+  const raw: SeedBookList = {
+    id: nextId('bl'),
+    slug: normalize(title)
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, ''),
+    title,
+    description: String(body?.description ?? '').slice(0, 400),
+    ownerId: CURRENT_USER_ID,
+    isOfficial: false,
+    followersCount: 0,
+    followerIds: [],
+    items: [],
+    createdAt: nowIso(),
+  };
+  db.bookLists.unshift(raw);
+  persistDb();
+  return toBookList(raw);
+});
+
+route('PATCH', '/lists/:id', ({ params, body }) => {
+  const db = getDb();
+  const raw = db.bookLists.find((l) => l.id === params.id);
+  if (!raw) throw new ApiError('NOT_FOUND', 'List not found', 404);
+  if (raw.ownerId !== CURRENT_USER_ID) throw new ApiError('FORBIDDEN', 'Not your list', 403);
+
+  if (body?.title !== undefined) raw.title = String(body.title).trim();
+  if (body?.description !== undefined) raw.description = String(body.description).slice(0, 400);
+  persistDb();
+  return toBookList(raw);
+});
+
+route('DELETE', '/lists/:id', ({ params }) => {
+  const db = getDb();
+  const raw = db.bookLists.find((l) => l.id === params.id);
+  if (!raw) throw new ApiError('NOT_FOUND', 'List not found', 404);
+  if (raw.ownerId !== CURRENT_USER_ID) throw new ApiError('FORBIDDEN', 'Not your list', 403);
+
+  db.bookLists = db.bookLists.filter((l) => l.id !== params.id);
+  persistDb();
+  return { success: true };
+});
+
+route('POST', '/lists/:id/follow', ({ params, body }) => {
+  const db = getDb();
+  const raw = db.bookLists.find((l) => l.id === params.id);
+  if (!raw) throw new ApiError('NOT_FOUND', 'List not found', 404);
+
+  const follow = body?.follow !== false;
+  const already = raw.followerIds.includes(CURRENT_USER_ID);
+  if (follow && !already) {
+    raw.followerIds.push(CURRENT_USER_ID);
+    raw.followersCount += 1;
+  } else if (!follow && already) {
+    raw.followerIds = raw.followerIds.filter((id) => id !== CURRENT_USER_ID);
+    raw.followersCount = Math.max(0, raw.followersCount - 1);
+  }
+  persistDb();
+  return { following: follow, followersCount: raw.followersCount };
+});
+
+route('POST', '/lists/:id/books', ({ params, body }) => {
+  const db = getDb();
+  const raw = db.bookLists.find((l) => l.id === params.id);
+  if (!raw) throw new ApiError('NOT_FOUND', 'List not found', 404);
+  if (raw.ownerId !== CURRENT_USER_ID) throw new ApiError('FORBIDDEN', 'Not your list', 403);
+
+  const book = db.books.find((b) => b.id === body?.bookId);
+  if (!book) throw new ApiError('NOT_FOUND', 'Book not found', 404);
+  if (raw.items.some((item) => item.bookId === book.id)) {
+    throw new ApiError('CONFLICT', 'Book is already on this list', 409);
+  }
+
+  raw.items.push({
+    bookId: book.id,
+    note: body?.note ? String(body.note).slice(0, 200) : null,
+    position: raw.items.length,
+  });
+  persistDb();
+  return toBookList(raw);
+});
+
+route('DELETE', '/lists/:id/books/:bookId', ({ params }) => {
+  const db = getDb();
+  const raw = db.bookLists.find((l) => l.id === params.id);
+  if (!raw) throw new ApiError('NOT_FOUND', 'List not found', 404);
+  if (raw.ownerId !== CURRENT_USER_ID) throw new ApiError('FORBIDDEN', 'Not your list', 403);
+
+  raw.items = raw.items
+    .filter((item) => item.bookId !== params.bookId)
+    .map((item, position) => ({ ...item, position }));
+  persistDb();
+  return toBookList(raw);
 });
 
 /* ---- demo-only helpers (no backend counterpart) ---- */
