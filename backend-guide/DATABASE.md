@@ -326,25 +326,66 @@ CREATE INDEX idx_shelf_entries_book   ON shelf_entries (book_id);
 
 ### `reading_sessions`
 
-Drives streaks, the weekly chart and the `reading_marathon` badge.
+One row per **sitting**, not per day. Drives streaks, the weekly chart, the
+reading-speed estimate and the `reading_marathon` badge.
+
+> **Changed.** This table used to be a daily aggregate keyed
+> `UNIQUE (user_id, book_id, session_date)` with a single `pages_read` column.
+> The app now ships a session timer (`app/read/[id].tsx`), so a reader can log
+> two separate sittings with the same book on the same day — which the old
+> unique constraint forbade — and each sitting carries a duration and a page
+> range. The daily aggregate is still available, as a query rather than a table:
+> see `weeklyPages` below.
 
 ```sql
 CREATE TABLE reading_sessions (
-  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id     uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  book_id     uuid REFERENCES books(id) ON DELETE SET NULL,
-  pages_read  integer NOT NULL DEFAULT 0,
-  -- calendar day in Asia/Baku; makes "did they read today?" a lookup
-  session_date date NOT NULL,
-  created_at  timestamptz NOT NULL DEFAULT now(),
+  id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id          uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  book_id          uuid NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+  start_page       integer NOT NULL CHECK (start_page >= 0),
+  end_page         integer NOT NULL CHECK (end_page >= 0),
+  -- 0 is legal: a session logged after the fact has no stopwatch reading.
+  -- Those rows are excluded from the speed estimate, not rejected.
+  duration_seconds integer NOT NULL DEFAULT 0 CHECK (duration_seconds >= 0),
+  note             text CHECK (note IS NULL OR char_length(note) <= 280),
+  started_at       timestamptz NOT NULL,
+  ended_at         timestamptz NOT NULL,
+  -- Denormalised calendar day in the *user's* timezone, so "did they read
+  -- today?" and the streak are an index lookup rather than a per-row
+  -- timezone conversion across the whole table.
+  session_date     date NOT NULL,
+  created_at       timestamptz NOT NULL DEFAULT now(),
 
-  UNIQUE (user_id, book_id, session_date)
+  CONSTRAINT pages_forward CHECK (end_page >= start_page),
+  CONSTRAINT ends_after_start CHECK (ended_at >= started_at)
 );
 
 CREATE INDEX idx_sessions_user_date ON reading_sessions (user_id, session_date DESC);
+CREATE INDEX idx_sessions_user_book ON reading_sessions (user_id, book_id, started_at DESC);
 ```
 
-`weeklyPages[i] = SUM(pages_read) GROUP BY session_date` over the last 7 days.
+`start_page` / `end_page` are not foreign-keyed to `books.page_count`: the API
+validates `end_page <= book.page_count` at write time, but a publisher editing a
+book's page count later must not retroactively invalidate stored history.
+
+Derived values:
+
+```sql
+-- weeklyPages[i] — pages per day, last 7 days
+SELECT session_date, SUM(end_page - start_page) AS pages
+FROM reading_sessions
+WHERE user_id = $1 AND session_date > current_date - 7
+GROUP BY session_date ORDER BY session_date;
+
+-- pagesPerHour — timed sessions only, or you divide by zero
+SELECT ROUND(SUM(end_page - start_page)::numeric * 3600 / NULLIF(SUM(duration_seconds), 0))
+FROM reading_sessions
+WHERE user_id = $1 AND duration_seconds > 0 AND session_date > current_date - $2;
+```
+
+`session_date` must be computed from `started_at` in the account's timezone (see
+[`ENDPOINTS.md` §18](./ENDPOINTS.md#18-reading-sessions)). Storing UTC days would
+cost a Baku reader their streak every time they read after 20:00.
 
 ### `reading_goals`
 
@@ -449,6 +490,70 @@ CREATE TABLE comments (
 CREATE INDEX idx_comments_target ON comments (target_type, target_id, created_at DESC)
   WHERE deleted_at IS NULL;
 ```
+
+---
+
+### `book_lists`, `book_list_items`, `book_list_follows`
+
+Curated collections. A shelf is private reading state; a list is an editorial
+artefact other readers follow, so it is a separate tree rather than a flag on
+`shelves`.
+
+```sql
+CREATE TABLE book_lists (
+  id              uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug            text NOT NULL UNIQUE,
+  title           text NOT NULL CHECK (char_length(title) BETWEEN 3 AND 120),
+  description     text NOT NULL DEFAULT '' CHECK (char_length(description) <= 400),
+  owner_id        uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  -- Staff-curated. Never settable from POST /lists — the verified badge in the
+  -- UI is keyed on it.
+  is_official     boolean NOT NULL DEFAULT false,
+  followers_count integer NOT NULL DEFAULT 0,
+  created_at      timestamptz NOT NULL DEFAULT now(),
+  updated_at      timestamptz NOT NULL DEFAULT now(),
+  deleted_at      timestamptz
+);
+
+CREATE INDEX idx_lists_owner    ON book_lists (owner_id, created_at DESC)
+  WHERE deleted_at IS NULL;
+CREATE INDEX idx_lists_ranking  ON book_lists (is_official DESC, followers_count DESC)
+  WHERE deleted_at IS NULL;
+
+CREATE TABLE book_list_items (
+  list_id   uuid NOT NULL REFERENCES book_lists(id) ON DELETE CASCADE,
+  book_id   uuid NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+  note      text CHECK (note IS NULL OR char_length(note) <= 200),
+  -- Contiguous from 0. Removing an item re-packs the survivors; the client
+  -- renders by position and a gap shows up as a jump in the numbering.
+  position  integer NOT NULL CHECK (position >= 0),
+  added_at  timestamptz NOT NULL DEFAULT now(),
+
+  PRIMARY KEY (list_id, book_id)
+);
+
+CREATE INDEX idx_list_items_order ON book_list_items (list_id, position);
+CREATE INDEX idx_list_items_book  ON book_list_items (book_id);  -- GET /books/:id/lists
+
+CREATE TABLE book_list_follows (
+  list_id     uuid NOT NULL REFERENCES book_lists(id) ON DELETE CASCADE,
+  user_id     uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  followed_at timestamptz NOT NULL DEFAULT now(),
+
+  PRIMARY KEY (list_id, user_id)
+);
+```
+
+`PRIMARY KEY (list_id, book_id)` is what makes a duplicate add a `409` rather
+than a silent second row — the client surfaces "already on this list".
+
+`followers_count` is a counter cache on `book_lists`, maintained by the same
+trigger pattern used for `likes_count` on `reviews`. The browse list sorts on
+it, and counting `book_list_follows` per row would make that query quadratic.
+
+`slug` is generated from the title, ASCII-folded (`ə→e`, `ı→i`, `ö→o`, `ü→u`,
+`ç→c`, `ş→s`, `ğ→g`) so `/lists/azerbaycan-klassikleri` is URL-safe. Both the id
+and the slug resolve on `GET /lists/:id`.
 
 ---
 

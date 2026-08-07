@@ -39,12 +39,30 @@ Every screen below is implemented and running against the built-in mock API.
 | 🔍 **Kəşf / Discovery** | Yazı səhvinə dözümlü axtarış, janr/dil/reytinq/qiymət filtri, "Bunu nəzərdə tuturdun?" |
 | 🛒 **Marketplace** | Çoxsatıcılı səbət, kuryer/məntəqə/Azərpoçt, kart/nağd/POS/balans, hədiyyə kartı |
 | 📦 **Sifarişlər / Orders** | Status izləmə xətti, elektron qəbz, ləğv etmə |
+| ⏱️ **Oxu seansı / Sessions** | Taymer, seans tarixçəsi, saatda səhifə sürəti, avtomatik tərəqqi yeniləməsi |
+| 🗂️ **Siyahılar / Lists** | Redaksiya və istifadəçi siyahıları, izləmə, kitab əlavə/çıxarma |
 | 🎮 **Gamification** | Oxu seriyası, 10 nişan, həftəlik/aylıq reytinq cədvəli |
 | 👥 **Birgə oxu / Buddy reads** | Qrup yaratma, hər üzvün tərəqqisi, fəsil üzrə müzakirə |
-| 📊 **Profil** | Janr bölgüsü (pie chart), həftəlik oxu, illik hədəf halqası |
+| 📊 **Profil** | Janr bölgüsü (pie chart), həftəlik oxu, illik hədəf halqası, oxu statistikası |
 | 🏢 **Nəşriyyat / Publisher** | Satış paneli, kitab əlavə/redaktə, anbar, sifariş idarəetməsi, analitika |
 | 🛡️ **Moderasiya** | Şikayət növbəsi, rəy/sitat silmə, audit |
-| 🌗 **UX** | Qaranlıq/işıqlı mövzu, **AZ ⇄ EN** dil dəyişimi, oflayn rejim, skeleton yükləmə |
+| 🌗 **UX** | 3 rəng paleti × qaranlıq/işıqlı, **AZ ⇄ EN**, animasiyalar, oflayn rejim, skeleton |
+
+### 📚 Kataloq / Catalogue
+
+**1000 real kitab, 618 müəllif** — [Open Library](https://openlibrary.org)-dən
+`scripts/build-catalog.mjs` ilə yığılıb və repoya yazılıb. 981 kitabın real üzlük
+şəkli, 455 müəllifin real fotosu var. Qiymət, anbar və Azərbaycan dilində təsvirlər
+sabit PRNG toxumu ilə real biblioqrafik məlumatın üzərində yaradılır — hər maşında
+eyni görünür və internet olmadan da açılır.
+
+```bash
+node scripts/build-catalog.mjs --target 1000   # kataloqu yenilə (Open Library)
+```
+
+```bash
+node scripts/export-seed.mjs                   # backend-guide/seed-data/ üçün ixrac
+```
 
 ---
 
@@ -82,6 +100,10 @@ npm run android    # Android emulator / cihaz
 npm run ios        # iOS simulator (macOS)
 npm start          # QR kod — Expo Go ilə telefonda aç
 ```
+
+> 📱 **Telefonda test və APK üçün:** [`MOBILE.md`](./MOBILE.md) — Expo Go,
+> EAS ilə `.apk` build və telefondan backend-ə qoşulma (`localhost` işləmir,
+> LAN IP lazımdır).
 
 > **Demo girişi:** istənilən e-poçt və şifrə ilə daxil ola bilərsən.
 > E-poçtda `publisher` sözü olsa → nəşriyyat paneli, `admin` olsa → moderasiya
@@ -122,6 +144,7 @@ Backend komandası üçün tam sənədləşmə: [`backend-guide/`](./backend-gui
 | [`ROADMAP.md`](./backend-guide/ROADMAP.md) | Sprint üzrə tikinti ardıcıllığı |
 | [`openapi.yaml`](./backend-guide/openapi.yaml) | Swagger / codegen üçün |
 | [`seed-data/`](./backend-guide/seed-data/) | Mock məlumatın JSON ixracı — eyni ilə seed et |
+| [`MOBILE.md`](./MOBILE.md) | Telefonda test, APK build, cihazdan backend-ə qoşulma |
 
 ---
 
@@ -143,7 +166,7 @@ holbertonfinalproject/
 │  ├─ api/                   # ⚠️ frontend ↔ backend sərhədi
 │  │  ├─ endpoints.ts        #   bütün yollar bir yerdə
 │  │  ├─ client.ts           #   fetch, token yeniləmə, xəta normallaşdırma
-│  │  ├─ mock/               #   işlək mock backend (58 kitab, 14 istifadəçi…)
+│  │  ├─ mock/               #   işlək mock backend (1000 kitab, 14 istifadəçi…)
 │  │  └─ hooks/              #   ekranların istifadə etdiyi yeganə API səthi
 │  ├─ components/            # ui · book · quote · review · profile · charts
 │  ├─ theme/                 # rəng tokenləri, tipoqrafiya, dark/light

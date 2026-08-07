@@ -27,6 +27,30 @@ environment variable.
 
 ---
 
+## What changed recently
+
+The frontend gained two features and swapped its catalogue for real
+bibliographic data. If you have already started implementing, these are the
+deltas:
+
+| Change | Where |
+|---|---|
+| **Reading sessions** — a session timer; new resource plus an aggregates endpoint | [`ENDPOINTS.md` §18](./ENDPOINTS.md#18-reading-sessions) |
+| **`reading_sessions` reshaped** — per-sitting rather than per-day; the old `UNIQUE (user_id, book_id, session_date)` is gone | [`DATABASE.md`](./DATABASE.md#reading_sessions) |
+| **Book lists** — curated shareable collections; three new tables | [`ENDPOINTS.md` §19](./ENDPOINTS.md#19-book-lists) · [`DATABASE.md`](./DATABASE.md#book_lists-book_list_items-book_list_follows) |
+| **Catalogue is now 1000 real books** from Open Library, with cover and author-portrait URLs | [`seed-data/README.md`](./seed-data/README.md#where-the-catalogue-comes-from) |
+| `books.cover_url` and `authors.photo_url` are populated, no longer `null` | [`seed-data/README.md`](./seed-data/README.md) |
+
+The catalogue change matters most for whoever writes the seeder: cover URLs
+point at `covers.openlibrary.org`, and you want to mirror those images rather
+than serve production traffic off a third party's CDN. The seed-data README
+explains the URL format and the sizing suffix the client depends on.
+
+Add two modules to the layout below — `reading-sessions/` and `lists/` — and two
+entries to the sprint plan in [`ROADMAP.md`](./ROADMAP.md).
+
+---
+
 ## Recommended stack
 
 The product spec calls for Node.js + PostgreSQL. A setup that matches this
@@ -75,6 +99,8 @@ backend/
 │  │  ├─ users/
 │  │  ├─ books/
 │  │  ├─ shelves/
+│  │  ├─ reading-sessions/
+│  │  ├─ lists/
 │  │  ├─ reviews/
 │  │  ├─ quotes/
 │  │  ├─ buddy-reads/
