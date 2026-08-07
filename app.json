@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#12100E"
+      "backgroundColor": "#0E1116"
     },
     "ios": {
       "supportsTablet": true,
@@ -21,7 +21,7 @@
       "package": "az.kitabdostu.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#12100E"
+        "backgroundColor": "#0E1116"
       },
       "edgeToEdgeEnabled": true
     },
@@ -30,8 +30,8 @@
       "favicon": "./assets/images/favicon.png",
       "name": "KitabDostu",
       "shortName": "KitabDostu",
-      "themeColor": "#C2410C",
-      "backgroundColor": "#12100E",
+      "themeColor": "#1E3A5F",
+      "backgroundColor": "#0E1116",
       "display": "standalone",
       "lang": "az"
     },
@@ -49,11 +49,6 @@
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "eas": {
-        "projectId": "00000000-0000-0000-0000-000000000000"
-      }
     }
   }
 }
