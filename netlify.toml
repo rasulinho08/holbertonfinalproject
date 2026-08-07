@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build:web"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# expo-router is a client-side router: every unknown path has to fall through to the
+# single HTML entry point, otherwise a refresh on /profile returns Netlify's 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
