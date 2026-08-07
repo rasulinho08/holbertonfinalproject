@@ -27,7 +27,6 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "single",
       "favicon": "./assets/images/favicon.png",
       "name": "KitabDostu",
       "shortName": "KitabDostu",
