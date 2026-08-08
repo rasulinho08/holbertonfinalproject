@@ -7,7 +7,8 @@ import { useI18n } from '@/i18n';
 import { useAuth } from '@/store/auth';
 import { usePrefs } from '@/store/prefs';
 import * as validate from '@/lib/validation';
-import { serverMessage } from '@/api/errors';
+import { useGoogleAuth } from '@/lib/googleAuth';
+import { errorMessageKey } from '@/api/errors';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Screen } from '@/components/ui/Screen';
@@ -43,19 +44,25 @@ export default function LoginScreen() {
       await login(email.trim(), password);
       router.replace(onboardingDone ? '/' : '/onboarding');
     } catch (error) {
-      toast.error(serverMessage(error) ?? t('errors.invalidCredentials'));
+      toast.error(t(errorMessageKey(error)));
     } finally {
       setBusy(false);
     }
   };
 
+  const { signIn: googleSignIn } = useGoogleAuth();
+
   const social = async (provider: 'google' | 'apple' | 'facebook') => {
+    if (provider !== 'google') return;
     setBusy(true);
     try {
-      await loginWithProvider(provider);
+      const result = await googleSignIn();
+      // null means the reader closed the consent screen — not an error.
+      if (!result) return;
+      await loginWithProvider('google', result.idToken);
       router.replace(onboardingDone ? '/' : '/onboarding');
-    } catch {
-      toast.error(t('errors.generic'));
+    } catch (error) {
+      toast.error(t(errorMessageKey(error)));
     } finally {
       setBusy(false);
     }
