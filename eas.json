@@ -6,10 +6,13 @@
   "build": {
     "//": [
       "EXPO_PUBLIC_* values are inlined into the bundle at build time, so the",
-      "API address is chosen per profile here rather than read at runtime.",
-      "There is no bundled mock any more: every profile needs a reachable",
-      "backend, and an APK built against localhost will only work on the",
-      "machine that ran the server."
+      "API address and the Google client id are chosen per profile here rather",
+      "than read at runtime. There is no bundled mock: every profile needs a",
+      "reachable backend, and an APK built against localhost only works on the",
+      "machine that ran the server.",
+      "",
+      "Only the client *id* appears here. The implicit id_token flow needs no",
+      "client secret, and a secret in an app bundle is not a secret."
     ],
 
     "development": {
@@ -17,7 +20,8 @@
       "distribution": "internal",
       "android": { "buildType": "apk" },
       "env": {
-        "EXPO_PUBLIC_API_BASE_URL": "http://10.0.2.2:4000/api/v1"
+        "EXPO_PUBLIC_API_BASE_URL": "http://10.0.2.2:4000/api/v1",
+        "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "124124575060-tdstriicil2o9rcm4khoifggreb77d44.apps.googleusercontent.com"
       }
     },
 
@@ -28,7 +32,8 @@
       "android": { "buildType": "apk" },
       "env": {
         "EXPO_PUBLIC_API_BASE_URL": "https://holbertonfinalproject-backend.onrender.com/api/v1",
-        "EXPO_PUBLIC_DEFAULT_LOCALE": "az"
+        "EXPO_PUBLIC_DEFAULT_LOCALE": "az",
+        "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "124124575060-tdstriicil2o9rcm4khoifggreb77d44.apps.googleusercontent.com"
       }
     },
 
@@ -50,7 +55,8 @@
       "android": { "buildType": "app-bundle" },
       "env": {
         "EXPO_PUBLIC_API_BASE_URL": "https://holbertonfinalproject-backend.onrender.com/api/v1",
-        "EXPO_PUBLIC_DEFAULT_LOCALE": "az"
+        "EXPO_PUBLIC_DEFAULT_LOCALE": "az",
+        "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "124124575060-tdstriicil2o9rcm4khoifggreb77d44.apps.googleusercontent.com"
       }
     }
   },
