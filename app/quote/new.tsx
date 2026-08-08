@@ -8,7 +8,11 @@ import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useBooks, useCreateQuote, useOcrExtract, useShelfBooks, useShelves } from '@/api/hooks';
 import { useDebounced } from '@/lib/hooks';
-import { QUOTE_BACKGROUNDS } from '@/api/mock/seed';
+import {
+  DEFAULT_QUOTE_BACKGROUND,
+  QUOTE_BACKGROUNDS,
+  quoteBackground,
+} from '@/theme/quoteBackgrounds';
 import { serverMessage } from '@/api/errors';
 import { BookCover } from '@/components/book/BookCover';
 import { Button } from '@/components/ui/Button';
@@ -48,7 +52,7 @@ export default function NewQuoteScreen() {
   const [pickedBook, setPickedBook] = useState<Book | null>(null);
   const [text, setText] = useState('');
   const [page, setPage] = useState('');
-  const [background, setBackground] = useState<string>(QUOTE_BACKGROUNDS[0].id);
+  const [background, setBackground] = useState<string>(DEFAULT_QUOTE_BACKGROUND.id);
 
   const create = useCreateQuote();
   const ocr = useOcrExtract();
@@ -63,7 +67,7 @@ export default function NewQuoteScreen() {
   const book = pickedBook ?? suggested.find((b) => b.id === params.bookId) ?? null;
 
   const searchResults = searchQuery.data?.pages.flatMap((p) => p.data) ?? [];
-  const bg = QUOTE_BACKGROUNDS.find((b) => b.id === background) ?? QUOTE_BACKGROUNDS[0];
+  const bg = quoteBackground(background);
 
   const scan = async () => {
     const permission = await ImagePicker.requestCameraPermissionsAsync();

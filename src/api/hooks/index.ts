@@ -1,9 +1,9 @@
 /**
  * The only API surface screens are allowed to import.
  *
- * Screens never touch `client.ts`, `endpoints.ts` or the mock directly — they
- * call hooks. That is what makes swapping the mock for the real backend a
- * zero-diff change in `app/`.
+ * Screens never touch `client.ts` or `endpoints.ts` directly — they call
+ * hooks. One module per resource knows its endpoints, so a route rename is one
+ * edit here rather than a search across 40 screens.
  */
 export * from './books';
 export * from './commerce';

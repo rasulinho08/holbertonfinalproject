@@ -74,7 +74,6 @@ export const StorageKeys = {
   accessToken: 'kd.auth.access',
   refreshToken: 'kd.auth.refresh',
   session: 'kd.auth.session',
-  mockDb: 'kd.mock.db',
   offlineQueue: 'kd.offline.queue',
   queryCache: 'kd.query.cache',
   onboarded: 'kd.onboarded',

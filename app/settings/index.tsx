@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
 import { useRouter } from 'expo-router';
 import Constants from 'expo-constants';
 import {
-  BarChart3,
   Bell,
   EyeOff,
   Globe,
@@ -18,18 +16,15 @@ import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useAuth, useCurrentUser } from '@/store/auth';
 import { usePrefs } from '@/store/prefs';
-import { USE_MOCK_API } from '@/api/config';
+import { API_BASE_URL } from '@/api/config';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { Button } from '@/components/ui/Button';
-import { Chip } from '@/components/ui/Chip';
 import { ListGroup, ListRow } from '@/components/ui/ListRow';
 import { Screen } from '@/components/ui/Screen';
 import { Sheet } from '@/components/ui/Sheet';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
-import type { UserRole } from '@/types';
 
-const ROLES: UserRole[] = ['user', 'publisher', 'admin'];
 
 export default function SettingsScreen() {
   const theme = useTheme();
@@ -39,7 +34,6 @@ export default function SettingsScreen() {
 
   const user = useCurrentUser();
   const logout = useAuth((s) => s.logout);
-  const setDemoRole = useAuth((s) => s.setDemoRole);
 
   const dataSaver = usePrefs((s) => s.dataSaver);
   const setDataSaver = usePrefs((s) => s.setDataSaver);
@@ -105,60 +99,17 @@ export default function SettingsScreen() {
         </ListGroup>
 
         {/*
-          Demo-only role switch. The real backend derives the role from the
-          account, but a single demo login has to be able to show the reader,
-          publisher and moderator experiences during the sprint review.
+          The role now comes from the account, as it does in production: the
+          seeded publisher@ and admin@ logins reach the publisher and moderation
+          panels. The demo role switch that used to live here talked to a
+          mock-only endpoint and has gone with the mock.
         */}
-        {USE_MOCK_API ? (
-          <View style={{ gap: theme.spacing.sm }}>
-            <Text variant="caption" color="fgSubtle">
-              DEMO
-            </Text>
-            <View
-              style={{
-                gap: theme.spacing.md,
-                padding: theme.spacing.lg,
-                borderRadius: theme.radius.lg,
-                backgroundColor: theme.colors.card,
-                borderWidth: 1,
-                borderColor: theme.colors.border,
-              }}
-            >
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}>
-                <BarChart3 size={16} color={theme.colors.fgMuted} />
-                <Text variant="small" color="fgMuted" style={{ flex: 1 }}>
-                  {t('settings.apiModeMock')}
-                </Text>
-              </View>
-
-              <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
-                {ROLES.map((role) => (
-                  <Chip
-                    key={role}
-                    label={
-                      role === 'user'
-                        ? t('nav.profile')
-                        : role === 'publisher'
-                          ? t('nav.publisher')
-                          : t('nav.admin')
-                    }
-                    selected={user?.role === role}
-                    onPress={async () => {
-                      await setDemoRole(role);
-                      toast.success(role);
-                    }}
-                  />
-                ))}
-              </View>
-            </View>
-          </View>
-        ) : null}
 
         <ListGroup title={t('settings.about')}>
           <ListRow title={t('settings.version')} value={version} />
           <ListRow
-            title={t('settings.apiMode')}
-            value={USE_MOCK_API ? t('settings.apiModeMock') : t('settings.apiModeLive')}
+            title={t('settings.apiModeServer')}
+            value={API_BASE_URL}
           />
         </ListGroup>
 

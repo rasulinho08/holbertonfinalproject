@@ -21,28 +21,35 @@ mkdirSync(OUT, { recursive: true });
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+/**
+ * Routes with a `:id` segment are filled in at run time from the API.
+ *
+ * They used to hardcode the mock's prefixed ids (`b_1`, `au_1`). Those are not
+ * ids the real backend has ever issued — it uses uuids — so every detail screen
+ * silently exercised an error path instead of the screen it was meant to test.
+ */
 const ROUTES = [
   ['home', '/'],
   ['explore', '/explore'],
   ['shelves', '/shelves'],
   ['quotes', '/quotes'],
   ['profile', '/profile'],
-  ['book-detail', '/book/b_1'],
-  ['book-reviews', '/book/b_1/reviews'],
-  ['author', '/author/au_1'],
-  ['shelf', '/shelf/sh_1_1'],
+  ['book-detail', '/book/{bookId}'],
+  ['book-reviews', '/book/{bookId}/reviews'],
+  ['author', '/author/{authorId}'],
+  ['shelf', '/shelf/{shelfId}'],
   ['badges', '/badges'],
   ['lists', '/lists'],
-  ['list-detail', '/list/bl_1'],
+  ['list-detail', '/list/{listId}'],
   ['sessions', '/sessions'],
-  ['read-timer', '/read/b_1'],
+  ['read-timer', '/read/{bookId}'],
   ['leaderboard', '/leaderboard'],
   ['notifications', '/notifications'],
   ['buddy-reads', '/buddy-reads'],
-  ['buddy-read', '/buddy-reads/br_1'],
-  ['quote-detail', '/quote/q_1'],
+  ['buddy-read', '/buddy-reads/{buddyId}'],
+  ['quote-detail', '/quote/{quoteId}'],
   ['quote-new', '/quote/new'],
-  ['review-new', '/review/new?bookId=b_1'],
+  ['review-new', '/review/new?bookId={bookId}'],
   ['cart', '/cart'],
   ['checkout', '/checkout'],
   ['orders', '/orders'],
@@ -79,6 +86,20 @@ page.on('console', (m) => {
   if (m.type() === 'error') errors.push(m.text().slice(0, 400));
 });
 page.on('pageerror', (e) => errors.push(`pageerror: ${e.message.slice(0, 400)}`));
+
+// "Failed to load resource: 500" in the console does not say *which* resource,
+// which is useless when the page makes thirty requests. Record the response
+// itself so a failure names its own URL.
+page.on('response', (res) => {
+  const status = res.status();
+  if (status >= 400) {
+    const url = res.url();
+    // Expo's dev server 404s a few probes by design; only real API calls matter.
+    if (url.includes('/api/') || status >= 500) {
+      errors.push(`HTTP ${status} ${res.request().method()} ${url.replace(/^https?:\/\/[^/]+/, '')}`);
+    }
+  }
+});
 
 const report = [];
 
@@ -141,9 +162,65 @@ if (await page.evaluate(() => document.body.innerText.includes('Hansı janrları
   await sleep(2000);
 }
 
+/* ------------------------- resolve real ids ------------------------------ */
+
+/**
+ * Reads ids out of the running app rather than assuming them.
+ *
+ * Taken from the rendered links on each list screen, so they are whatever the
+ * app itself is working with — mock ids against the mock, uuids against the
+ * real backend, with no branch here for either.
+ */
+const API = process.env.E2E_API_BASE ?? 'http://localhost:4000/api/v1';
+
+const resolved = await page.evaluate(async (api) => {
+  // Scraping links does not work: most navigation is a `Pressable` calling
+  // `router.push`, which react-native-web renders as a div with no href. Asking
+  // the API is simpler and gives exactly the ids the screens will be handed.
+  const token = window.localStorage.getItem('kd.auth.access');
+  const auth = token ? { Authorization: `Bearer ${token}` } : {};
+
+  async function first(path, pluck) {
+    try {
+      const res = await fetch(`${api}${path}`, { headers: auth });
+      if (!res.ok) return null;
+      const json = await res.json();
+      const rows = Array.isArray(json?.data) ? json.data : [json?.data];
+      const row = rows[0];
+      return (pluck ? pluck(row) : row?.id) ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  const book = await first('/books?limit=1', (b) => b);
+
+  return {
+    bookId: book?.id ?? null,
+    authorId: book?.authorId ?? null,
+    listId: await first('/lists?limit=1'),
+    quoteId: await first('/quotes?limit=1'),
+    buddyId: await first('/buddy-reads?limit=1'),
+    shelfId: await first('/shelves'),
+  };
+}, API);
+
+console.log('\nresolved ids:', JSON.stringify(resolved), '\n');
+
+function fillIds(path) {
+  return path.replace(/\{(\w+)\}/g, (match, key) => resolved[key] ?? match);
+}
+
 /* --------------------------- walk every route ---------------------------- */
 
-for (const [name, path] of ROUTES) {
+for (const [name, rawPath] of ROUTES) {
+  const path = fillIds(rawPath);
+  // A route whose id could not be resolved would silently test an error page.
+  if (path.includes('{')) {
+    console.log(` SKIP ${name.padEnd(22)} could not resolve ${rawPath}`);
+    report.push({ name, path: rawPath, skipped: true, errors: [] });
+    continue;
+  }
   errors = [];
   try {
     await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle2', timeout: 45000 });

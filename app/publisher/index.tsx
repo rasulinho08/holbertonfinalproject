@@ -35,7 +35,7 @@ export default function PublisherDashboardScreen() {
           <EmptyState
             icon={<Boxes size={22} color={theme.colors.fgSubtle} />}
             title={t('errors.forbidden')}
-            hint={t('settings.apiModeMock')}
+            hint={t('errors.forbiddenPublisher')}
             actionLabel={t('settings.title')}
             onAction={() => router.push('/settings')}
           />

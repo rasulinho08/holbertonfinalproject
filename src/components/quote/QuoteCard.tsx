@@ -6,7 +6,7 @@ import { Heart, MessageCircle, MoreHorizontal, Quote as QuoteIcon } from 'lucide
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { formatCount, formatRelative } from '@/lib/format';
-import { QUOTE_BACKGROUNDS } from '@/api/mock/seed';
+import { quoteBackground } from '@/theme/quoteBackgrounds';
 import { Avatar } from '@/components/ui/Avatar';
 import { Text } from '@/components/ui/Text';
 import type { Quote } from '@/types';
@@ -21,9 +21,8 @@ export interface QuoteCardProps {
   style?: ViewStyle;
 }
 
-export function getQuoteBackground(id: string) {
-  return QUOTE_BACKGROUNDS.find((b) => b.id === id) ?? QUOTE_BACKGROUNDS[0];
-}
+/** Re-exported so callers that already import from this module keep working. */
+export { quoteBackground as getQuoteBackground };
 
 /**
  * The Instagram-story style quote card the spec puts at the centre of social
@@ -34,7 +33,7 @@ export function QuoteCard({ quote, onLike, onComment, onMore, compact, style }: 
   const router = useRouter();
   const { t, locale } = useI18n();
 
-  const bg = getQuoteBackground(quote.background);
+  const bg = quoteBackground(quote.background);
   const gradientId = `quote-${quote.id}`;
   const long = quote.text.length > 180;
 

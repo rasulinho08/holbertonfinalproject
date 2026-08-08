@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Send } from 'lucide-react-native';
+import { Lock, Send } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useCurrentUser } from '@/store/auth';
@@ -19,6 +19,7 @@ import { AppHeader } from '@/components/layout/AppHeader';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { IconButton } from '@/components/ui/IconButton';
 import { Input } from '@/components/ui/Input';
 import { Progress } from '@/components/ui/Progress';
@@ -153,6 +154,18 @@ export default function BuddyReadScreen() {
         </Section>
 
         <Section title={t('buddy.discussion')}>
+          {/* The API refuses the discussion to non-members — it is spoiler
+              territory — so the section says why rather than rendering an
+              unexplained empty heading. */}
+          {!isMember ? (
+            <EmptyState
+              compact
+              icon={<Lock size={22} color={theme.colors.fgSubtle} />}
+              title={t('buddy.discussionLocked')}
+              hint={t('buddy.discussionLockedHint')}
+            />
+          ) : null}
+
           <View style={{ gap: theme.spacing.md }}>
             {(messages ?? []).map((message) => {
               const mine = message.user.id === me?.id;
