@@ -230,8 +230,7 @@ teams do not need to be in sync day to day:
 
 A task is finished when:
 
-- [ ] It works with `EXPO_PUBLIC_USE_MOCK_API=true` (and against the real API if
-      that endpoint exists yet)
+- [ ] It works against the running backend (`npm run dev` in the API repository)
 - [ ] `npm run typecheck` passes
 - [ ] It renders correctly in light **and** dark mode
 - [ ] It renders correctly in AZ **and** EN

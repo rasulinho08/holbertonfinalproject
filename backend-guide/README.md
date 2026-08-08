@@ -186,7 +186,6 @@ repository create `.env.local`:
 
 ```bash
 EXPO_PUBLIC_API_BASE_URL=http://localhost:4000/api/v1
-EXPO_PUBLIC_USE_MOCK_API=false
 ```
 
 Then restart Metro (`npm run web -- --clear`). No frontend code changes.
@@ -213,7 +212,7 @@ An endpoint is finished when all of the following hold:
    with per-field messages.
 5. Auth is enforced per the "Auth" column, and ownership is checked on mutations.
 6. There is at least one happy-path and one failure test.
-7. The corresponding frontend screen works with `EXPO_PUBLIC_USE_MOCK_API=false`.
+7. The corresponding frontend screen works against the running API.
 
 ---
 

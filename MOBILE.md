@@ -76,14 +76,28 @@ about installing outside the Play Store — that is expected for a `.apk`.
 
 The build profiles are in [`eas.json`](./eas.json):
 
-| Profile | Output | API |
+| Profile | Output | Talks to |
 |---|---|---|
-| `preview` | `.apk` | bundled mock data — works offline, no backend needed |
-| `preview-live` | `.apk` | your deployed backend — edit the URL in `eas.json` first |
-| `production` | `.aab` (for Play Store) | your deployed backend |
+| `preview` | `.apk` | the deployed API on Render — **use this one** |
+| `preview-lan` | `.apk` | a backend on your own machine, over Wi-Fi |
+| `development` | `.apk` + dev client | `10.0.2.2:4000` (Android emulator) |
+| `production` | `.aab` (Play Store) | the deployed API |
 
-Start with `preview`. It contains the full 1000-book catalogue and every screen
-works without a server, which is what you want for a demo.
+`preview` is the one to send people. There is no offline mode: the mock was
+removed when the API was finished, so **the APK needs a reachable backend**.
+That is what makes `preview` the right default — it points at the deployed
+service, so it works on any phone, on any network, without your laptop being
+switched on.
+
+Two things worth knowing before you share the link:
+
+**Render's free tier sleeps** after 15 minutes of no traffic, and the next
+request waits about 50 seconds while it wakes. The first person to open the app
+after a quiet night will think it is broken. Open the API URL in a browser a
+minute before a demo.
+
+**The API address is baked into the APK** at build time. Moving the backend to a
+different host means a new build — the installed app cannot be repointed.
 
 ---
 
@@ -116,7 +130,6 @@ Create `.env.local` in the project root (it is git-ignored):
 
 ```bash
 EXPO_PUBLIC_API_BASE_URL=http://192.168.1.42:4000/api/v1
-EXPO_PUBLIC_USE_MOCK_API=false
 ```
 
 Use your computer's **LAN IP**, not `localhost`:
