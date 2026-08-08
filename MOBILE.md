@@ -178,3 +178,96 @@ before building, or deploy the backend somewhere with a stable URL.
 Open **Tənzimləmələr → Haqqında**. The "API rejimi" row reads either
 *Demo (mock) məlumat* or *Canlı backend*. If you set `.env.local` and it still
 says demo, Metro cached the old bundle — restart with `--clear`.
+
+---
+
+## Sharing a build with other people
+
+### Android — a real installable APK
+
+```bash
+eas build --platform android --profile preview
+```
+
+The CLI prints a URL when it finishes. Anyone can open that URL on an Android
+phone and install from it; Android warns about installing outside the Play
+Store, which is expected for a `.apk`.
+
+The link stays valid for 30 days on the free plan. `eas build:list` reprints it,
+and the same builds are on your Expo dashboard.
+
+The `preview` profile already points at the deployed API, so the APK works on
+any phone, on any network, with your computer switched off.
+
+### Keeping it working — the one thing that will bite you
+
+Render's free tier stops the container after 15 minutes with no traffic, and
+the next request waits ~50 seconds for a cold start. Someone opening the app for
+the first time will see it hang and conclude it is broken.
+
+Two ways to avoid that:
+
+**Free.** Ping the health endpoint on a schedule. Sign up at
+[cron-job.org](https://cron-job.org), create a job hitting
+
+```
+https://holbertonfinalproject-backend.onrender.com/health
+```
+
+every 10 minutes. That is enough to keep the container awake. It burns free
+instance-hours — 750/month, and continuous pinging uses roughly all of them, so
+one always-on service is the practical limit.
+
+**$7/month.** Render's Starter plan does not sleep. If this is being marked or
+demoed on someone else's schedule, it is the more reliable answer.
+
+### iOS — harder, and mostly not free
+
+Apple does not allow installing an app from a link. There are three routes:
+
+**TestFlight** — the real one. Needs an Apple Developer account at **$99/year**.
+
+```bash
+eas build --platform ios --profile preview
+```
+
+```bash
+eas submit --platform ios
+```
+
+Testers install TestFlight from the App Store and accept an invite. Up to 100
+internal testers, and builds expire after 90 days.
+
+**Expo Go** — free, but the tester needs Expo Go installed.
+
+```bash
+eas update --branch preview
+```
+
+They open Expo Go and scan the QR code. This runs your JavaScript inside Expo
+Go rather than as a standalone app, so anything requiring a custom native module
+will not work — for this project that is fine.
+
+**The web build — free, and closest to "an app" without paying.**
+
+The site is already configured as a progressive web app (`display: standalone`
+in `app.json`), so on an iPhone:
+
+1. Open the Netlify URL in **Safari** (not Chrome — only Safari can do this)
+2. Share button → **Add to Home Screen**
+
+It gets an icon on the home screen, opens without browser chrome, and behaves
+like an installed app. No developer account, no review, no expiry.
+
+For a student project being shown to a marker, this is usually the right answer
+for iPhone users and the APK for Android ones.
+
+### What is baked in at build time
+
+`EXPO_PUBLIC_*` values are inlined into the bundle, so the API address and the
+Google client id are fixed when the build runs. Moving the backend to a
+different host means a new build — an installed APK cannot be repointed.
+
+`eas update` can push new **JavaScript** to an existing build on the same
+channel, which covers screen and logic changes without redistributing the file.
+It cannot change native configuration or those inlined environment values.
