@@ -3,7 +3,7 @@ import { api } from '@/api/client';
 import { Endpoints } from '@/api/endpoints';
 import { clearTokens, loadTokens, setTokens } from '@/api/tokens';
 import { storage, StorageKeys } from '@/lib/storage';
-import type { AuthSession, GenreSlug, OAuthProvider, User, UserRole } from '@/types';
+import type { AuthSession, GenreSlug, OAuthProvider, User } from '@/types';
 
 export type AuthStatus = 'loading' | 'authenticated' | 'guest';
 
@@ -30,7 +30,6 @@ interface AuthState {
   }) => Promise<void>;
   setGoal: (target: number) => Promise<void>;
   /** Demo-only: switch between reader / publisher / moderator views. */
-  setDemoRole: (role: UserRole) => Promise<void>;
 }
 
 export const useAuth = create<AuthState>((set, get) => ({
@@ -127,10 +126,6 @@ export const useAuth = create<AuthState>((set, get) => ({
     await get().refresh();
   },
 
-  setDemoRole: async (role) => {
-    const user = await api.post<User>('/_demo/role', { role });
-    set({ user });
-  },
 }));
 
 /** Convenience selectors, so components subscribe to the narrowest slice. */

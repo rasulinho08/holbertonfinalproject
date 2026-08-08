@@ -3,8 +3,8 @@
  *
  * These types are the frontend's half of the API contract. Every shape here has
  * a matching definition in `backend-guide/ENDPOINTS.md` and a table in
- * `backend-guide/DATABASE.md`. If you change a field here, change it there too —
- * the mock API and the real backend both have to satisfy this file.
+ * `backend-guide/DATABASE.md`. If you change a field here, change it in the
+ * backend too — this file is what the API has to satisfy.
  */
 
 export type ID = string;

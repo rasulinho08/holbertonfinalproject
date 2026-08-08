@@ -30,7 +30,7 @@ export default function AdminDashboardScreen() {
           <EmptyState
             icon={<ShieldCheck size={22} color={theme.colors.fgSubtle} />}
             title={t('errors.forbidden')}
-            hint={t('settings.apiModeMock')}
+            hint={t('errors.forbiddenAdmin')}
             actionLabel={t('settings.title')}
             onAction={() => router.push('/settings')}
           />

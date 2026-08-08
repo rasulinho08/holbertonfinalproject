@@ -1,7 +1,6 @@
-import { API_BASE_URL, REQUEST_TIMEOUT_MS, USE_MOCK_API } from './config';
+import { API_BASE_URL, REQUEST_TIMEOUT_MS } from './config';
 import { Endpoints } from './endpoints';
 import { ApiError, type ApiErrorCode } from './errors';
-import { handleMockRequest } from './mock/handlers';
 import {
   clearTokens,
   emitSessionExpired,
@@ -179,9 +178,24 @@ async function httpRequest<T>(path: string, options: RequestOptions, retry = tru
   }
 
   const envelope = payload as SuccessEnvelope<T> | null;
-  // Endpoints that return a bare object are tolerated, but the documented
-  // contract is always `{ data, meta? }`.
-  return (envelope && 'data' in envelope ? envelope.data : (payload as T)) as T;
+  if (!envelope || !('data' in envelope)) {
+    // Endpoints that return a bare object are tolerated, but the documented
+    // contract is always `{ data, meta? }`.
+    return payload as T;
+  }
+
+  // List endpoints are typed as `Paginated<T>` — the hooks read `meta.hasMore`
+  // to drive infinite scroll — so the envelope has to survive when it carries
+  // `meta`, and be unwrapped when it does not.
+  //
+  // The mock returns `{ data, meta }` directly and never went through this
+  // unwrapping, so the two paths disagreed and every paginated screen broke
+  // the moment a real backend answered: `last.meta` was undefined.
+  if (envelope.meta !== undefined) {
+    return { data: envelope.data, meta: envelope.meta } as T;
+  }
+
+  return envelope.data as T;
 }
 
 /* --------------------------------- api ----------------------------------- */
@@ -189,11 +203,11 @@ async function httpRequest<T>(path: string, options: RequestOptions, retry = tru
 /**
  * The single entry point for data access.
  *
- * When `USE_MOCK_API` is on, requests are served by `mock/handlers.ts` instead
- * of the network — same paths, same shapes, same errors.
+ * Every screen reaches the backend through here, via the hooks in `hooks/`.
+ * Nothing else in `src/` calls `fetch` directly, which is what keeps token
+ * refresh, error normalisation and the response envelope in one place.
  */
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  if (USE_MOCK_API) return handleMockRequest<T>(path, options);
   return httpRequest<T>(path, options);
 }
 
