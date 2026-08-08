@@ -509,11 +509,77 @@ export interface Report {
   };
 }
 
+/** One bucket of a time series. Series are padded, so gaps arrive as zeros. */
+export interface TrendPoint {
+  label: string;
+  value: number;
+}
+
 export interface AdminStats {
-  openReports: number;
-  removedContent: number;
-  activeUsers: number;
-  newUsersThisWeek: number;
+  users: {
+    total: number;
+    newThisWeek: number;
+    newThisMonth: number;
+    /** "Active" means a reading session was logged, not that an account exists. */
+    activeToday: number;
+    activeThisWeek: number;
+    activeThisMonth: number;
+    readers: number;
+    publishers: number;
+    admins: number;
+  };
+  content: {
+    books: number;
+    authors: number;
+    reviews: number;
+    quotes: number;
+    lists: number;
+    sessions: number;
+    pagesRead: number;
+  };
+  commerce: {
+    orders: number;
+    /** Excludes cancelled orders. */
+    revenue: number;
+    pending: number;
+    delivered: number;
+    cancelled: number;
+    averageOrder: number;
+  };
+  moderation: {
+    openReports: number;
+    resolvedReports: number;
+    removedContent: number;
+  };
+  /** Signups per week, oldest first — always 12 buckets. */
+  signupTrend: TrendPoint[];
+  /** Reading sessions per day, oldest first — always 14 buckets. */
+  activityTrend: TrendPoint[];
+  topBooks: {
+    id: string;
+    title: string;
+    authorName: string;
+    coverUrl: string | null;
+    readers: number;
+  }[];
+  topReaders: { user: UserSummary; booksRead: number; pagesRead: number }[];
+  genreSpread: { genre: GenreSlug; count: number }[];
+}
+
+export interface AdminUserRow {
+  id: string;
+  username: string;
+  name: string;
+  email: string;
+  avatarUrl: string | null;
+  role: UserRole;
+  createdAt: string;
+  booksRead: number;
+  reviewsCount: number;
+  quotesCount: number;
+  lastActiveAt: string | null;
+  /** Soft-deleted accounts stay in the directory, marked. */
+  deleted: boolean;
 }
 
 /* ------------------------------- publisher ------------------------------- */

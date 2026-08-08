@@ -17,6 +17,11 @@ const BASE = process.env.E2E_BASE_URL ?? 'http://localhost:8081';
 const OUT = process.argv[2] ?? 'e2e/audit';
 const SCHEME = process.argv[3] ?? 'light';
 
+// The account matters: the publisher and admin screens render a "no access"
+// state for a reader, which a status check happily reports as fine.
+const EMAIL = process.env.E2E_EMAIL ?? 'leyla@kitabdostu.az';
+const PASSWORD = process.env.E2E_PASSWORD ?? 'password123';
+
 mkdirSync(OUT, { recursive: true });
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -65,6 +70,7 @@ const ROUTES = [
   ['publisher-orders', '/publisher/orders'],
   ['publisher-analytics', '/publisher/analytics'],
   ['admin', '/admin'],
+  ['admin-users', '/admin/users'],
   ['admin-reports', '/admin/reports'],
   ['admin-reviews', '/admin/reviews'],
   ['admin-quotes', '/admin/quotes'],
@@ -143,9 +149,9 @@ await waitForText('Kitab dostunu tap', 60000);
 const inputs = await page.$$('input');
 if (inputs.length >= 2) {
   await inputs[0].click();
-  await page.keyboard.type('leyla@kitabdostu.az');
+  await page.keyboard.type(EMAIL);
   await inputs[1].click();
-  await page.keyboard.type('password123');
+  await page.keyboard.type(PASSWORD);
 }
 await clickText('Daxil ol');
 await sleep(2500);
