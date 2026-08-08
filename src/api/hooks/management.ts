@@ -1,9 +1,16 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { api } from '../client';
 import { Endpoints } from '../endpoints';
 import { qk } from '../queryKeys';
+import { DEFAULT_PAGE_SIZE } from '../config';
 import type {
   AdminStats,
+  AdminUserRow,
   Book,
   BookDraft,
   Order,
@@ -100,6 +107,25 @@ export function useAdminStats(enabled = true) {
   return useQuery({
     queryKey: qk.admin.stats,
     queryFn: () => api.get<AdminStats>(Endpoints.admin.stats),
+    enabled,
+    // The dashboard aggregates across the whole database; a minute of staleness
+    // is invisible to a moderator and saves recomputing it on every focus.
+    staleTime: 60_000,
+  });
+}
+
+/** The user directory. `search` matches name, username or email. */
+export function useAdminUsers(search = '', enabled = true) {
+  return useInfiniteQuery({
+    queryKey: qk.admin.users(search),
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) =>
+      api.get<Paginated<AdminUserRow>>(Endpoints.admin.users, {
+        q: search || undefined,
+        page: pageParam,
+        limit: DEFAULT_PAGE_SIZE,
+      }),
+    getNextPageParam: (last) => (last.meta.hasMore ? last.meta.page + 1 : undefined),
     enabled,
   });
 }

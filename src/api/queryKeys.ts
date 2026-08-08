@@ -111,6 +111,7 @@ export const qk = {
 
   admin: {
     stats: ['admin', 'stats'] as const,
+    users: (search: string) => ['admin', 'users', search] as const,
     reports: (status?: string) => ['admin', 'reports', status ?? 'all'] as const,
     reviews: ['admin', 'reviews'] as const,
     quotes: ['admin', 'quotes'] as const,

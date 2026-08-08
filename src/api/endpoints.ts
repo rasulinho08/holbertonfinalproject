@@ -193,6 +193,7 @@ export const Endpoints = {
 
   admin: {
     stats: '/admin/stats',
+    users: '/admin/users',
     reports: '/admin/reports',
     resolveReport: (id: string) => `/admin/reports/${id}`,
     reviews: '/admin/reviews',
