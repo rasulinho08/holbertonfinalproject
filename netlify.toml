@@ -5,6 +5,30 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# ---------------------------------------------------------------------------
+# EXPO_PUBLIC_API_BASE_URL must be set in the Netlify UI, not here.
+#
+# Two reasons it is not in this file: it differs per site, and Expo inlines
+# EXPO_PUBLIC_* at **build time**. A value committed here would be baked into
+# every deploy, and changing it would need a commit rather than a redeploy.
+#
+#   Site configuration → Environment variables
+#     EXPO_PUBLIC_API_BASE_URL = https://your-api.onrender.com/api/v1
+#     EXPO_PUBLIC_DEFAULT_LOCALE = az
+#
+# Then: Deploys → Trigger deploy → **Clear cache and deploy site**. A plain
+# redeploy can reuse a cached bundle that still holds the old value.
+#
+# The API must be HTTPS. This site is HTTPS, and a browser blocks an HTTP call
+# from an HTTPS page as mixed content — it never reaches the server, so the API
+# logs show nothing and it looks like an outage.
+#
+# The API's CORS_ORIGINS must list this site's URL, or every request is refused
+# before it is sent.
+#
+# Setup: see DEPLOY.md in the backend repository.
+# ---------------------------------------------------------------------------
+
 # expo-router is a client-side router: every unknown path has to fall through to the
 # single HTML entry point, otherwise a refresh on /profile returns Netlify's 404.
 [[redirects]]
