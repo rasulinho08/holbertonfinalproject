@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import { useTheme } from '@/theme';
 import { LOCALES, useI18n } from '@/i18n';
+import { isGoogleConfigured } from '@/lib/googleAuth';
 import { Button } from '@/components/ui/Button';
 import { Text } from '@/components/ui/Text';
 
@@ -83,6 +84,17 @@ export function LocaleSwitch() {
   );
 }
 
+/**
+ * Social sign-in.
+ *
+ * Only providers that are actually configured are rendered. Apple needs a paid
+ * developer account and only works on iOS; Facebook needs app review before it
+ * will release an email address. Showing their buttons anyway would mean three
+ * buttons of which two always fail — worse than one that works.
+ *
+ * Returns null entirely when nothing is configured, so the divider does not
+ * hang above an empty space.
+ */
 export function SocialButtons({
   onPress,
   disabled,
@@ -92,6 +104,8 @@ export function SocialButtons({
 }) {
   const theme = useTheme();
   const { t } = useI18n();
+
+  if (!isGoogleConfigured) return null;
 
   return (
     <View style={{ gap: theme.spacing.md }}>
@@ -110,24 +124,6 @@ export function SocialButtons({
         icon={<ProviderMark provider="google" />}
         onPress={() => onPress('google')}
       />
-      <View style={{ flexDirection: 'row', gap: theme.spacing.md }}>
-        <Button
-          title="Apple"
-          variant="outline"
-          disabled={disabled}
-          style={{ flex: 1 }}
-          icon={<ProviderMark provider="apple" />}
-          onPress={() => onPress('apple')}
-        />
-        <Button
-          title="Facebook"
-          variant="outline"
-          disabled={disabled}
-          style={{ flex: 1 }}
-          icon={<ProviderMark provider="facebook" />}
-          onPress={() => onPress('facebook')}
-        />
-      </View>
     </View>
   );
 }

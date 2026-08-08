@@ -6,6 +6,7 @@ import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useAuth } from '@/store/auth';
 import * as validate from '@/lib/validation';
+import { useGoogleAuth } from '@/lib/googleAuth';
 import { errorMessageKey, fieldErrors } from '@/api/errors';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -21,6 +22,7 @@ export default function RegisterScreen() {
   const toast = useToast();
 
   const register = useAuth((s) => s.register);
+  const { signIn: googleSignIn } = useGoogleAuth();
   const loginWithProvider = useAuth((s) => s.loginWithProvider);
 
   const [form, setForm] = useState({
@@ -137,12 +139,16 @@ export default function RegisterScreen() {
       <SocialButtons
         disabled={busy}
         onPress={async (provider) => {
+          if (provider !== 'google') return;
           setBusy(true);
           try {
-            await loginWithProvider(provider);
+            const result = await googleSignIn();
+            // null means the consent screen was dismissed — not an error.
+            if (!result) return;
+            await loginWithProvider('google', result.idToken);
             router.replace('/onboarding');
-          } catch {
-            toast.error(t('errors.generic'));
+          } catch (error) {
+            toast.error(t(errorMessageKey(error)));
           } finally {
             setBusy(false);
           }

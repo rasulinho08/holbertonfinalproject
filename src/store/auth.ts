@@ -19,7 +19,7 @@ interface AuthState {
     email: string;
     password: string;
   }) => Promise<User>;
-  loginWithProvider: (provider: OAuthProvider) => Promise<User>;
+  loginWithProvider: (provider: OAuthProvider, idToken: string) => Promise<User>;
   logout: () => Promise<void>;
   /** Soft-deletes the account server-side and clears the session. */
   deleteAccount: () => Promise<void>;
@@ -76,12 +76,13 @@ export const useAuth = create<AuthState>((set, get) => ({
     return session.user;
   },
 
-  loginWithProvider: async (provider) => {
-    // A real build hands off to expo-auth-session here and posts the returned
-    // id_token; the contract for that exchange is in backend-guide/AUTH.md.
+  loginWithProvider: async (provider, idToken) => {
+    // The token comes from the provider's own consent screen and is verified
+    // server-side — including its audience claim — before anything in it is
+    // trusted. See backend-guide/AUTH.md.
     const session = await api.post<AuthSession>(
       Endpoints.auth.oauth(provider),
-      { idToken: 'demo' },
+      { idToken },
       { auth: false },
     );
     await setTokens(session.accessToken, session.refreshToken);
