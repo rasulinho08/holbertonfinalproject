@@ -619,6 +619,12 @@ export const az = {
   },
 
   errors: {
+    emailTaken: 'Bu e-poçt artıq qeydiyyatdadır',
+    validation: 'Məlumatları yoxla',
+    conflict: 'Bu əməliyyat indi mümkün deyil',
+    twoFactorRequired: 'Autentifikator kodunu daxil et',
+    rateLimited: 'Çox sayda cəhd. Bir azdan yenidən yoxla.',
+    paymentFailed: 'Ödəniş alınmadı',
     generic: 'Nəsə səhv getdi. Bir azdan yenidən yoxla.',
     network: 'Şəbəkə xətası. Bağlantını yoxla.',
     notFound: 'Tapılmadı',

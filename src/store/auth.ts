@@ -21,6 +21,8 @@ interface AuthState {
   }) => Promise<User>;
   loginWithProvider: (provider: OAuthProvider) => Promise<User>;
   logout: () => Promise<void>;
+  /** Soft-deletes the account server-side and clears the session. */
+  deleteAccount: () => Promise<void>;
   refresh: () => Promise<void>;
   setUser: (user: User) => void;
   updateProfile: (patch: Partial<Pick<User, 'name' | 'bio' | 'username' | 'avatarUrl'>>) => Promise<User>;
@@ -95,6 +97,15 @@ export const useAuth = create<AuthState>((set, get) => ({
     }
     await clearTokens();
     await storage.remove(StorageKeys.session);
+    set({ status: 'guest', user: null });
+  },
+
+  deleteAccount: async () => {
+    // The server soft-deletes: reviews and quotes stay for moderation and
+    // orders stay for accounting, while the email and username are released so
+    // the reader can register again.
+    await api.delete(Endpoints.users.deleteMe);
+    await clearTokens();
     set({ status: 'guest', user: null });
   },
 
