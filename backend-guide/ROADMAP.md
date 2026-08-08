@@ -2,7 +2,7 @@
 
 Build order for the backend, arranged so that **each milestone unblocks a
 visible slice of the already-built app**. After every milestone you can flip
-`EXPO_PUBLIC_USE_MOCK_API=false` and check that the corresponding screens work
+the API running and check that the corresponding screens work
 against real data.
 
 Effort is a rough estimate for one developer.
@@ -269,7 +269,7 @@ card payment in `/checkout/payment`.
 |---|---|---|
 | **1** | 0–2 | Auth works; the catalogue is real. The app runs on live data for browsing. |
 | **2** | 3–4 | The full reading and social loop is live. Mock only needed for commerce. |
-| **3** | 5–6 | Orders and gamification. `EXPO_PUBLIC_USE_MOCK_API=false` permanently. |
+| **3** | 5–6 | Orders and gamification. The mock is gone; the API is the only source. |
 | **4** | 7–10 | Buddy reads, publisher, moderation, third parties. |
 | **5** | 11 | Hardening, load testing, deployment. |
 
@@ -291,7 +291,7 @@ before splitting.
 
 ## Definition of done for the whole backend
 
-The frontend runs with `EXPO_PUBLIC_USE_MOCK_API=false` and:
+The frontend runs against this API and:
 
 1. `npm run e2e` in the frontend repo passes all 17 steps against the live API.
 2. Both spec user flows work end to end.

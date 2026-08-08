@@ -122,16 +122,16 @@ npm run build:web   # statik web build → dist/
 
 ## 🔌 Backend qoşulması / Connecting the backend
 
-Tətbiq **hazır API müqaviləsi** ilə yazılıb. Backend hazır olanda `.env.local`:
+Tətbiq bütün datanı backend-dən alır — daxili mock yoxdur. `.env.local`:
 
 ```bash
 EXPO_PUBLIC_API_BASE_URL=http://localhost:4000/api/v1
-EXPO_PUBLIC_USE_MOCK_API=false
 ```
 
-Bundan sonra Metro-nu yenidən başlat (`npm run web -- --clear`).
-**Heç bir kod dəyişikliyi tələb olunmur** — bütün ekranlar eyni hook-lardan
-istifadə edir.
+Dəyər **build zamanı** bundle-a yazılır, ona görə dəyişəndən sonra Metro-nu
+`--clear` ilə yenidən başlatmaq lazımdır.
+
+Backend: [holbertonfinalproject-backend](https://github.com/rasulinho08/holbertonfinalproject-backend)
 
 Backend komandası üçün tam sənədləşmə: [`backend-guide/`](./backend-guide/)
 
@@ -187,7 +187,7 @@ env dəyişəni ilə baş verir.
 ```
 Screen  →  useBook(id)  →  api.get(Endpoints.books.detail(id))
                                       ↓
-                    USE_MOCK_API ?  mock/handlers.ts  :  fetch(API_BASE_URL)
+                            fetch(API_BASE_URL + path)
 ```
 
 ---
