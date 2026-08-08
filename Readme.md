@@ -233,7 +233,7 @@ main       ← stabil, release-ə hazır
 ├─ frontend  ← bu repo üçün əsas iş branch-i
 └─ backend   ← API inteqrasiyası
 ```
-s
+
 ---
 
 ## 📄 Lisenziya / License
