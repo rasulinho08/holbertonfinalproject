@@ -38,7 +38,10 @@ export default function BuddyReadScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const { data: buddy, isLoading } = useBuddyRead(id);
-  const { data: messages } = useBuddyMessages(id);
+  // Derived before the messages query, which needs it: the discussion is
+  // members-only, so asking as a non-member is a guaranteed 403.
+  const isMember = buddy?.members.some((m) => m.user.id === me?.id) ?? false;
+  const { data: messages } = useBuddyMessages(id, isMember);
   const send = useSendBuddyMessage();
   const join = useJoinBuddyRead();
   const leave = useLeaveBuddyRead();
@@ -48,7 +51,6 @@ export default function BuddyReadScreen() {
   const [progressOpen, setProgressOpen] = useState(false);
   const [page, setPage] = useState('');
 
-  const isMember = buddy?.members.some((m) => m.user.id === me?.id) ?? false;
   const myProgress = buddy?.members.find((m) => m.user.id === me?.id)?.progressPage ?? 0;
 
   const submitMessage = async () => {

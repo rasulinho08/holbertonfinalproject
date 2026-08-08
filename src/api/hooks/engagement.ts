@@ -114,12 +114,20 @@ export function useBuddyRead(id: string | undefined) {
   });
 }
 
-export function useBuddyMessages(id: string | undefined) {
+/**
+ * A buddy read's discussion.
+ *
+ * `enabled` takes membership as well as the id, because the API refuses this to
+ * non-members — the thread is spoiler territory. Asking anyway is a guaranteed
+ * 403 on every visit to a group you have not joined: a wasted round trip, and
+ * a console error for something the screen already knows.
+ */
+export function useBuddyMessages(id: string | undefined, isMember = true) {
   return useQuery({
     queryKey: qk.buddyReads.messages(id ?? ''),
     queryFn: () =>
       api.get<Paginated<BuddyMessage>>(Endpoints.buddyReads.messages(id!), { limit: 100 }),
-    enabled: !!id,
+    enabled: !!id && isMember,
     select: (page) => page.data,
   });
 }
