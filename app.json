@@ -15,7 +15,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "az.kitabdostu.app"
+      "bundleIdentifier": "az.kitabdostu.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "az.kitabdostu.app",
@@ -49,6 +52,17 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b32565cb-6998-48ea-adb4-dd825f2f6a12"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/b32565cb-6998-48ea-adb4-dd825f2f6a12"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }
