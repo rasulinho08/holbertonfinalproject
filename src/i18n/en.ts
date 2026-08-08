@@ -618,6 +618,12 @@ export const en: Translated<Dictionary> = {
   },
 
   errors: {
+    emailTaken: 'That email is already registered',
+    validation: 'Check the details you entered',
+    conflict: 'That is not possible right now',
+    twoFactorRequired: 'Enter the code from your authenticator app',
+    rateLimited: 'Too many attempts. Try again shortly.',
+    paymentFailed: 'The payment did not go through',
     generic: 'Something went wrong. Please try again shortly.',
     network: 'Network error. Check your connection.',
     notFound: 'Not found',

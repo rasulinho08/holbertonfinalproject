@@ -6,7 +6,7 @@ import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useAuth } from '@/store/auth';
 import * as validate from '@/lib/validation';
-import { serverMessage } from '@/api/errors';
+import { errorMessageKey, fieldErrors } from '@/api/errors';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Screen } from '@/components/ui/Screen';
@@ -58,7 +58,21 @@ export default function RegisterScreen() {
       // New accounts always go through the onboarding quiz first.
       router.replace('/onboarding');
     } catch (error) {
-      toast.error(serverMessage(error) ?? t('errors.generic'));
+      // Field-level problems belong under the field. A toast tells the reader
+      // something is wrong but not which box to fix, and the server's copy is
+      // English — the wrong language for this app.
+      const fields = fieldErrors(error);
+      if (Object.keys(fields).length > 0) {
+        setErrors((prev) => ({
+          ...prev,
+          ...Object.fromEntries(Object.keys(fields).map((key) => [key, 'errors.validation'])),
+        }));
+      }
+      const code = (error as { code?: string })?.code;
+      if (code === 'USERNAME_TAKEN') setErrors((prev) => ({ ...prev, username: 'errors.usernameTaken' }));
+      if (code === 'EMAIL_TAKEN') setErrors((prev) => ({ ...prev, email: 'errors.emailTaken' }));
+
+      toast.error(t(errorMessageKey(error)));
     } finally {
       setBusy(false);
     }
@@ -81,7 +95,7 @@ export default function RegisterScreen() {
         <Input
           label={t('auth.username')}
           value={form.username}
-          onChangeText={(v) => set('username')(v.toLowerCase())}
+          onChangeText={(v) => set('username')(validate.toUsername(v))}
           error={errors.username ? t(errors.username) : undefined}
           autoCapitalize="none"
           placeholder="kitabsever"

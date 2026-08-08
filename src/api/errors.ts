@@ -56,8 +56,25 @@ const CODE_TO_KEY: Partial<Record<ApiErrorCode, TranslationKey>> = {
   FORBIDDEN: 'errors.forbidden',
   INVALID_CREDENTIALS: 'errors.invalidCredentials',
   USERNAME_TAKEN: 'errors.usernameTaken',
+  EMAIL_TAKEN: 'errors.emailTaken',
+  VALIDATION_ERROR: 'errors.validation',
+  CONFLICT: 'errors.conflict',
+  TWO_FACTOR_REQUIRED: 'errors.twoFactorRequired',
+  RATE_LIMITED: 'errors.rateLimited',
+  PAYMENT_FAILED: 'errors.paymentFailed',
   OUT_OF_STOCK: 'errors.outOfStock',
 };
+
+/**
+ * Per-field messages from a 422, keyed by the request-body field name.
+ *
+ * Screens render these under the matching input. A validation error shown only
+ * as a toast tells the reader something is wrong but not which box to fix —
+ * and the server's copy is English, which is the wrong language for this app.
+ */
+export function fieldErrors(error: unknown): Record<string, string> {
+  return error instanceof ApiError ? (error.fields ?? {}) : {};
+}
 
 /**
  * Maps an unknown thrown value to a translation key, so screens can surface a

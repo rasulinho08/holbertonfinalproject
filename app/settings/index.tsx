@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { View } from 'react-native';
 import { useRouter } from 'expo-router';
 import Constants from 'expo-constants';
 import {
@@ -34,6 +35,7 @@ export default function SettingsScreen() {
 
   const user = useCurrentUser();
   const logout = useAuth((s) => s.logout);
+  const deleteAccount = useAuth((s) => s.deleteAccount);
 
   const dataSaver = usePrefs((s) => s.dataSaver);
   const setDataSaver = usePrefs((s) => s.setDataSaver);
@@ -41,6 +43,8 @@ export default function SettingsScreen() {
   const setHideSpoilers = usePrefs((s) => s.setHideSpoilers);
 
   const [signingOut, setSigningOut] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   const version = Constants.expoConfig?.version ?? '0.1.0';
 
@@ -124,10 +128,46 @@ export default function SettingsScreen() {
             title={t('settings.deleteAccount')}
             icon={<Trash2 size={16} color={theme.colors.danger} />}
             destructive
-            onPress={() => toast.info(t('common.comingSoon'))}
+            onPress={() => setDeleting(true)}
           />
         </ListGroup>
       </Screen>
+
+      <Sheet
+        visible={deleting}
+        onClose={() => setDeleting(false)}
+        title={t('settings.deleteAccount')}
+      >
+        <Text variant="body" color="fgMuted">
+          {t('settings.deleteAccountConfirm')}
+        </Text>
+        <View style={{ flexDirection: 'row', gap: theme.spacing.md, marginTop: theme.spacing.lg }}>
+          <Button
+            title={t('common.cancel')}
+            variant="secondary"
+            onPress={() => setDeleting(false)}
+            style={{ flex: 1 }}
+          />
+          <Button
+            title={t('settings.deleteAccount')}
+            variant="danger"
+            loading={busy}
+            style={{ flex: 1 }}
+            onPress={async () => {
+              setBusy(true);
+              try {
+                await deleteAccount();
+                router.replace('/login');
+              } catch {
+                toast.error(t('errors.generic'));
+              } finally {
+                setBusy(false);
+                setDeleting(false);
+              }
+            }}
+          />
+        </View>
+      </Sheet>
 
       <Sheet visible={signingOut} onClose={() => setSigningOut(false)} title={t('auth.signOut')}>
         <Text variant="body" color="fgMuted">
