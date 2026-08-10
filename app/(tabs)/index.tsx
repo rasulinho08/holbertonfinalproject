@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { BookOpen, ChevronRight, Sparkles } from 'lucide-react-native';
+import { BookOpen, ChevronRight, Play, Sparkles } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useCurrentUser } from '@/store/auth';
@@ -24,6 +24,8 @@ import { GoalCard, StreakCard } from '@/components/profile/StatCards';
 import { QuoteCard } from '@/components/quote/QuoteCard';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { Button } from '@/components/ui/Button';
+import { IconButton } from '@/components/ui/IconButton';
+import { PressableScale } from '@/components/ui/Motion';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Progress } from '@/components/ui/Progress';
 import { Screen, Section } from '@/components/ui/Screen';
@@ -206,6 +208,17 @@ export default function HomeScreen() {
   );
 }
 
+/**
+ * A book you are part-way through.
+ *
+ * The cover is the largest thing in the row, because it is the thing a reader
+ * recognises without reading anything. It used to be 52px beside a button that
+ * took 40% of the width — the least informative element dominating the most.
+ *
+ * The whole row opens the book; the small button only logs progress, which is
+ * the secondary action. Tapping a row and getting a progress sheet instead of
+ * the book was the other half of that confusion.
+ */
 function ContinueReadingRow({ book, onUpdate }: { book: Book; onUpdate: () => void }) {
   const theme = useTheme();
   const router = useRouter();
@@ -217,36 +230,45 @@ function ContinueReadingRow({ book, onUpdate }: { book: Book; onUpdate: () => vo
     <View
       style={{
         flexDirection: 'row',
-        gap: theme.spacing.md,
+        gap: theme.spacing.lg,
         padding: theme.spacing.md,
         borderRadius: theme.radius.lg,
         backgroundColor: theme.colors.card,
-        borderWidth: 1,
-        borderColor: theme.colors.border,
+        ...theme.elevation(1),
       }}
     >
-      <Pressable accessibilityRole="button" onPress={() => router.push(`/book/${book.id}`)}>
-        <BookCover title={book.title} authorName={book.authorName} uri={book.coverUrl} width={52} />
-      </Pressable>
+      {/* Only the cover-and-title region is pressable. Wrapping the whole row
+          would nest the progress button inside a button: invalid HTML, a React
+          hydration error, and one tap firing both actions. */}
+      <PressableScale
+        accessibilityRole="button"
+        accessibilityLabel={book.title}
+        onPress={() => router.push(`/book/${book.id}`)}
+        style={{ flexDirection: 'row', gap: theme.spacing.lg, flex: 1, minWidth: 0 }}
+      >
+        <BookCover title={book.title} authorName={book.authorName} uri={book.coverUrl} width={64} />
 
-      <View style={{ flex: 1, gap: 6, justifyContent: 'center' }}>
-        <Text variant="bodyStrong" numberOfLines={1}>
-          {book.title}
-        </Text>
-        <Progress value={percent} height={6} />
-        <Text variant="caption" color="fgSubtle">
-          {book.progressPage}/{book.pageCount} · {percent}%
-        </Text>
-      </View>
+        <View style={{ flex: 1, gap: 6, justifyContent: 'center', minWidth: 0 }}>
+        {/* Two lines, and ellipsised at the end. A single line truncated in the
+            middle produced titles that began with "…", which reads as broken
+            rather than as shortened. */}
+          <Text variant="bodyStrong" numberOfLines={2}>
+            {book.title}
+          </Text>
+          <Text variant="caption" color="fgSubtle" numberOfLines={1}>
+            {book.authorName}
+          </Text>
+          <Progress value={percent} height={5} />
+          <Text variant="caption" color="fgSubtle">
+            {book.progressPage}/{book.pageCount} · {percent}%
+          </Text>
+        </View>
+      </PressableScale>
 
       <View style={{ justifyContent: 'center' }}>
-        <Button
-          title={t('home.continueReading')}
-          size="sm"
-          variant="secondary"
-          fullWidth={false}
-          onPress={onUpdate}
-        />
+        <IconButton label={t('home.continueReading')} onPress={onUpdate} variant="subtle">
+          <Play size={16} color={theme.colors.primary} />
+        </IconButton>
       </View>
     </View>
   );
