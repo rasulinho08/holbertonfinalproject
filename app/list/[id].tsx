@@ -18,6 +18,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { IconButton } from '@/components/ui/IconButton';
+import { QueryState } from '@/components/ui/QueryState';
 import { Sheet } from '@/components/ui/Sheet';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Text } from '@/components/ui/Text';
@@ -31,7 +32,7 @@ export default function BookListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const user = useCurrentUser();
-  const { data: list, isLoading } = useBookList(id);
+  const { data: list, isLoading, error, refetch } = useBookList(id);
   const toggleFollow = useToggleListFollow();
   const removeBook = useRemoveBookFromList();
   const removeList = useDeleteBookList();
@@ -51,15 +52,17 @@ export default function BookListScreen() {
     }
   };
 
-  if (isLoading || !list) {
+  if (isLoading || error || !list) {
     return (
       <>
         <AppHeader back title={t('list.title')} />
         <View style={{ flex: 1, gap: theme.spacing.md, padding: theme.spacing.lg }}>
-          <Skeleton height={120} radius={theme.radius.lg} />
-          {[0, 1, 2, 3].map((i) => (
-            <Skeleton key={i} height={100} radius={theme.radius.lg} />
-          ))}
+          <QueryState
+            isLoading={isLoading}
+            error={error}
+            skeleton={[120, 100, 100, 100]}
+            onRetry={() => void refetch()}
+          />
         </View>
       </>
     );

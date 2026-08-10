@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Progress } from '@/components/ui/Progress';
+import { QueryState } from '@/components/ui/QueryState';
 import { Screen, Section } from '@/components/ui/Screen';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Text } from '@/components/ui/Text';
@@ -44,7 +45,7 @@ export default function ReadingSessionScreen() {
   const toast = useToast();
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { data: book, isLoading } = useBook(id);
+  const { data: book, isLoading, error, refetch } = useBook(id);
   const { data: sessions } = useBookSessions(id);
   const log = useLogReadingSession();
 
@@ -78,13 +79,17 @@ export default function ReadingSessionScreen() {
     setStartPage(String(book.progressPage ?? 0));
   }
 
-  if (isLoading || !book) {
+  if (isLoading || error || !book) {
     return (
       <>
         <AppHeader back title={t('session.title')} />
         <Screen>
-          <Skeleton height={120} radius={theme.radius.lg} />
-          <Skeleton height={200} radius={theme.radius.lg} />
+          <QueryState
+            isLoading={isLoading}
+            error={error}
+            skeleton={[200, 160]}
+            onRetry={() => void refetch()}
+          />
         </Screen>
       </>
     );

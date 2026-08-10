@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Screen, Section } from '@/components/ui/Screen';
 import { Sheet } from '@/components/ui/Sheet';
+import { QueryState } from '@/components/ui/QueryState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
@@ -24,20 +25,26 @@ export default function OrderDetailScreen() {
   const toast = useToast();
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { data: order, isLoading } = useOrder(id);
+  const { data: order, isLoading, error, refetch } = useOrder(id);
   const { data: receipt } = useReceipt(id);
   const cancel = useCancelOrder();
 
   const [receiptOpen, setReceiptOpen] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
 
-  if (isLoading || !order) {
+  // Loading and failed are different states. Treating them as one left a failed
+  // request showing skeletons forever, with nothing to explain it.
+  if (isLoading || error || !order) {
     return (
       <>
         <AppHeader back />
         <Screen>
-          <Skeleton height={120} radius={theme.radius.lg} />
-          <Skeleton height={220} radius={theme.radius.lg} />
+          <QueryState
+            isLoading={isLoading}
+            error={error}
+            skeleton={[120, 220]}
+            onRetry={() => void refetch()}
+          />
         </Screen>
       </>
     );
@@ -124,8 +131,8 @@ export default function OrderDetailScreen() {
 
         <Section title={t('order.items')}>
           <Card level={0} style={{ gap: theme.spacing.md }}>
-            {order.items.map((line) => (
-              <View key={line.bookId} style={{ flexDirection: 'row', gap: theme.spacing.md, alignItems: 'center' }}>
+            {order.items.map((line, index) => (
+              <View key={line.bookId ?? `${line.title}-${index}`} style={{ flexDirection: 'row', gap: theme.spacing.md, alignItems: 'center' }}>
                 <BookCover title={line.title} uri={line.coverUrl} width={44} />
                 <View style={{ flex: 1 }}>
                   <Text variant="smallStrong" numberOfLines={2}>
