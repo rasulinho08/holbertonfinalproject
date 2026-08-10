@@ -50,7 +50,9 @@ export default function OrderDetailScreen() {
     );
   }
 
-  const reached = new Set(order.timeline.map((event) => event.status));
+  // Defensive: a field the API renames should degrade to an empty timeline,
+  // not take the whole screen down with it.
+  const reached = new Set((order.timeline ?? []).map((event) => event.status));
   const cancelled = order.status === 'cancelled';
   const canCancel = ['pending', 'confirmed', 'preparing'].includes(order.status);
 
@@ -131,7 +133,7 @@ export default function OrderDetailScreen() {
 
         <Section title={t('order.items')}>
           <Card level={0} style={{ gap: theme.spacing.md }}>
-            {order.items.map((line, index) => (
+            {(order.items ?? []).map((line, index) => (
               <View key={line.bookId ?? `${line.title}-${index}`} style={{ flexDirection: 'row', gap: theme.spacing.md, alignItems: 'center' }}>
                 <BookCover title={line.title} uri={line.coverUrl} width={44} />
                 <View style={{ flex: 1 }}>
@@ -216,7 +218,7 @@ export default function OrderDetailScreen() {
               {formatDateTime(receipt.issuedAt, locale)}
             </Text>
             <View style={{ height: 1, backgroundColor: theme.colors.border }} />
-            {receipt.lines.map((line, i) => (
+            {(receipt.lines ?? []).map((line, i) => (
               <Row
                 key={i}
                 label={`${line.quantity} × ${line.title}`}
