@@ -41,11 +41,10 @@ export function QuoteCard({ quote, onLike, onComment, onMore, compact, style }: 
     <View
       style={[
         {
-          borderRadius: theme.radius.lg,
+          borderRadius: theme.radius.xl,
           overflow: 'hidden',
           backgroundColor: theme.colors.card,
-          borderWidth: 1,
-          borderColor: theme.colors.border,
+          ...theme.elevation(2),
         },
         style,
       ]}
@@ -55,7 +54,7 @@ export function QuoteCard({ quote, onLike, onComment, onMore, compact, style }: 
         accessibilityLabel={quote.text}
         onPress={() => router.push(`/quote/${quote.id}`)}
       >
-        <View style={{ padding: theme.spacing.xl, minHeight: compact ? 130 : 170, justifyContent: 'center' }}>
+        <View style={{ padding: theme.spacing['2xl'], minHeight: compact ? 150 : 210, justifyContent: 'center' }}>
           <Svg style={{ position: 'absolute', width: '100%', height: '100%' }}>
             <Defs>
               <LinearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
@@ -66,11 +65,14 @@ export function QuoteCard({ quote, onLike, onComment, onMore, compact, style }: 
             <Rect width="100%" height="100%" fill={`url(#${gradientId})`} />
           </Svg>
 
+          {/* An oversized mark bled off the corner, behind the text. As a small
+              icon stacked above the quote it just consumed a line of height
+              without carrying any of the card's character. */}
           <QuoteIcon
-            size={compact ? 18 : 22}
+            size={compact ? 64 : 92}
             color={bg.text}
-            opacity={0.35}
-            style={{ marginBottom: theme.spacing.sm }}
+            opacity={0.13}
+            style={{ position: 'absolute', top: -14, left: -10 }}
           />
 
           <Text
@@ -78,26 +80,32 @@ export function QuoteCard({ quote, onLike, onComment, onMore, compact, style }: 
             numberOfLines={compact ? 4 : long ? 7 : undefined}
             style={{
               color: bg.text,
-              fontSize: compact ? 14 : long ? 15 : 17,
-              lineHeight: compact ? 21 : long ? 23 : 26,
+              fontSize: compact ? 15 : long ? 17 : 20,
+              lineHeight: compact ? 22 : long ? 26 : 30,
               fontWeight: '500',
+              letterSpacing: 0.1,
             }}
           >
             {quote.text}
           </Text>
 
-          <Text
-            numberOfLines={1}
+          <View
             style={{
-              color: bg.text,
-              opacity: 0.75,
-              fontSize: 12,
-              marginTop: theme.spacing.md,
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: theme.spacing.sm,
+              marginTop: theme.spacing.lg,
             }}
           >
-            — {quote.book.title}
-            {quote.page ? `, ${t('common.page')} ${quote.page}` : ''}
-          </Text>
+            <View style={{ width: 18, height: 1, backgroundColor: bg.text, opacity: 0.5 }} />
+            <Text
+              numberOfLines={1}
+              style={{ color: bg.text, opacity: 0.82, fontSize: 12, flex: 1 }}
+            >
+              {quote.book.title}
+              {quote.page ? ` · ${t('common.page')} ${quote.page}` : ''}
+            </Text>
+          </View>
         </View>
       </Pressable>
 

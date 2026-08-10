@@ -9,10 +9,15 @@ import { Platform } from 'react-native';
  * across 35 screens.
  *
  * Three accent themes ship with the app and the reader picks one in
- * Settings → Appearance. Each is defined once, in light and dark, and every
- * pair below was checked for WCAG AA contrast: body text ≥ 7:1 on its
- * background, secondary text ≥ 4.5:1, and any text sitting on a `*Soft` fill
- * ≥ 4.5:1 against that fill.
+ * Settings → Appearance.
+ *
+ * Each theme is defined once, in light and dark, and every pair below was
+ * checked for WCAG AA contrast: body text ≥ 7:1 on its background, secondary
+ * text ≥ 4.5:1, and any text on a `*Soft` fill ≥ 4.5:1 against that fill.
+ *
+ * In light mode the page is deliberately several steps darker than a card.
+ * They started one percent apart, which is no separation at all: every screen
+ * read as flat boxes on paper, and the elevation shadows had nothing to sit on.
  */
 
 export type ColorScheme = 'light' | 'dark';
@@ -84,10 +89,10 @@ export interface Palette {
 /* -------------------------------------------------------------------------- */
 
 const inkLight: Palette = {
-  bg: '#FAFAF9',
+  bg: '#F2F1EE',
   card: '#FFFFFF',
   cardRaised: '#FFFFFF',
-  subtle: '#F1F1EF',
+  subtle: '#E8E7E3',
   fg: '#16181D',
   fgMuted: '#5B6470',
   fgSubtle: '#8A929E',
@@ -174,10 +179,10 @@ const inkDark: Palette = {
 /* -------------------------------------------------------------------------- */
 
 const forestLight: Palette = {
-  bg: '#FAFBF9',
+  bg: '#EFF2EE',
   card: '#FFFFFF',
   cardRaised: '#FFFFFF',
-  subtle: '#EFF2EE',
+  subtle: '#E3E8E1',
   fg: '#161A17',
   fgMuted: '#586158',
   fgSubtle: '#879186',
@@ -264,10 +269,10 @@ const forestDark: Palette = {
 /* -------------------------------------------------------------------------- */
 
 const violetLight: Palette = {
-  bg: '#FCFCFD',
+  bg: '#F1F1F6',
   card: '#FFFFFF',
   cardRaised: '#FFFFFF',
-  subtle: '#F1F1F6',
+  subtle: '#E7E7EE',
   fg: '#15151C',
   fgMuted: '#5C5C6B',
   fgSubtle: '#8B8B9B',
