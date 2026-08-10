@@ -1,4 +1,4 @@
-import { intlTags, type Locale } from '@/i18n/dictionaries';
+import { dictionaries, intlTags, type Locale } from '@/i18n/dictionaries';
 
 /**
  * Formatting helpers. Everything money-related goes through `formatPrice` so a
@@ -108,31 +108,49 @@ export function formatDateTime(iso: string, locale: Locale = 'az'): string {
   }
 }
 
-const RELATIVE_UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
-  ['year', 365 * 24 * 3600],
-  ['month', 30 * 24 * 3600],
-  ['week', 7 * 24 * 3600],
-  ['day', 24 * 3600],
-  ['hour', 3600],
-  ['minute', 60],
-];
-
 /** "3 gün əvvəl" / "3 days ago". Falls back to an absolute date if Intl is thin. */
+/**
+ * Relative time, formatted from the app's own strings.
+ *
+ * `Intl.RelativeTimeFormat` was used here and produced "-2 w" on device for
+ * Azerbaijani readers: React Native's Hermes ships a trimmed ICU, so an
+ * unsupported locale silently falls back to root and emits the numeric short
+ * form. It looked correct in Node, which has the full data — so the bug only
+ * existed where the app actually runs.
+ *
+ * The units the app needs are few and the strings are already translated, so
+ * this is both correct everywhere and one less platform dependency.
+ */
 export function formatRelative(iso: string, locale: Locale = 'az'): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';
-  const diffSeconds = (d.getTime() - Date.now()) / 1000;
-  const abs = Math.abs(diffSeconds);
 
-  try {
-    const rtf = new Intl.RelativeTimeFormat(intlTags[locale], { numeric: 'auto' });
-    for (const [unit, seconds] of RELATIVE_UNITS) {
-      if (abs >= seconds) return rtf.format(Math.round(diffSeconds / seconds), unit);
-    }
-    return rtf.format(Math.round(diffSeconds), 'second');
-  } catch {
-    return formatDate(iso, locale);
-  }
+  const t = dictionaries[locale].common;
+  const seconds = (Date.now() - d.getTime()) / 1000;
+  const future = seconds < 0;
+  const abs = Math.abs(seconds);
+
+  const fill = (template: string, count: number) =>
+    template.replace('{{count}}', String(count));
+
+  if (abs < 60) return t.justNow;
+
+  const minutes = Math.round(abs / 60);
+  if (abs < 3600) return fill(future ? t.inMinutes : t.minutesAgo, minutes);
+
+  const hours = Math.round(abs / 3600);
+  if (abs < 86_400) return fill(future ? t.inHours : t.hoursAgo, hours);
+
+  const days = Math.round(abs / 86_400);
+  if (abs < 7 * 86_400) return fill(future ? t.inDays : t.daysAgo, days);
+
+  // Beyond a week a future date is a target — a delivery estimate or a buddy
+  // read deadline — and an absolute date reads better than "in 3 weeks".
+  if (future) return formatDate(iso, locale);
+
+  if (abs < 30 * 86_400) return fill(t.weeksAgo, Math.round(abs / (7 * 86_400)));
+  if (abs < 365 * 86_400) return fill(t.monthsAgo, Math.round(abs / (30 * 86_400)));
+  return fill(t.yearsAgo, Math.round(abs / (365 * 86_400)));
 }
 
 /** Percentage of a book read, clamped so bad data can't overflow a progress bar. */
