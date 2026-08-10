@@ -66,15 +66,21 @@ function AdminReviews() {
                 </Text>
               </View>
               {item.isSpoiler ? <Badge label={t('review.spoiler')} tone="warning" /> : null}
-              <IconButton
-                label={t('admin.remove')}
-                onPress={async () => {
-                  await remove.mutateAsync(item.id);
-                  toast.success(t('admin.remove'));
-                }}
-              >
-                <Trash2 size={16} color={theme.colors.danger} />
-              </IconButton>
+              {/* Removed rows stay in the list so a moderator can see what was
+                  taken down, but they no longer offer a remove button. */}
+              {item.deleted ? (
+                <Badge label={t('admin.deleted')} tone="danger" />
+              ) : (
+                <IconButton
+                  label={t('admin.remove')}
+                  onPress={async () => {
+                    await remove.mutateAsync(item.id);
+                    toast.success(t('admin.remove'));
+                  }}
+                >
+                  <Trash2 size={16} color={theme.colors.danger} />
+                </IconButton>
+              )}
             </View>
 
             <Text variant="small" color="fgMuted" numberOfLines={4}>

@@ -566,6 +566,21 @@ export interface AdminStats {
   genreSpread: { genre: GenreSlug; count: number }[];
 }
 
+/**
+ * Moderation views of a review and a quote.
+ *
+ * The admin listings include soft-deleted rows — a moderator has to be able to
+ * see what was taken down — so they carry a flag the public shapes do not.
+ */
+export interface AdminReview extends Review {
+  bookTitle: string;
+  deleted: boolean;
+}
+
+export interface AdminQuote extends Quote {
+  deleted: boolean;
+}
+
 export interface AdminUserRow {
   id: string;
   username: string;

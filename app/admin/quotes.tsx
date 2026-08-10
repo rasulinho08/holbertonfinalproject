@@ -9,6 +9,7 @@ import { formatRelative } from '@/lib/format';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { RoleGate } from '@/components/layout/RoleGate';
 import { Avatar } from '@/components/ui/Avatar';
+import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { IconButton } from '@/components/ui/IconButton';
@@ -64,15 +65,21 @@ function AdminQuotes() {
                   {formatRelative(item.createdAt, locale)} · {item.book.title}
                 </Text>
               </View>
-              <IconButton
-                label={t('admin.remove')}
-                onPress={async () => {
-                  await remove.mutateAsync(item.id);
-                  toast.success(t('admin.remove'));
-                }}
-              >
-                <Trash2 size={16} color={theme.colors.danger} />
-              </IconButton>
+              {/* Removed rows stay visible so a moderator can see what was taken
+                  down, but they no longer offer a remove button. */}
+              {item.deleted ? (
+                <Badge label={t('admin.deleted')} tone="danger" />
+              ) : (
+                <IconButton
+                  label={t('admin.remove')}
+                  onPress={async () => {
+                    await remove.mutateAsync(item.id);
+                    toast.success(t('admin.remove'));
+                  }}
+                >
+                  <Trash2 size={16} color={theme.colors.danger} />
+                </IconButton>
+              )}
             </View>
 
             <Text serif variant="small" color="fgMuted" numberOfLines={4}>
