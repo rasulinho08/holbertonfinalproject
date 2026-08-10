@@ -9,6 +9,8 @@ import { Endpoints } from '../endpoints';
 import { qk } from '../queryKeys';
 import { DEFAULT_PAGE_SIZE } from '../config';
 import type {
+  AdminQuote,
+  AdminReview,
   AdminStats,
   AdminUserRow,
   Book,
@@ -156,7 +158,7 @@ export function useResolveReport() {
 export function useAdminReviews(enabled = true) {
   return useQuery({
     queryKey: qk.admin.reviews,
-    queryFn: () => api.get<Paginated<Review>>(Endpoints.admin.reviews, { limit: 100 }),
+    queryFn: () => api.get<Paginated<AdminReview>>(Endpoints.admin.reviews, { limit: 100 }),
     enabled,
     select: (page) => page.data,
   });
@@ -173,7 +175,7 @@ export function useAdminRemoveReview() {
 export function useAdminQuotes(enabled = true) {
   return useQuery({
     queryKey: qk.admin.quotes,
-    queryFn: () => api.get<Paginated<Quote>>(Endpoints.admin.quotes, { limit: 100 }),
+    queryFn: () => api.get<Paginated<AdminQuote>>(Endpoints.admin.quotes, { limit: 100 }),
     enabled,
     select: (page) => page.data,
   });
