@@ -57,6 +57,21 @@ export const az = {
     anonymous: 'Qonaq',
   },
 
+  scan: {
+    title: 'Kitabı skan et',
+    hint: 'Kitabın arxasındakı barkodu çərçivəyə tut — ISBN avtomatik tapılacaq.',
+    isbn: 'ISBN',
+    isbnHint: 'Barkodun altındakı 13 rəqəm',
+    enterManually: 'Əl ilə ISBN yaz',
+    permissionTitle: 'Kameraya icazə lazımdır',
+    permissionHint: 'Barkodu oxumaq üçün kameranı işə salaq.',
+    permissionDenied: 'İcazə tənzimləmələrdən verilməlidir. Və ya ISBN-i əl ilə yaz.',
+    allow: 'İcazə ver',
+    notFound: 'Bu kitab kataloqda yoxdur',
+    notFoundHint: 'Hər kitab hələ bazamızda deyil. Adı ilə axtarmağı yoxla.',
+    added: 'Rəfə əlavə olundu',
+  },
+
   nav: {
     home: 'Ana səhifə',
     explore: 'Kəşf et',

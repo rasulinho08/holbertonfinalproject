@@ -48,6 +48,12 @@
           "photosPermission": "KitabDostu sitatları kitab şəkillərindən çıxarmaq üçün qalereyaya giriş istəyir.",
           "cameraPermission": "KitabDostu sitat çəkmək üçün kameraya giriş istəyir."
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "KitabDostu kitabın barkodunu oxumaq üçün kameradan istifadə edir."
+        }
       ]
     ],
     "experiments": {

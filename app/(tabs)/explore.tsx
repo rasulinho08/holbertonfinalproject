@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Search, SlidersHorizontal, X } from 'lucide-react-native';
+import { ScanLine, Search, SlidersHorizontal, X } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useBookLists, useBooks, useGenres, useSearchSuggestions } from '@/api/hooks';
@@ -79,6 +79,20 @@ export default function ExploreScreen() {
             ) : undefined
           }
         />
+
+        {/* Scanning sits beside search because it is the same intent — find this
+            book — reached with the camera instead of the keyboard. Buried in a
+            menu, nobody would discover it. */}
+        <View style={{ justifyContent: 'center' }}>
+          <IconButton
+            label={t('scan.title')}
+            variant="card"
+            size={48}
+            onPress={() => router.push('/scan')}
+          >
+            <ScanLine size={20} color={theme.colors.fg} />
+          </IconButton>
+        </View>
 
         <View style={{ justifyContent: 'center' }}>
           <IconButton

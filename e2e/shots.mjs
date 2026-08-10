@@ -44,6 +44,7 @@ const ROUTES = [
   ['author', '/author/{authorId}'],
   ['shelf', '/shelf/{shelfId}'],
   ['badges', '/badges'],
+  ['scan', '/scan'],
   ['lists', '/lists'],
   ['list-detail', '/list/{listId}'],
   ['sessions', '/sessions'],

@@ -56,6 +56,21 @@ export const en: Translated<Dictionary> = {
     anonymous: 'Guest',
   },
 
+  scan: {
+    title: 'Scan a book',
+    hint: 'Hold the barcode on the back of the book inside the frame.',
+    isbn: 'ISBN',
+    isbnHint: 'The 13 digits under the barcode',
+    enterManually: 'Enter the ISBN by hand',
+    permissionTitle: 'Camera access needed',
+    permissionHint: 'We need the camera to read the barcode.',
+    permissionDenied: 'Allow camera access in settings, or type the ISBN instead.',
+    allow: 'Allow',
+    notFound: 'That book is not in the catalogue',
+    notFoundHint: 'Not every book is in our database yet. Try searching by title.',
+    added: 'Added to your shelf',
+  },
+
   nav: {
     home: 'Home',
     explore: 'Explore',
