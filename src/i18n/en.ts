@@ -5,6 +5,16 @@ type Translated<T> = { [K in keyof T]: T[K] extends string ? string : Translated
 
 export const en: Translated<Dictionary> = {
   common: {
+    justNow: 'just now',
+    minutesAgo: '{{count}} min ago',
+    hoursAgo: '{{count}}h ago',
+    daysAgo: '{{count}}d ago',
+    weeksAgo: '{{count}}w ago',
+    monthsAgo: '{{count}}mo ago',
+    yearsAgo: '{{count}}y ago',
+    inMinutes: 'in {{count}} min',
+    inHours: 'in {{count}}h',
+    inDays: 'in {{count}}d',
     appName: 'KitabDostu',
     ok: 'OK',
     cancel: 'Cancel',
@@ -44,7 +54,6 @@ export const en: Translated<Dictionary> = {
     all: 'All',
     none: 'None',
     anonymous: 'Guest',
-    justNow: 'just now',
   },
 
   nav: {

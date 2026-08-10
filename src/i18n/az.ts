@@ -6,6 +6,16 @@
  */
 export const az = {
   common: {
+    justNow: 'indicə',
+    minutesAgo: '{{count}} dəq əvvəl',
+    hoursAgo: '{{count}} saat əvvəl',
+    daysAgo: '{{count}} gün əvvəl',
+    weeksAgo: '{{count}} həftə əvvəl',
+    monthsAgo: '{{count}} ay əvvəl',
+    yearsAgo: '{{count}} il əvvəl',
+    inMinutes: '{{count}} dəq sonra',
+    inHours: '{{count}} saat sonra',
+    inDays: '{{count}} gün sonra',
     appName: 'KitabDostu',
     ok: 'Oldu',
     cancel: 'Ləğv et',
@@ -45,7 +55,6 @@ export const az = {
     all: 'Hamısı',
     none: 'Heç biri',
     anonymous: 'Qonaq',
-    justNow: 'indicə',
   },
 
   nav: {
