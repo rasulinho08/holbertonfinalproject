@@ -23,6 +23,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { IconButton } from '@/components/ui/IconButton';
 import { Input } from '@/components/ui/Input';
 import { Progress } from '@/components/ui/Progress';
+import { QueryState } from '@/components/ui/QueryState';
 import { Screen, Section } from '@/components/ui/Screen';
 import { Sheet } from '@/components/ui/Sheet';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -37,7 +38,7 @@ export default function BuddyReadScreen() {
   const me = useCurrentUser();
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { data: buddy, isLoading } = useBuddyRead(id);
+  const { data: buddy, isLoading, error, refetch } = useBuddyRead(id);
   // Derived before the messages query, which needs it: the discussion is
   // members-only, so asking as a non-member is a guaranteed 403.
   const isMember = buddy?.members.some((m) => m.user.id === me?.id) ?? false;
@@ -70,13 +71,17 @@ export default function BuddyReadScreen() {
     toast.success(t('book.progressSaved'));
   };
 
-  if (isLoading || !buddy) {
+  if (isLoading || error || !buddy) {
     return (
       <>
         <AppHeader back />
         <Screen>
-          <Skeleton height={140} radius={theme.radius.lg} />
-          <Skeleton height={200} radius={theme.radius.lg} />
+          <QueryState
+            isLoading={isLoading}
+            error={error}
+            skeleton={[140, 200]}
+            onRetry={() => void refetch()}
+          />
         </Screen>
       </>
     );

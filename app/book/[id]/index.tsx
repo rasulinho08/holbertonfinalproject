@@ -35,6 +35,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Progress } from '@/components/ui/Progress';
 import { RatingStars } from '@/components/ui/Rating';
+import { QueryState } from '@/components/ui/QueryState';
 import { Screen, Section } from '@/components/ui/Screen';
 import { Skeleton, SkeletonLines } from '@/components/ui/Skeleton';
 import { Text } from '@/components/ui/Text';
@@ -47,7 +48,7 @@ export default function BookDetailScreen() {
   const toast = useToast();
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { data: book, isLoading } = useBook(id);
+  const { data: book, isLoading, error, refetch } = useBook(id);
   const { data: reviews } = useBookReviews(id);
   const { data: quotes } = useBookQuotes(id);
   const { data: similar, isLoading: similarLoading } = useSimilarBooks(id);
@@ -59,18 +60,17 @@ export default function BookDetailScreen() {
   const [progressOpen, setProgressOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  if (isLoading || !book) {
+  if (isLoading || error || !book) {
     return (
       <>
         <AppHeader back actions />
         <Screen>
-          <View style={{ flexDirection: 'row', gap: theme.spacing.lg }}>
-            <Skeleton width={128} height={192} radius={theme.radius.md} />
-            <View style={{ flex: 1, gap: theme.spacing.sm }}>
-              <SkeletonLines count={4} />
-            </View>
-          </View>
-          <Skeleton height={110} radius={theme.radius.lg} />
+          <QueryState
+            isLoading={isLoading}
+            error={error}
+            skeleton={[240, 120, 180]}
+            onRetry={() => void refetch()}
+          />
         </Screen>
       </>
     );
