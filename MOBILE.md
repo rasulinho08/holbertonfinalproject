@@ -271,3 +271,70 @@ different host means a new build — an installed APK cannot be repointed.
 `eas update` can push new **JavaScript** to an existing build on the same
 channel, which covers screen and logic changes without redistributing the file.
 It cannot change native configuration or those inlined environment values.
+
+---
+
+## Hosting the web build somewhere else
+
+Netlify's free tier is capped by build minutes. When they run out, published
+sites stay up but **new deploys stop** until the next billing cycle — clearing
+the cache does not help, because there is nothing wrong with the cache.
+
+The build itself is a folder of static files, so any static host serves it.
+`public/_redirects` ships with the export and carries the single rule the app
+needs, in a format Netlify, Cloudflare Pages and Render all read — so moving
+host is a matter of pointing something new at the repository.
+
+### Cloudflare Pages — the free option with the most headroom
+
+500 builds a month, unlimited bandwidth, no card.
+
+1. **https://dash.cloudflare.com** → Workers & Pages → Create → Pages →
+   Connect to Git
+2. Pick `holbertonfinalproject`
+3. Build settings:
+
+| Field | Value |
+|---|---|
+| Framework preset | None |
+| Build command | `npm run build:web` |
+| Build output directory | `dist` |
+
+4. **Environment variables** — the same ones Netlify needs, because
+   `EXPO_PUBLIC_*` is inlined at build time:
+
+```
+EXPO_PUBLIC_API_BASE_URL = https://holbertonfinalproject-backend.onrender.com/api/v1
+EXPO_PUBLIC_DEFAULT_LOCALE = az
+EXPO_PUBLIC_GOOGLE_CLIENT_ID = <the web client id>
+```
+
+Deploy. You get `<project>.pages.dev`.
+
+**Two things to update afterwards**, or the site loads and then fails every
+request:
+
+- Add the new origin to `CORS_ORIGINS` on Render, comma-separated alongside the
+  Netlify one.
+- Add `https://<project>.pages.dev` to the Google OAuth client's authorised
+  redirect URIs.
+
+### Other hosts that work unchanged
+
+| Host | Free tier | Notes |
+|---|---|---|
+| **Vercel** | Generous hobby plan | Same settings; output `dist` |
+| **Render** | Static sites are free | You already have an account there |
+| **GitHub Pages** | Unlimited | Needs an Actions workflow, and `_redirects` is ignored — SPA routing needs a `404.html` copy of `index.html` instead |
+
+### Deploying by hand, without any CI
+
+The output is just files, so a build from your machine can be uploaded
+directly — useful when a provider's build minutes are the thing that ran out:
+
+```bash
+npm run build:web
+```
+
+Then drag the `dist` folder onto Cloudflare Pages' or Netlify's manual deploy
+box. That path does not consume build minutes on either.
