@@ -19,6 +19,7 @@ export const en: Translated<Dictionary> = {
     ok: 'OK',
     cancel: 'Cancel',
     save: 'Save',
+    create: 'Create',
     delete: 'Delete',
     edit: 'Edit',
     retry: 'Retry',
@@ -86,6 +87,7 @@ export const en: Translated<Dictionary> = {
     buddyReads: 'Buddy reads',
     publisher: 'Publisher panel',
     admin: 'Moderation',
+    marketplace: 'Marketplace',
   },
 
   auth: {
