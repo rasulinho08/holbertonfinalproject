@@ -80,14 +80,14 @@ export function Button({
       style={({ pressed }) => [
         {
           height: HEIGHTS[size],
-          paddingHorizontal: size === 'sm' ? theme.spacing.md : theme.spacing.xl,
-          borderRadius: theme.radius.md,
+          paddingHorizontal: size === 'sm' ? theme.spacing.md : theme.spacing.lg,
+          borderRadius: theme.radius.lg,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
           gap: theme.spacing.sm,
           alignSelf: fullWidth ? 'stretch' : 'flex-start',
-          opacity: isDisabled ? 0.5 : pressed ? 0.85 : 1,
+          opacity: isDisabled ? 0.5 : pressed ? 0.92 : 1,
           transform: [{ scale: pressed && !isDisabled ? 0.985 : 1 }],
         },
         surface[variant],
