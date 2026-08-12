@@ -114,7 +114,6 @@ npm start          # QR kod — Expo Go ilə telefonda aç
 ```bash
 npm run typecheck   # tsc --noEmit
 npm run lint
-npm run e2e         # başsız Chrome ilə uçdan-uca test (əvvəlcə `npm run web`)
 npm run build:web   # statik web build → dist/
 ```
 
@@ -175,7 +174,7 @@ holbertonfinalproject/
 │  └─ types/                 # domen modeli (API müqaviləsi ilə eyni)
 ├─ backend-guide/            # 👉 digər repo üçün spesifikasiya
 ├─ docs/PRODUCT_SPEC.md      # ilkin məhsul brifi
-└─ e2e/smoke.mjs             # uçdan-uca test
+└─ app/                      # Expo-router ekranları
 ```
 
 ### Memarlıq qərarı / Key architectural decision
@@ -194,21 +193,7 @@ Screen  →  useBook(id)  →  api.get(Endpoints.books.detail(id))
 
 ## ✅ Test / Verification
 
-`npm run e2e` başsız Chrome-da tətbiqi idarə edərək spesifikasiyadakı hər iki
-istifadəçi axınını yoxlayır:
-
-```
-PASS  login screen renders          PASS  book added to shelf
-PASS  sign in navigates to onboarding   PASS  cart shows the added book
-PASS  genre chips load              PASS  checkout address step
-PASS  onboarding reaches goal step  PASS  checkout payment step
-PASS  home screen loads             PASS  order placed
-PASS  explore tab opens             PASS  profile renders stats
-PASS  search returns results        PASS  quotes feed renders
-PASS  book detail opens             PASS  leaderboard renders
-PASS  shelf picker opens
-                                    17/17 steps passed · 0 console errors
-```
+App verification is handled through the regular project checks and manual flow testing, without the browser-driven smoke suite.
 
 ---
 

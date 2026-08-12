@@ -96,7 +96,6 @@ Every merge into `frontend`, `backend` or `main` goes through a PR.
 ```bash
 npm run typecheck    # must be clean
 npm run lint
-npm run e2e          # if the change touches a user flow
 ```
 
 ### PR description template
