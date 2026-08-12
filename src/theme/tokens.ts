@@ -85,50 +85,50 @@ export interface Palette {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  ink — deep navy + amber. Library at night; the default.                   */
+/*  ink — default theme. Updated to the new warm light palette.               */
 /* -------------------------------------------------------------------------- */
 
 const inkLight: Palette = {
-  bg: '#F2F1EE',
+  bg: '#FAF9F6',
   card: '#FFFFFF',
   cardRaised: '#FFFFFF',
-  subtle: '#E8E7E3',
-  fg: '#16181D',
-  fgMuted: '#5B6470',
-  fgSubtle: '#8A929E',
-  border: '#E4E5E3',
-  borderStrong: '#C9CCCF',
+  subtle: '#F5F5F3',
+  fg: '#222222',
+  fgMuted: '#6B7280',
+  fgSubtle: '#9CA3AF',
+  border: '#E5E7EB',
+  borderStrong: '#D9DCE0',
 
-  primary: '#1E3A5F',
+  primary: '#3F7D5A',
   primaryFg: '#FFFFFF',
-  primarySoft: '#E6EDF5',
-  primarySoftFg: '#1B3453',
-  accent: '#B0762B',
+  primarySoft: '#E8F2EC',
+  primarySoftFg: '#184B36',
+  accent: '#D88A4A',
   accentFg: '#FFFFFF',
-  accentSoft: '#FBF0DE',
-  accentSoftFg: '#7A5015',
+  accentSoft: '#F7EDE2',
+  accentSoftFg: '#6B3F20',
 
-  success: '#166534',
-  successSoft: '#DCFCE7',
-  successSoftFg: '#14532D',
-  warning: '#9A5B00',
-  warningSoft: '#FEF3C7',
-  warningSoftFg: '#7C4A02',
-  danger: '#B4232A',
-  dangerSoft: '#FEE6E6',
-  dangerSoftFg: '#8F1D22',
-  info: '#1A56A8',
-  infoSoft: '#E2ECFB',
-  infoSoftFg: '#154488',
+  success: '#3F7D5A',
+  successSoft: '#E8F2EC',
+  successSoftFg: '#184B36',
+  warning: '#D88A4A',
+  warningSoft: '#FDEBE0',
+  warningSoftFg: '#6B3F20',
+  danger: '#C94C4C',
+  dangerSoft: '#FDECEE',
+  dangerSoftFg: '#8A2F2F',
+  info: '#2B6CB0',
+  infoSoft: '#EBF3FF',
+  infoSoftFg: '#10345A',
 
   rating: '#D99A15',
   streak: '#DC6803',
 
-  overlay: 'rgba(14, 17, 22, 0.5)',
-  shadow: '#0E1116',
+  overlay: 'rgba(0, 0, 0, 0.06)',
+  shadow: '#000000',
   imagePlaceholder: '#ECECEA',
 
-  chart: ['#1E3A5F', '#B0762B', '#2C7A6B', '#8C4A6B', '#4B5FA8', '#7A7F45'],
+  chart: ['#3F7D5A', '#D88A4A', '#2C7A6B', '#8C4A6B', '#4B5FA8', '#7A7F45'],
 };
 
 const inkDark: Palette = {
@@ -175,18 +175,18 @@ const inkDark: Palette = {
 };
 
 /* -------------------------------------------------------------------------- */
-/*  forest — deep emerald + chestnut. Quiet, natural, classic.                */
+/*  forest — keep existing palettes but align light variant to new look.      */
 /* -------------------------------------------------------------------------- */
 
 const forestLight: Palette = {
-  bg: '#EFF2EE',
+  bg: '#F7FAF6',
   card: '#FFFFFF',
   cardRaised: '#FFFFFF',
-  subtle: '#E3E8E1',
-  fg: '#161A17',
+  subtle: '#F5F7F4',
+  fg: '#222222',
   fgMuted: '#586158',
   fgSubtle: '#879186',
-  border: '#E2E7E0',
+  border: '#E9EEE9',
   borderStrong: '#C6CFC4',
 
   primary: '#1B5E4A',
@@ -214,8 +214,8 @@ const forestLight: Palette = {
   rating: '#C9930F',
   streak: '#C2571A',
 
-  overlay: 'rgba(12, 18, 16, 0.5)',
-  shadow: '#0C1210',
+  overlay: 'rgba(0,0,0,0.06)',
+  shadow: '#000000',
   imagePlaceholder: '#EAEEE8',
 
   chart: ['#1B5E4A', '#9A4F26', '#2F6F9E', '#7D5BA6', '#A8873C', '#8C3A55'],
@@ -257,7 +257,7 @@ const forestDark: Palette = {
   rating: '#E2B23C',
   streak: '#EE8A3C',
 
-  overlay: 'rgba(0, 0, 0, 0.68)',
+  overlay: 'rgba(0,0,0,0.68)',
   shadow: '#000000',
   imagePlaceholder: '#1B2320',
 
@@ -265,15 +265,15 @@ const forestDark: Palette = {
 };
 
 /* -------------------------------------------------------------------------- */
-/*  violet — indigo + coral. Modern and social.                              */
+/*  violet — align light palette to the warm aesthetic while keeping accents. */
 /* -------------------------------------------------------------------------- */
 
 const violetLight: Palette = {
-  bg: '#F1F1F6',
+  bg: '#FAF9F6',
   card: '#FFFFFF',
   cardRaised: '#FFFFFF',
-  subtle: '#E7E7EE',
-  fg: '#15151C',
+  subtle: '#F5F5F3',
+  fg: '#222222',
   fgMuted: '#5C5C6B',
   fgSubtle: '#8B8B9B',
   border: '#E5E5EC',
@@ -304,8 +304,8 @@ const violetLight: Palette = {
   rating: '#D69412',
   streak: '#E05B2B',
 
-  overlay: 'rgba(13, 13, 20, 0.5)',
-  shadow: '#0D0D14',
+  overlay: 'rgba(0,0,0,0.06)',
+  shadow: '#000000',
   imagePlaceholder: '#EDEDF2',
 
   chart: ['#4F3FBF', '#C13A55', '#1F8A8A', '#B57A1E', '#7A4FB5', '#2E7D5B'],
@@ -347,7 +347,7 @@ const violetDark: Palette = {
   rating: '#E8B33B',
   streak: '#FB7E45',
 
-  overlay: 'rgba(0, 0, 0, 0.68)',
+  overlay: 'rgba(0,0,0,0.68)',
   shadow: '#000000',
   imagePlaceholder: '#1D1D28',
 
@@ -444,9 +444,9 @@ export type TypographyVariant = keyof typeof typography;
 export function elevation(level: 0 | 1 | 2 | 3, shadowColor: string) {
   if (level === 0) return {};
   const map = {
-    1: { radius: 6, offset: 2, opacity: 0.06 },
-    2: { radius: 14, offset: 5, opacity: 0.1 },
-    3: { radius: 26, offset: 10, opacity: 0.14 },
+    1: { radius: 6, offset: 2, opacity: 0.04 },
+    2: { radius: 10, offset: 3, opacity: 0.06 },
+    3: { radius: 18, offset: 6, opacity: 0.08 },
   } as const;
   const { radius: r, offset, opacity } = map[level];
   return Platform.select({
