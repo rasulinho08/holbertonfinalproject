@@ -5,7 +5,6 @@ import {
   BookPlus,
   ShoppingBag,
   Tag,
-  MessageSquarePlus,
   Quote as QuoteIcon,
   Users,
 } from 'lucide-react-native';
@@ -22,9 +21,11 @@ export interface QuickActionSheetProps {
 
 export function QuickActionSheet({ visible, onClose }: QuickActionSheetProps) {
   const theme = useTheme();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const router = useRouter();
   type PushArg = Parameters<typeof router.push>[0];
+
+  const isAz = locale?.startsWith('az');
 
   const actions: {
     key: string;
@@ -37,76 +38,67 @@ export function QuickActionSheet({ visible, onClose }: QuickActionSheetProps) {
   }[] = [
     {
       key: 'add-book',
-      title: t('publisher.addBook'),
-      description: t('publisher.myBooks'),
+      // Добавление в личную библиотеку
+      title: isAz ? 'Kitab əlavə et' : 'Add a book',
+      description: isAz ? 'Oxuduğun və ya oxuyacağın kitabı əlavə et' : 'Add to your personal library',
       Icon: BookPlus,
       color: theme.colors.primary,
       bg: theme.colors.primarySoft,
-      route: '/publisher/books/new',
-    },
-    {
-      key: 'buy-book',
-      title: t('book.buyNow'),
-      description: t('cart.continueShopping'),
-      Icon: ShoppingBag,
-      color: theme.colors.success,
-      bg: theme.colors.successSoft,
-      route: '/explore',
+      route: '/shelves' as PushArg,
     },
     {
       key: 'sell-book',
-      title: t('publisher.addBook'),
-      description: t('publisher.myBooks'),
+      // Выставить на продажу
+      title: isAz ? 'Kitab sat' : 'Sell a book',
+      description: isAz ? 'Kitabını satışa çıxar' : 'List your book for sale',
       Icon: Tag,
       color: theme.colors.warning,
       bg: theme.colors.warningSoft,
-      route: '/publisher/books/new',
+      route: '/publisher/books/new' as PushArg,
     },
     {
-      key: 'add-review',
-      title: t('book.writeReview'),
-      description: t('review.reviewPlaceholder'),
-      Icon: MessageSquarePlus,
-      color: theme.colors.info,
-      bg: theme.colors.infoSoft,
-      route: '/review/new',
+      key: 'buy-book',
+      title: t('book.buyNow') || (isAz ? 'Kitab al' : 'Buy now'),
+      description: t('cart.continueShopping') || (isAz ? 'Kataloqa keçid et' : 'Continue shopping'),
+      Icon: ShoppingBag,
+      color: theme.colors.success,
+      bg: theme.colors.successSoft,
+      route: '/explore' as PushArg,
     },
     {
       key: 'add-quote',
-      title: t('quote.newQuote'),
-      description: t('quote.quotePlaceholder'),
+      title: t('quote.newQuote') || (isAz ? 'Sitat əlavə et' : 'Share a quote'),
+      description: t('quote.quotePlaceholder') || (isAz ? 'Sevdiriyin sitatı paylaş' : 'Type the passage that stayed with you...'),
       Icon: QuoteIcon,
       color: theme.colors.rating,
-      bg: theme.colors.card, // no dedicated soft for rating — use card as neutral bg
-      route: '/quote/new',
+      bg: theme.colors.card,
+      route: '/quote/new' as PushArg,
     },
     {
       key: 'start-buddy',
-      title: t('book.startBuddyRead'),
-      description: t('buddy.emptyHint'),
+      title: t('book.startBuddyRead') || (isAz ? 'Birgə oxu başla' : 'Start a buddy read'),
+      description: t('buddy.emptyHint') || (isAz ? 'Dostlarınla birgə oxu' : 'Start reading the same book with a friend.'),
       Icon: Users,
       color: theme.colors.fgMuted,
       bg: theme.colors.subtle,
-      route: '/buddy-reads',
+      route: '/buddy-reads' as PushArg,
     },
   ];
 
   const onAction = (route: PushArg, label: string) => {
-    // lightweight haptic, close sheet, then navigate after a short delay
     haptics.tap();
     onClose();
     setTimeout(() => {
-      // navigate after sheet starts closing to avoid visual conflict
       try {
         router.push(route);
       } catch (e) {
-        // swallow navigation errors — router may be unavailable in tests
+        // swallow navigation errors
       }
     }, 120);
   };
 
   return (
-    <Sheet visible={visible} onClose={onClose} title={t('common.create') /* reuse generic key */}>
+    <Sheet visible={visible} onClose={onClose} title={t('common.create')}>
       <View style={{ gap: theme.spacing.md }}>
         {actions.map((action) => (
           <Pressable

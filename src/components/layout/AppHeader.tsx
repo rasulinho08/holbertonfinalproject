@@ -1,12 +1,14 @@
 import React from 'react';
-import { View, type ViewStyle } from 'react-native';
+import { Pressable, View, type ViewStyle } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowLeft, Bell, ShoppingBag } from 'lucide-react-native';
+import { ArrowLeft, Bell } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
-import { useCartCount, useUnreadCount } from '@/api/hooks';
+import { useCurrentUser } from '@/store/auth';
+import { useUnreadCount } from '@/api/hooks';
 import { IconButton } from '@/components/ui/IconButton';
+import { Avatar } from '@/components/ui/Avatar';
 import { Text } from '@/components/ui/Text';
 
 export interface AppHeaderProps {
@@ -14,8 +16,10 @@ export interface AppHeaderProps {
   subtitle?: string;
   /** Shows a back chevron. Defaults to true on non-tab screens. */
   back?: boolean;
-  /** Shows the notifications bell and cart button. */
+  /** Shows the notifications bell and profile avatar. */
   actions?: boolean;
+  /** Show profile avatar on the far right. Defaults to true when actions is true. */
+  showProfile?: boolean;
   right?: React.ReactNode;
   large?: boolean;
   style?: ViewStyle;
@@ -30,6 +34,7 @@ export function AppHeader({
   subtitle,
   back = false,
   actions = false,
+  showProfile,
   right,
   large = false,
   style,
@@ -38,9 +43,11 @@ export function AppHeader({
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { t } = useI18n();
+  const user = useCurrentUser();
 
   const unread = useUnreadCount();
-  const cartCount = useCartCount();
+
+  const shouldShowProfile = showProfile ?? actions;
 
   return (
     <View
@@ -57,44 +64,61 @@ export function AppHeader({
         style,
       ]}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm, minHeight: 40 }}>
-        {back ? (
-          <IconButton label={t('common.back')} onPress={() => router.back()}>
-            <ArrowLeft size={22} color={theme.colors.fg} />
-          </IconButton>
-        ) : null}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: theme.spacing.sm,
+          minHeight: 40,
+        }}
+      >
+        {/* Left Side: Back button + Title */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm, flex: 1 }}>
+          {back ? (
+            <IconButton label={t('common.back')} onPress={() => router.back()}>
+              <ArrowLeft size={22} color={theme.colors.fg} />
+            </IconButton>
+          ) : null}
 
-        <View style={{ flex: 1, gap: 1 }}>
-          {title ? (
-            <Text variant={large ? 'display' : 'h2'} numberOfLines={1}>
-              {title}
-            </Text>
-          ) : null}
-          {subtitle ? (
-            <Text variant="small" color="fgMuted" numberOfLines={1}>
-              {subtitle}
-            </Text>
-          ) : null}
+          <View style={{ flex: 1, gap: 1 }}>
+            {title ? (
+              <Text variant={large ? 'display' : 'h2'} numberOfLines={1}>
+                {title}
+              </Text>
+            ) : null}
+            {subtitle ? (
+              <Text variant="small" color="fgMuted" numberOfLines={1}>
+                {subtitle}
+              </Text>
+            ) : null}
+          </View>
         </View>
 
-        {right}
+        {/* Right Side: Actions & Profile Icon strictly pushed to the right */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.xs }}>
+          {right}
 
-        {actions ? (
-          <>
+          {actions ? (
             <IconButton label={t('nav.notifications')} onPress={() => router.push('/notifications')}>
               <View>
                 <Bell size={21} color={theme.colors.fg} />
                 {unread > 0 ? <Dot /> : null}
               </View>
             </IconButton>
-            <IconButton label={t('nav.cart')} onPress={() => router.push('/cart')}>
-              <View>
-                <ShoppingBag size={21} color={theme.colors.fg} />
-                {cartCount > 0 ? <Dot /> : null}
-              </View>
-            </IconButton>
-          </>
-        ) : null}
+          ) : null}
+
+          {shouldShowProfile && user ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('nav.profile')}
+              onPress={() => router.push('/profile')}
+              style={{ marginLeft: theme.spacing.xs }}
+            >
+              <Avatar uri={user.avatarUrl} name={user.name} size={34} />
+            </Pressable>
+          ) : null}
+        </View>
       </View>
     </View>
   );
