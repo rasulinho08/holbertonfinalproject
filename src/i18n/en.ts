@@ -668,5 +668,6 @@ export const en: Translated<Dictionary> = {
     invalidPhone: 'Enter a valid phone number',
     outOfStock: 'Not enough stock available',
     tooLong: 'That text is too long',
+    invalidForm: 'Please check the form and try again.',
   },
 };
