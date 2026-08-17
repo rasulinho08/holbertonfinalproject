@@ -2,9 +2,13 @@ import { create } from 'zustand';
 import type { Address, DeliveryMethod, PaymentMethod } from '@/types';
 
 /**
- * Checkout draft, shared between `/checkout` (address + delivery) and
- * `/checkout/payment`. Deliberately not persisted — an abandoned checkout
- * should not resurface days later with a stale address.
+ * Checkout draft shared between:
+ * - /checkout
+ * - /checkout/payment
+ * - checkout summary
+ *
+ * The selected delivery method is stored globally so it
+ * remains available when navigating between checkout screens.
  */
 interface CheckoutState {
   address: Address;
@@ -29,29 +33,66 @@ const EMPTY_ADDRESS: Address = {
   note: '',
 };
 
+const INITIAL_DELIVERY_METHOD: DeliveryMethod = 'courier';
+const INITIAL_PAYMENT_METHOD: PaymentMethod = 'cod';
+
 export const useCheckout = create<CheckoutState>((set) => ({
   address: EMPTY_ADDRESS,
-  deliveryMethod: 'courier',
-  paymentMethod: 'cod',
+
+  // Default delivery method.
+  // User can change it to "pickup" using setDeliveryMethod().
+  deliveryMethod: INITIAL_DELIVERY_METHOD,
+
+  paymentMethod: INITIAL_PAYMENT_METHOD,
+
   giftCardCode: null,
   giftCardAmount: 0,
 
-  setAddress: (patch) => set((state) => ({ address: { ...state.address, ...patch } })),
-  setDeliveryMethod: (deliveryMethod) => set({ deliveryMethod }),
-  setPaymentMethod: (paymentMethod) => set({ paymentMethod }),
-  applyGiftCard: (giftCardCode, giftCardAmount) => set({ giftCardCode, giftCardAmount }),
-  clearGiftCard: () => set({ giftCardCode: null, giftCardAmount: 0 }),
+  setAddress: (patch) =>
+    set((state) => ({
+      address: {
+        ...state.address,
+        ...patch,
+      },
+    })),
+
+  setDeliveryMethod: (method) =>
+    set({
+      deliveryMethod: method,
+    }),
+
+  setPaymentMethod: (method) =>
+    set({
+      paymentMethod: method,
+    }),
+
+  applyGiftCard: (code, amount) =>
+    set({
+      giftCardCode: code,
+      giftCardAmount: amount,
+    }),
+
+  clearGiftCard: () =>
+    set({
+      giftCardCode: null,
+      giftCardAmount: 0,
+    }),
+
   reset: () =>
     set({
       address: EMPTY_ADDRESS,
-      deliveryMethod: 'courier',
-      paymentMethod: 'cod',
+      deliveryMethod: INITIAL_DELIVERY_METHOD,
+      paymentMethod: INITIAL_PAYMENT_METHOD,
       giftCardCode: null,
       giftCardAmount: 0,
     }),
 }));
 
-/** Baku is same-day/next-day; regions go through Azerpost. */
+/**
+ * Supported delivery cities in Azerbaijan.
+ * Baku uses same-day/next-day delivery;
+ * regions are handled through Azerpost.
+ */
 export const AZ_CITIES = [
   'Bakı',
   'Sumqayıt',
