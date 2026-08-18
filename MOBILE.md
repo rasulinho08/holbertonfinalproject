@@ -250,10 +250,13 @@ will not work — for this project that is fine.
 
 **The web build — free, and closest to "an app" without paying.**
 
-The site is already configured as a progressive web app (`display: standalone`
-in `app.json`), so on an iPhone:
+The export ships a `manifest.json` and the Apple-specific tags that Safari
+needs (`scripts/inject-pwa-head.mjs` adds them after `expo export`). Note that
+`display: standalone` in `app.json` does **not** do this on its own — Expo does
+not put it in the exported HTML. On an iPhone:
 
-1. Open the Netlify URL in **Safari** (not Chrome — only Safari can do this)
+1. Open the site in **Safari** (not Chrome — only Safari can do this):
+   `https://holbertonfinalproject0.mamishovrasul028.workers.dev`
 2. Share button → **Add to Home Screen**
 
 It gets an icon on the home screen, opens without browser chrome, and behaves
