@@ -1,10 +1,13 @@
 {
   // Cloudflare Workers — statik sayt (Workers Static Assets).
   //
+  // Ad Cloudflare-dəki Worker ilə eyni olmalıdır: build token yalnız həmin
+  // Worker-i dəyişə bilir, fərqli ad yazsan deploy icazə xətası ilə dayanır.
+  //
   // Bu proyektdə server kodu yoxdur: Expo `dist/` qovluğuna adi statik fayllar
   // yığır, Cloudflare də onları paylayır. Ona görə `main` sahəsi yoxdur — Worker
   // skripti olmadan yalnız assets xidmət olunur.
-  "name": "kitabdostu",
+  "name": "holbertonfinalproject0",
   "compatibility_date": "2026-08-18",
 
   "assets": {
