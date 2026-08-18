@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Banknote, CreditCard, Gift, ShieldCheck, Smartphone, Wallet } from 'lucide-react-native';
 import { useTheme } from '@/theme';
-import { useI18n } from '@/i18n';
+import { useI18n, type TranslationKey } from '@/i18n';
 import { useCart, usePlaceOrder, useRedeemGiftCard, useWallet } from '@/api/hooks';
 import { useCheckout } from '@/store/checkout';
 import { formatPrice } from '@/lib/format';
@@ -16,7 +16,26 @@ import { Input } from '@/components/ui/Input';
 import { Screen, Section } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
-import type { PaymentMethod } from '@/types';
+import type { DeliveryMethod, PaymentMethod } from '@/types';
+
+/**
+ * The delivery method chosen on the previous screen, spelled out for the
+ * summary.
+ *
+ * This was a two-way ternary testing for `post` and letting everything else
+ * fall through to the courier copy — so picking up in person was confirmed back
+ * to the buyer as "Bakı daxili 24 saat", a courier promise nobody made. A
+ * `Record` keyed by the union makes the compiler demand an entry when a fourth
+ * method is added, instead of quietly filing it under courier.
+ */
+const DELIVERY_LABEL_KEYS: Record<
+  DeliveryMethod,
+  { title: TranslationKey; hint: TranslationKey }
+> = {
+  courier: { title: 'checkout.courier', hint: 'checkout.courierHint' },
+  pickup: { title: 'checkout.pickup', hint: 'checkout.pickupHint' },
+  post: { title: 'checkout.post', hint: 'checkout.postHint' },
+};
 
 const METHODS: {
   value: PaymentMethod;
@@ -238,10 +257,14 @@ export default function CheckoutPaymentScreen() {
             ) : null}
             <View style={{ height: 1, backgroundColor: theme.colors.border, marginVertical: 4 }} />
             <Row label={t('cart.total')} value={formatPrice(total, locale)} strong />
+            <Row
+              label={t('checkout.deliveryMethod')}
+              value={t(DELIVERY_LABEL_KEYS[deliveryMethod].title)}
+            />
             <Badge
-              label={`${t('checkout.estimatedDelivery')}: ${
-                deliveryMethod === 'post' ? t('checkout.postHint') : t('checkout.courierHint')
-              }`}
+              label={`${t('checkout.estimatedDelivery')}: ${t(
+                DELIVERY_LABEL_KEYS[deliveryMethod].hint,
+              )}`}
               tone="info"
             />
           </Card>

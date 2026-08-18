@@ -94,15 +94,19 @@ export function QuoteCard({
               justifyContent: 'center',
             }}
           >
-            {/* Background gradient */}
+            {/* Background gradient.
+                Sized with width/height rather than inset offsets: the `Rect`
+                below is 100% of the *SVG viewport*, and with only top/left/
+                right/bottom set that viewport is not established, so the fill
+                came out smaller than the card and left bare corners whatever
+                colours were chosen. The composer screen already sizes it this
+                way — the two now agree. */}
             <Svg
               pointerEvents="none"
               style={{
                 position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
+                width: '100%',
+                height: '100%',
               }}
             >
               <Defs>
