@@ -19,8 +19,10 @@
     // kimi mövcud deyil. Bu olmasa səhifəni yeniləyəndə Cloudflare 404 qaytarır
     // və sayt sınıq görünür — halbuki problem yalnız marşrutlaşdırmadadır.
     //
-    // Qeyd: `public/_redirects` faylı Netlify və Cloudflare Pages üçündür;
-    // Workers onu oxumur, ekvivalenti məhz bu sahədir.
+    // Qeyd: bir vaxtlar bunu `public/_redirects` faylı edirdi. Workers həmin
+    // faylı oxuyur, amma `/*  /index.html  200` qaydasını sonsuz dövrə sayıb
+    // deploy-u dayandırır. Fayl silindi; Netlify tərəfi `netlify.toml`-dakı
+    // eyni qayda ilə işləməyə davam edir.
     "not_found_handling": "single-page-application"
   }
 }
