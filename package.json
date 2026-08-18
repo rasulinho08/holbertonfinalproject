@@ -12,7 +12,6 @@
     "typecheck": "tsc --noEmit",
     "lint": "expo lint",
     "doctor": "npx expo-doctor",
-    "e2e": "node e2e/smoke.mjs",
     "build:web": "expo export --platform web --output-dir dist"
   },
   "dependencies": {
@@ -55,7 +54,6 @@
     "babel-preset-expo": "~54.0.10",
     "eslint": "^9.39.5",
     "eslint-config-expo": "^57.0.1",
-    "puppeteer-core": "^25.5.0",
     "typescript": "~5.9.2"
   }
 }
