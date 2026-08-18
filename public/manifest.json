@@ -1,0 +1,26 @@
+{
+  "name": "KitabDostu",
+  "short_name": "KitabDostu",
+  "description": "Oxuduğun kitabları izlə, sitat paylaş və Azərbaycanın kitabsevərlər icmasına qoşul.",
+  "lang": "az",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0E1116",
+  "theme_color": "#1E3A5F",
+  "icons": [
+    {
+      "src": "/icon-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
