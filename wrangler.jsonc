@@ -1,0 +1,23 @@
+{
+  // Cloudflare Workers — statik sayt (Workers Static Assets).
+  //
+  // Bu proyektdə server kodu yoxdur: Expo `dist/` qovluğuna adi statik fayllar
+  // yığır, Cloudflare də onları paylayır. Ona görə `main` sahəsi yoxdur — Worker
+  // skripti olmadan yalnız assets xidmət olunur.
+  "name": "kitabdostu",
+  "compatibility_date": "2026-08-18",
+
+  "assets": {
+    // `npm run build:web` buraya yazır. Deploy-dan əvvəl build işləməlidir,
+    // yoxsa wrangler boş qovluq göndərər.
+    "directory": "./dist",
+
+    // expo-router client-side router-dir: /profile kimi ünvan serverdə fayl
+    // kimi mövcud deyil. Bu olmasa səhifəni yeniləyəndə Cloudflare 404 qaytarır
+    // və sayt sınıq görünür — halbuki problem yalnız marşrutlaşdırmadadır.
+    //
+    // Qeyd: `public/_redirects` faylı Netlify və Cloudflare Pages üçündür;
+    // Workers onu oxumur, ekvivalenti məhz bu sahədir.
+    "not_found_handling": "single-page-application"
+  }
+}
