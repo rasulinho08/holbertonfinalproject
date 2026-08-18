@@ -268,6 +268,8 @@ export const az = {
     photos: 'Şəkillər',
     addPhoto: 'Şəkil əlavə et',
     outOf10: '/10',
+    comments: '{{count}} şərh',
+    addComment: 'Şərh yaz…',
     ratingRequired: 'Qiymət verilməlidir',
   },
 

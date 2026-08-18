@@ -267,6 +267,8 @@ export const en: Translated<Dictionary> = {
     photos: 'Photos',
     addPhoto: 'Add photo',
     outOf10: '/10',
+    comments: '{{count}} comments',
+    addComment: 'Write a comment…',
     ratingRequired: 'A rating is required',
   },
 

@@ -270,7 +270,7 @@ export default function BookDetailScreen() {
                   key={review.id}
                   review={review}
                   onLike={(liked) => toggleReviewLike.mutate({ id: review.id, liked })}
-                  onComment={() => router.push(`/book/${book.id}/reviews`)}
+                  onComment={() => router.push(`/review/${review.id}`)}
                 />
               ))}
             </View>
