@@ -644,6 +644,8 @@ export const az = {
     ru: 'Русский',
   },
 
+ 
+
   errors: {
     emailTaken: 'Bu e-poçt artıq qeydiyyatdan keçib',
     validation: 'Daxil etdiyiniz məlumatları yoxlayın',
@@ -669,6 +671,7 @@ export const az = {
     invalidPhone: 'Etibarlı telefon nömrəsi daxil et',
     outOfStock: 'Kifayət qədər anbar yoxdur',
     tooLong: 'Bu mətn çox uzundur',
+    invalidForm: 'Zəhmət olmasa formanı yoxlayın və yenidən cəhd edin.',
   },
 } as const;
 
