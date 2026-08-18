@@ -281,9 +281,12 @@ sites stay up but **new deploys stop** until the next billing cycle — clearing
 the cache does not help, because there is nothing wrong with the cache.
 
 The build itself is a folder of static files, so any static host serves it.
-`public/_redirects` ships with the export and carries the single rule the app
-needs, in a format Netlify, Cloudflare Pages and Render all read — so moving
-host is a matter of pointing something new at the repository.
+The one rule the app needs is a fallback that sends every unknown path to
+`index.html`, because expo-router routes on the client. Each host spells it
+differently: `netlify.toml` on Netlify, and `not_found_handling` in
+`wrangler.jsonc` on Cloudflare Workers. There is deliberately no
+`public/_redirects` — Workers reads that file and rejects the rule as an
+infinite loop, which fails the deploy rather than the build.
 
 ### Cloudflare Pages — the free option with the most headroom
 
