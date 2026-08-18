@@ -46,3 +46,9 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# QA screenshot çıxışları — lokal olaraq yenidən yaradılır və 32 MB-dır.
+# Repoda saxlansa hər EAS build-i onları yenidən yükləyir.
+e2e/audit-*/
+e2e/palettes/
+e2e/screenshots/
