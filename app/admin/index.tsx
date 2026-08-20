@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import {
   BookOpen,
+  FileText,
   Flag,
   MessageSquare,
   Quote as QuoteIcon,
@@ -315,6 +316,11 @@ export default function AdminDashboardScreen() {
               value={String(content.quotes)}
               icon={<QuoteIcon size={16} color={theme.colors.fgMuted} />}
               onPress={() => router.push('/admin/quotes')}
+            />
+            <ListRow
+              title={t('admin.posts')}
+              icon={<FileText size={16} color={theme.colors.fgMuted} />}
+              onPress={() => router.push('/admin/posts' as never)}
             />
           </ListGroup>
 

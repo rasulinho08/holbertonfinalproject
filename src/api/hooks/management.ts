@@ -18,6 +18,9 @@ import type {
   Order,
   OrderStatus,
   Paginated,
+  Publication,
+  PublicationDraft,
+  PublicationSummary,
   PublisherStats,
   Quote,
   Report,
@@ -190,5 +193,79 @@ export function useAdminRemoveQuote() {
         client.invalidateQueries({ queryKey: ['admin'] }),
         client.invalidateQueries({ queryKey: qk.quotes.all }),
       ]),
+  });
+}
+
+/* ------------------------------ publications ------------------------------ */
+
+export function usePublications(enabled = true) {
+  return useInfiniteQuery({
+    queryKey: qk.posts.list,
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) =>
+      api.get<Paginated<PublicationSummary>>(Endpoints.posts.list, {
+        page: pageParam,
+        limit: DEFAULT_PAGE_SIZE,
+      }),
+    getNextPageParam: (last) => (last.meta.hasMore ? last.meta.page + 1 : undefined),
+    enabled,
+  });
+}
+
+export function usePublication(id: string, enabled = true) {
+  return useQuery({
+    queryKey: qk.posts.detail(id),
+    queryFn: () => api.get<Publication>(Endpoints.posts.detail(id)),
+    enabled,
+  });
+}
+
+export function useCreatePublication() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (draft: PublicationDraft) =>
+      api.post<Publication>(Endpoints.admin.createPost, draft),
+    onSuccess: () =>
+      Promise.all([
+        client.invalidateQueries({ queryKey: qk.posts.all }),
+        client.invalidateQueries({ queryKey: qk.admin.posts }),
+      ]),
+  });
+}
+
+export function useUpdatePublication() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...patch }: Partial<PublicationDraft> & { id: string }) =>
+      api.put<Publication>(Endpoints.admin.updatePost(id), patch),
+    onSuccess: (_, vars) =>
+      Promise.all([
+        client.invalidateQueries({ queryKey: qk.posts.all }),
+        client.invalidateQueries({ queryKey: qk.admin.posts }),
+        client.invalidateQueries({ queryKey: qk.posts.detail(vars.id) }),
+      ]),
+  });
+}
+
+export function useDeletePublication() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.delete(Endpoints.admin.removePost(id)),
+    onSuccess: () =>
+      Promise.all([
+        client.invalidateQueries({ queryKey: qk.posts.all }),
+        client.invalidateQueries({ queryKey: qk.admin.posts }),
+      ]),
+  });
+}
+
+/** Admin publication list (same list endpoint, queried with limit 100 and a separate cache key). */
+export function useAdminPublications(enabled = true) {
+  return useQuery({
+    queryKey: qk.admin.posts,
+    queryFn: () =>
+      api.get<Paginated<PublicationSummary>>(Endpoints.admin.posts, { limit: 100 }),
+    enabled,
+    select: (page) => page.data,
   });
 }
