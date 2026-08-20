@@ -115,5 +115,12 @@ export const qk = {
     reports: (status?: string) => ['admin', 'reports', status ?? 'all'] as const,
     reviews: ['admin', 'reviews'] as const,
     quotes: ['admin', 'quotes'] as const,
+    posts: ['admin', 'posts'] as const,
+  },
+
+  posts: {
+    all: ['posts'] as const,
+    list: ['posts', 'list'] as const,
+    detail: (id: string) => ['posts', 'detail', id] as const,
   },
 } as const;

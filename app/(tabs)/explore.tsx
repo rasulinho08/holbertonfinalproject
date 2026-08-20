@@ -1,28 +1,40 @@
 import React, { useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { ScanLine, Search, SlidersHorizontal, X } from 'lucide-react-native';
+import { ArrowRight, ScanLine, Search, SlidersHorizontal, X } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
-import { useBookLists, useBooks, useGenres, useSearchSuggestions } from '@/api/hooks';
+import {
+  useBookLists,
+  useBooks,
+  useGenres,
+  usePublications,
+  useSearchSuggestions,
+} from '@/api/hooks';
 import { useDebounced } from '@/lib/hooks';
 import { BookCard, BookCardSkeleton } from '@/components/book/BookCard';
 import { BookListCard } from '@/components/book/BookListCard';
 import { FilterSheet, type Filters, EMPTY_FILTERS, activeFilterCount } from '@/components/book/FilterSheet';
 import { AppHeader } from '@/components/layout/AppHeader';
+import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
+import { Card } from '@/components/ui/Card';
 import { Chip } from '@/components/ui/Chip';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { IconButton } from '@/components/ui/IconButton';
 import { Input } from '@/components/ui/Input';
+import { Skeleton } from '@/components/ui/Skeleton';
 import { Text } from '@/components/ui/Text';
+import { formatDate } from '@/lib/format';
+import { Image } from 'expo-image';
 
 const CARD_WIDTH = 150;
+const POST_CARD_WIDTH = 280;
 
 export default function ExploreScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const params = useLocalSearchParams<{ q?: string; genre?: string }>();
 
   const [query, setQuery] = useState(params.q ?? '');
@@ -47,6 +59,11 @@ export default function ExploreScreen() {
   const suggestion = booksQuery.data?.pages[0]?.meta.suggestion;
   const filterCount = activeFilterCount(filters);
   const browsing = !debouncedQuery && filterCount === 0;
+  const publicationsQuery = usePublications(browsing);
+  const publications = useMemo(
+    () => publicationsQuery.data?.pages.flatMap((page) => page.data) ?? [],
+    [publicationsQuery.data],
+  );
 
   return (
     <>
@@ -147,6 +164,13 @@ export default function ExploreScreen() {
           if (booksQuery.hasNextPage && !booksQuery.isFetchingNextPage) {
             void booksQuery.fetchNextPage();
           }
+          if (
+            browsing &&
+            publicationsQuery.hasNextPage &&
+            !publicationsQuery.isFetchingNextPage
+          ) {
+            void publicationsQuery.fetchNextPage();
+          }
         }}
         // The stagger resets every page, so an infinite scroll does not
         // accumulate an ever-longer delay on later rows.
@@ -179,6 +203,125 @@ export default function ExploreScreen() {
                     </Text>
                   </Pressable>
                 ))}
+              </View>
+            ) : null}
+
+            {browsing ? (
+              <View style={{ gap: theme.spacing.md }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: theme.spacing.lg,
+                  }}
+                >
+                  <Text variant="h3">{t('posts.title')}</Text>
+                </View>
+                {publicationsQuery.isLoading || !publicationsQuery.data ? (
+                  <FlatList
+                    horizontal
+                    data={[0, 1]}
+                    keyExtractor={(i) => String(i)}
+                    renderItem={() => (
+                      <View style={{ width: POST_CARD_WIDTH, marginLeft: theme.spacing.lg }}>
+                        <Skeleton height={220} radius={theme.radius.lg} />
+                      </View>
+                    )}
+                    contentContainerStyle={{ paddingRight: theme.spacing.lg }}
+                    showsHorizontalScrollIndicator={false}
+                  />
+                ) : publications.length === 0 ? null : (
+                  <FlatList
+                    horizontal
+                    data={publications}
+                    keyExtractor={(post) => post.id}
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{
+                      gap: theme.spacing.md,
+                      paddingHorizontal: theme.spacing.lg,
+                      paddingEnd: theme.spacing.lg,
+                    }}
+                    renderItem={({ item: post }) => (
+                      <Pressable
+                        accessibilityRole="button"
+                        onPress={() => router.push(`/post/${post.id}` as never)}
+                        style={({ pressed }) => ({
+                          width: POST_CARD_WIDTH,
+                          opacity: pressed ? 0.85 : 1,
+                        })}
+                      >
+                        <Card level={0} style={{ height: '100%', gap: theme.spacing.md }}>
+                          {post.coverUrl ? (
+                            <View
+                              style={{
+                                width: '100%',
+                                aspectRatio: 16 / 10,
+                                borderRadius: theme.radius.md,
+                                overflow: 'hidden',
+                                backgroundColor: theme.colors.subtle,
+                              }}
+                            >
+                              <Image
+                                source={{ uri: post.coverUrl }}
+                                style={{ width: '100%', height: '100%' }}
+                                contentFit="cover"
+                              />
+                            </View>
+                          ) : null}
+                          <View style={{ flex: 1, gap: theme.spacing.sm }}>
+                            <Text variant="bodyStrong" numberOfLines={2}>
+                              {post.title}
+                            </Text>
+                            <Text variant="small" color="fgMuted" numberOfLines={3}>
+                              {post.excerpt}
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                marginTop: 'auto',
+                              }}
+                            >
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  gap: theme.spacing.sm,
+                                }}
+                              >
+                                <Avatar
+                                  name={post.author.name}
+                                  uri={post.author.avatarUrl}
+                                  size={16}
+                                />
+                                <Text variant="caption" color="fgSubtle">
+                                  {formatDate(post.createdAt, locale)}
+                                </Text>
+                              </View>
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  gap: 2,
+                                }}
+                              >
+                                <Text variant="smallStrong" color="primary">
+                                  {t('posts.readMore')}
+                                </Text>
+                                <ArrowRight
+                                  size={14}
+                                  color={theme.colors.primary}
+                                />
+                              </View>
+                            </View>
+                          </View>
+                        </Card>
+                      </Pressable>
+                    )}
+                  />
+                )}
               </View>
             ) : null}
 
