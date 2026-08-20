@@ -1,0 +1,28 @@
+{
+  // Cloudflare Workers — statik sayt (Workers Static Assets).
+  //
+  // Ad Cloudflare-dəki Worker ilə eyni olmalıdır: build token yalnız həmin
+  // Worker-i dəyişə bilir, fərqli ad yazsan deploy icazə xətası ilə dayanır.
+  //
+  // Bu proyektdə server kodu yoxdur: Expo `dist/` qovluğuna adi statik fayllar
+  // yığır, Cloudflare də onları paylayır. Ona görə `main` sahəsi yoxdur — Worker
+  // skripti olmadan yalnız assets xidmət olunur.
+  "name": "holbertonfinalproject0",
+  "compatibility_date": "2026-08-18",
+
+  "assets": {
+    // `npm run build:web` buraya yazır. Deploy-dan əvvəl build işləməlidir,
+    // yoxsa wrangler boş qovluq göndərər.
+    "directory": "./dist",
+
+    // expo-router client-side router-dir: /profile kimi ünvan serverdə fayl
+    // kimi mövcud deyil. Bu olmasa səhifəni yeniləyəndə Cloudflare 404 qaytarır
+    // və sayt sınıq görünür — halbuki problem yalnız marşrutlaşdırmadadır.
+    //
+    // Qeyd: bir vaxtlar bunu `public/_redirects` faylı edirdi. Workers həmin
+    // faylı oxuyur, amma `/*  /index.html  200` qaydasını sonsuz dövrə sayıb
+    // deploy-u dayandırır. Fayl silindi; Netlify tərəfi `netlify.toml`-dakı
+    // eyni qayda ilə işləməyə davam edir.
+    "not_found_handling": "single-page-application"
+  }
+}
