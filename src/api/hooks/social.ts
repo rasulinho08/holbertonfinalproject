@@ -123,6 +123,20 @@ export function useToggleQuoteLike() {
 
 /* -------------------------------- reviews --------------------------------- */
 
+/**
+ * A single review, for the screen that shows it with its comment thread.
+ *
+ * The endpoint and the query key were both already here; only this hook was
+ * missing, which is why the comment button on a review had nowhere to go.
+ */
+export function useReview(id: string | undefined) {
+  return useQuery({
+    queryKey: qk.reviews.detail(id ?? ''),
+    queryFn: () => api.get<Review>(Endpoints.reviews.detail(id!)),
+    enabled: !!id,
+  });
+}
+
 export interface CreateReviewInput {
   bookId: string;
   rating: number;
