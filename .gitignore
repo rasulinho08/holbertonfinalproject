@@ -3,6 +3,8 @@ node_modules/
 
 # expo
 .expo/
+# DO NOT COMMIT: simulated home dir — contains browser profile, cookies, passwords, history, npm cache
+.expo-home/
 dist/
 web-build/
 expo-env.d.ts
@@ -28,19 +30,42 @@ ios/
 # typescript
 *.tsbuildinfo
 
+# test coverage
+coverage/
+
+# AI / IDE tooling
+.claude/
+
+# certificates / signing keys (never commit)
+*.pem
+*.pfx
+*.crt
+*.cert
+*.keystore
+
+# backups
+*.bak
+*.backup
+*.orig
+
 # catalogue build cache — raw Open Library responses, rebuilt on demand.
 # `src/api/mock/catalog.json` (the output) IS committed.
 scripts/.ol-cache.json
 
-# debug
+# logs (generic)
+*.log
 npm-debug.*
 yarn-debug.*
 yarn-error.*
 .pnpm-debug.*
+lerna-debug.log*
 
 # macOS / Windows
 .DS_Store
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 
 # editors
 .idea/
