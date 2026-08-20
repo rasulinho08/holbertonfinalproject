@@ -200,5 +200,14 @@ export const Endpoints = {
     removeReview: (id: string) => `/admin/reviews/${id}`,
     quotes: '/admin/quotes',
     removeQuote: (id: string) => `/admin/quotes/${id}`,
+    posts: '/admin/posts',
+    createPost: '/admin/posts',
+    updatePost: (id: string) => `/admin/posts/${id}`,
+    removePost: (id: string) => `/admin/posts/${id}`,
+  },
+
+  posts: {
+    list: '/posts',
+    detail: (id: string) => `/posts/${id}`,
   },
 } as const;

@@ -13,7 +13,10 @@
     { "key": "shelfId", "value": "" },
     { "key": "quoteId", "value": "" },
     { "key": "reviewId", "value": "" },
-    { "key": "orderId", "value": "" }
+    { "key": "orderId", "value": "" },
+    { "key": "loginEmail", "value": "leyla@kitabdostu.az" },
+    { "key": "loginPassword", "value": "SET-THIS-MATCHES-SEED_PASSWORD" },
+    { "key": "registerPassword", "value": "SET-A-STRONG-PASSWORD-FOR-REGISTER" }
   ],
   "auth": {
     "type": "bearer",
@@ -56,7 +59,7 @@
             "url": "{{baseUrl}}/auth/register",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Test İstifadəçi\",\n  \"username\": \"test_user\",\n  \"email\": \"test@kitabdostu.az\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"name\": \"Test İstifadəçi\",\n  \"username\": \"test_user\",\n  \"email\": \"test@kitabdostu.az\",\n  \"password\": \"{{registerPassword}}\"\n}"
             }
           }
         },
@@ -83,7 +86,7 @@
             "url": "{{baseUrl}}/auth/login",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"leyla@kitabdostu.az\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"{{loginEmail}}\",\n  \"password\": \"{{loginPassword}}\"\n}"
             }
           }
         },
