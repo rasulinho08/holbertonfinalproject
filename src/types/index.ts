@@ -624,6 +624,43 @@ export interface BookDraft {
   stock: number;
 }
 
+/* ------------------------------ publications ------------------------------ */
+
+export interface PublicationBook {
+  bookId: ID;
+  book: Pick<Book, 'id' | 'title' | 'authorName' | 'coverUrl'>;
+  note: string | null;
+  position: number;
+}
+
+export interface PublicationSummary {
+  id: ID;
+  title: string;
+  excerpt: string;
+  coverUrl: string | null;
+  author: UserSummary;
+  bookCount: number;
+  createdAt: ISODate;
+}
+
+export interface Publication {
+  id: ID;
+  title: string;
+  content: string;
+  coverUrl: string | null;
+  author: UserSummary;
+  recommendedBooks: PublicationBook[];
+  createdAt: ISODate;
+  updatedAt: ISODate;
+}
+
+export interface PublicationDraft {
+  title: string;
+  content: string;
+  coverUrl: string | null;
+  recommendedBooks?: { bookId: ID; note?: string | null }[];
+}
+
 /* -------------------------------- auth ----------------------------------- */
 
 export interface AuthSession {
