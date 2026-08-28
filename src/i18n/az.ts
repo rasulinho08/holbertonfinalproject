@@ -154,6 +154,10 @@ export const az = {
     streakDays: '{{count}} gün',
     emptyReading: 'Hazırda oxuduğun kitab yoxdur',
     emptyReadingHint: 'Kitab tap və “Oxuyuram” rəfinə əlavə et.',
+    pickForMe: 'Mənə kitab seç',
+    pickForMeHint: 'Seçdiyin janr və müəlliflərdən təsadüfi bir kitab',
+    pickAnother: 'Başqasını seç',
+    openBook: 'Kitaba bax',
   },
 
   explore: {
