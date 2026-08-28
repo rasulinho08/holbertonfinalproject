@@ -153,6 +153,10 @@ export const en: Translated<Dictionary> = {
     streakDays: '{{count}} days',
     emptyReading: 'You are not reading anything yet',
     emptyReadingHint: 'Find a book and add it to “Currently reading”.',
+    pickForMe: 'Pick a book for me',
+    pickForMeHint: 'A random title from the genres and authors you chose',
+    pickAnother: 'Pick another',
+    openBook: 'Open book',
   },
 
   explore: {

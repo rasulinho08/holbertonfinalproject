@@ -8,6 +8,7 @@ import { useCurrentUser } from '@/store/auth';
 import {
   useFriendsFeed,
   useQuotes,
+  useRandomRecommendation,
   useRecommendedBooks,
   useShelfBooks,
   useShelves,
@@ -16,9 +17,11 @@ import {
   useTrendingBooks,
 } from '@/api/hooks';
 import { readingPercent } from '@/lib/format';
+import { BookCard, BookCardSkeleton } from '@/components/book/BookCard';
 import { BookCover } from '@/components/book/BookCover';
 import { BookRail } from '@/components/book/BookRail';
 import { ProgressSheet } from '@/components/book/ProgressSheet';
+import { RandomPickPanel } from '@/components/book/RandomPickPanel';
 import { ActivityRow } from '@/components/profile/ActivityRow';
 import { GoalCard, StreakCard } from '@/components/profile/StatCards';
 import { QuoteCard } from '@/components/quote/QuoteCard';
@@ -45,6 +48,7 @@ export default function HomeScreen() {
 
   const { data: trending, isLoading: trendingLoading } = useTrendingBooks();
   const { data: recommended, isLoading: recommendedLoading } = useRecommendedBooks();
+  const randomPick = useRandomRecommendation();
   const { data: streak } = useStreak();
   const { data: feed } = useFriendsFeed();
   const quotesQuery = useQuotes({ sort: 'newest' });
@@ -135,6 +139,16 @@ export default function HomeScreen() {
             </Pressable>
           }
         />
+
+        <Section title={t('home.pickForMe')}>
+          <RandomPickPanel
+            book={randomPick.data ?? null}
+            loading={randomPick.isPending}
+            error={randomPick.isError}
+            onPick={() => randomPick.mutate(randomPick.data?.id)}
+            onOpen={(book) => router.push(`/book/${book.id}`)}
+          />
+        </Section>
 
         <BookRail
           title={t('home.forYou')}

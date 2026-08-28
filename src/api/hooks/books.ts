@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../client';
 import { DEFAULT_PAGE_SIZE } from '../config';
 import { Endpoints } from '../endpoints';
@@ -67,6 +67,16 @@ export function useRecommendedBooks() {
     queryKey: qk.books.recommendations,
     queryFn: () => api.get<Paginated<Book>>(Endpoints.books.recommendations, { limit: 12 }),
     select: (page) => page.data,
+  });
+}
+
+/** One random catalogue book matching the signed-in reader's onboarding prefs. */
+export function useRandomRecommendation() {
+  return useMutation({
+    mutationFn: (excludeBookId?: string) =>
+      api.get<Book>(Endpoints.books.randomRecommendation, {
+        exclude: excludeBookId,
+      }),
   });
 }
 
