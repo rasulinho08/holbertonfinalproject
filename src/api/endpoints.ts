@@ -50,6 +50,7 @@ export const Endpoints = {
     quotes: (id: string) => `/books/${id}/quotes`,
     trending: '/books/trending',
     recommendations: '/books/recommendations',
+    randomRecommendation: '/books/random-recommendation',
     newReleases: '/books/new-releases',
   },
 
