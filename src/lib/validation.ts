@@ -44,6 +44,13 @@ export function username(value: string): FieldError {
   return /^[a-z0-9_]{3,20}$/.test(cleaned) ? null : 'errors.invalidUsername';
 }
 
+/** Optional absolute URL. Empty string is treated as "cleared" and passes. */
+export function url(value: string): FieldError {
+  const cleaned = value.trim();
+  if (!cleaned) return null;
+  return /^(https?|mailto):\/\/[^\s]+$/i.test(cleaned) ? null : 'errors.invalidUrl';
+}
+
 export function maxLength(value: string, limit: number): FieldError {
   return value.length > limit ? 'errors.tooLong' : null;
 }

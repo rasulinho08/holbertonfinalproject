@@ -301,6 +301,7 @@ paths:
                 username: { type: string }
                 bio: { type: string, maxLength: 240 }
                 avatarUrl: { type: string, nullable: true }
+                website: { type: string, nullable: true, maxLength: 500 }
       responses:
         '200':
           description: Updated profile
@@ -2150,6 +2151,7 @@ components:
         email: { type: string, format: email }
         avatarUrl: { type: string, nullable: true }
         bio: { type: string, nullable: true }
+        website: { type: string, nullable: true }
         role: { type: string, enum: [user, publisher, admin] }
         createdAt: { type: string, format: date-time }
         followersCount: { type: integer }
