@@ -65,6 +65,7 @@ export interface User {
   email: string;
   avatarUrl: string | null;
   bio: string | null;
+  website: string | null;
   role: UserRole;
   createdAt: ISODate;
   followersCount: number;

@@ -25,7 +25,7 @@ interface AuthState {
   deleteAccount: () => Promise<void>;
   refresh: () => Promise<void>;
   setUser: (user: User) => void;
-  updateProfile: (patch: Partial<Pick<User, 'name' | 'bio' | 'username' | 'avatarUrl'>>) => Promise<User>;
+  updateProfile: (patch: Partial<Pick<User, 'name' | 'bio' | 'username' | 'avatarUrl' | 'website'>>) => Promise<User>;
   savePreferences: (input: {
     favoriteGenres: GenreSlug[];
     favoriteAuthorIds: string[];

@@ -61,6 +61,7 @@ CREATE TABLE users (
   password_hash     text,                    -- NULL for OAuth-only accounts
   avatar_url        text,
   bio               text,
+  website           text,
   role              user_role NOT NULL DEFAULT 'user',
   publisher_id      uuid REFERENCES publishers(id) ON DELETE SET NULL,
   wallet_balance    numeric(10,2) NOT NULL DEFAULT 0 CHECK (wallet_balance >= 0),
