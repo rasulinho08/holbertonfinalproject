@@ -1,7 +1,7 @@
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { Linking, Pressable, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Award, CalendarDays, ChevronRight } from 'lucide-react-native';
+import { Award, CalendarDays, ChevronRight, ExternalLink } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import {
@@ -43,6 +43,8 @@ export function ProfileView({ user, isMe }: ProfileViewProps) {
   const { data: activity } = useUserActivity(user.username);
   const { data: readingStats } = useReadingStats(30);
   const toggleFollow = useToggleFollow();
+
+  const website = user.website;
 
   const earned = badges?.filter((b) => b.earned) ?? [];
   const pieData = user.stats.genreDistribution.slice(0, 6).map((entry) => ({
@@ -86,6 +88,19 @@ export function ProfileView({ user, isMe }: ProfileViewProps) {
         <Text variant="body" color="fgMuted">
           {user.bio}
         </Text>
+      ) : null}
+
+      {website ? (
+        <Pressable
+          accessibilityRole="link"
+          onPress={() => Linking.openURL(website)}
+          style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}
+        >
+          <ExternalLink size={14} color={theme.colors.fgSubtle} />
+          <Text variant="body" color="primary" numberOfLines={1}>
+            {website}
+          </Text>
+        </Pressable>
       ) : null}
 
       {!isMe ? (

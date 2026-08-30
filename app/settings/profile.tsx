@@ -18,6 +18,13 @@ import { useToast } from '@/components/ui/Toast';
 
 const BIO_LIMIT = 240;
 
+/** Folds free text into an absolute URL: "github.com/e" → "https://github.com/e". */
+function normalizeWebsite(value: string): string {
+  const cleaned = value.trim();
+  if (!cleaned) return '';
+  return /^[a-z][a-z0-9+.-]*:\/\//i.test(cleaned) ? cleaned : `https://${cleaned}`;
+}
+
 export default function ProfileSettingsScreen() {
   const theme = useTheme();
   const router = useRouter();
@@ -31,6 +38,7 @@ export default function ProfileSettingsScreen() {
   const [name, setName] = useState(user?.name ?? '');
   const [username, setUsername] = useState(user?.username ?? '');
   const [bio, setBio] = useState(user?.bio ?? '');
+  const [website, setWebsite] = useState(user?.website ?? '');
   const [avatarUrl, setAvatarUrl] = useState<string | null>(user?.avatarUrl ?? null);
   const [goal, setGoalValue] = useState(String(user?.goal.target ?? 24));
   const [errors, setErrors] = useState<Record<string, validate.FieldError>>({});
@@ -47,17 +55,25 @@ export default function ProfileSettingsScreen() {
   };
 
   const save = async () => {
+    const websiteValue = normalizeWebsite(website);
     const next = {
       name: validate.required(name),
       username: validate.username(username),
       bio: validate.maxLength(bio, BIO_LIMIT),
+      website: validate.url(websiteValue),
     };
     setErrors(next);
     if (!validate.isValid(next)) return;
 
     setBusy(true);
     try {
-      await updateProfile({ name: name.trim(), username: username.trim(), bio, avatarUrl });
+      await updateProfile({
+        name: name.trim(),
+        username: username.trim(),
+        bio,
+        avatarUrl,
+        website: websiteValue || null,
+      });
       const target = Number(goal);
       if (Number.isFinite(target) && target > 0 && target !== user?.goal.target) {
         await setGoal(target);
@@ -110,6 +126,17 @@ export default function ProfileSettingsScreen() {
             multiline
             placeholder={t('profile.bioPlaceholder')}
             hint={`${bio.length}/${BIO_LIMIT}`}
+          />
+          <Input
+            label={t('profile.website')}
+            value={website}
+            onChangeText={(v) => setWebsite(v.trimStart())}
+            error={errors.website ? t(errors.website) : undefined}
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="url"
+            inputMode="url"
+            placeholder={t('profile.websitePlaceholder')}
           />
           <Input
             label={t('profile.yearlyGoal')}

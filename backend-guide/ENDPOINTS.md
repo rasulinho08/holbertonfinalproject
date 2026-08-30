@@ -140,6 +140,7 @@ The secret is stored but 2FA is **not** active until `/auth/2fa/verify` succeeds
   "email": "leyla@example.com",      // omitted for other users' profiles
   "avatarUrl": null,
   "bio": "Kitab oxumaq — başqasının həyatını yaşamaqdır.",
+  "website": null,
   "role": "user",                     // user | publisher | admin
   "createdAt": "2023-12-17T09:00:00.000Z",
   "followersCount": 875,
@@ -170,8 +171,9 @@ leaderboards: `{ id, username, name, avatarUrl }`.
 
 ### PATCH `/users/me`
 
-Accepts any subset of `{ name, username, bio, avatarUrl }`. Returns the updated
-`User`. `409 USERNAME_TAKEN` if the username is in use.
+Accepts any subset of `{ name, username, bio, avatarUrl, website }`. Returns the updated
+`User`. `409 USERNAME_TAKEN` if the username is in use. `website`/`bio`/`avatarUrl` accept
+`null` to clear the field, and must be absolute URLs (`https://…`).
 
 ### PATCH `/users/me/goal`
 
