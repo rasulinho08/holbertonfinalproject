@@ -229,12 +229,46 @@ Merged, newest-first activity of everyone the caller follows. `ActivityItem`:
 | GET | `/books/:id/quotes` | public | Quotes from a book |
 | GET | `/books/trending` | public | Highest engagement |
 | GET | `/books/new-releases` | public | Newest publication year |
+| GET | `/books/most-read` | public | Most read by distinct shelf readers |
+| GET | `/books/best-selling` | public | Most sold by units across all orders |
 | GET | `/books/recommendations` | auth | Personalised |
 | GET | `/search/suggest` | public | Type-ahead |
+| GET | `/authors/most-read` | public | Most read authors by distinct shelf readers |
 | GET | `/authors/:id` | public | Author detail |
 | GET | `/authors/:id/books` | public | Books by author |
 | POST/DELETE | `/authors/:id/follow` | auth | Follow an author |
 | GET | `/genres` | public | Genre list with counts |
+
+### GET `/books/most-read`
+
+Returns books ranked by distinct readers whose shelf status is `reading` or
+`read`. The response is a flat array of `Book` objects (no pagination), each
+decorated with a `readers` count. Query: `limit` (default `10`, max `50`).
+
+```jsonc
+[ { "id": "b_1", "title": "Əli və Nino", ..., "readers": 412 } ]
+```
+
+### GET `/books/best-selling`
+
+Returns books ranked by total quantity sold across all non-cancelled orders.
+Cancelled orders and books with null `book_id` (orphan lines) are excluded.
+The response is a flat array of `Book` objects, each decorated with a `units`
+count. Query: `limit` (default `10`, max `50`).
+
+```jsonc
+[ { "id": "b_1", "title": "Əli və Nino", ..., "units": 87 } ]
+```
+
+### GET `/authors/most-read`
+
+Returns authors ranked by distinct readers of their books (shelf status
+`reading` or `read`). The response is a flat array of `Author` objects, each
+decorated with a `readers` count. Query: `limit` (default `10`, max `50`).
+
+```jsonc
+[ { "id": "au_1", "name": "Qurban Səid", "slug": "...", ..., "readers": 530 } ]
+```
 
 ### `Book` object
 

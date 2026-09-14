@@ -20,6 +20,8 @@ export interface BookCardProps {
   showPrice?: boolean;
   /** Shows a reading-progress bar for books on the "reading" shelf. */
   showProgress?: boolean;
+  /** Optional caption under the price line, e.g. "412 readers". */
+  stat?: string | null;
   /** Position in its rail or grid; staggers the entrance animation. */
   index?: number;
   style?: ViewStyle;
@@ -38,6 +40,7 @@ export function BookCard({
   width = 118,
   showPrice = true,
   showProgress = false,
+  stat,
   index = 0,
   style,
 }: BookCardProps) {
@@ -115,18 +118,25 @@ export function BookCard({
             </Text>
           </View>
         ) : (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: theme.spacing.xs,
-            }}
-          >
-            <RatingStars value={book.ratingAverage} size={11} compact />
-            {showPrice ? (
-              <Text variant="smallStrong" color="primary" numberOfLines={1}>
-                {formatPrice(book.price, locale)}
+          <View style={{ gap: 4 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: theme.spacing.xs,
+              }}
+            >
+              <RatingStars value={book.ratingAverage} size={11} compact />
+              {showPrice ? (
+                <Text variant="smallStrong" color="primary" numberOfLines={1}>
+                  {formatPrice(book.price, locale)}
+                </Text>
+              ) : null}
+            </View>
+            {stat ? (
+              <Text variant="caption" color="fgSubtle" numberOfLines={1}>
+                {stat}
               </Text>
             ) : null}
           </View>

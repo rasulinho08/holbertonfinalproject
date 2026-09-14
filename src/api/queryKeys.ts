@@ -30,6 +30,8 @@ export const qk = {
     trending: ['books', 'trending'] as const,
     recommendations: ['books', 'recommendations'] as const,
     newReleases: ['books', 'new-releases'] as const,
+    mostRead: ['books', 'most-read'] as const,
+    bestSelling: ['books', 'best-selling'] as const,
     reviews: (id: string) => ['books', id, 'reviews'] as const,
     quotes: (id: string) => ['books', id, 'quotes'] as const,
   },
@@ -41,6 +43,7 @@ export const qk = {
   authors: {
     detail: (id: string) => ['authors', id] as const,
     books: (id: string) => ['authors', id, 'books'] as const,
+    mostRead: ['authors', 'most-read'] as const,
   },
 
   genres: ['genres'] as const,
