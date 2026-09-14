@@ -64,6 +64,7 @@ export interface User {
   name: string;
   email: string;
   avatarUrl: string | null;
+  coverPhotoUrl: string | null;
   bio: string | null;
   website: string | null;
   role: UserRole;
@@ -326,6 +327,18 @@ export interface BuddyMember {
   progressPage: number;
 }
 
+export type BuddyInvitationStatus = 'pending' | 'accepted' | 'declined';
+
+export interface BuddyInvitation {
+  id: ID;
+  buddyReadId: ID;
+  inviter: UserSummary;
+  invitee: UserSummary;
+  status: BuddyInvitationStatus;
+  createdAt: ISODate;
+  respondedAt: ISODate | null;
+}
+
 export interface BuddyRead {
   id: ID;
   name: string;
@@ -335,6 +348,8 @@ export interface BuddyRead {
   members: BuddyMember[];
   targetDate: ISODate | null;
   messagesCount: number;
+  /** The viewer's invitation to this group, when one exists. */
+  invitation?: { id: ID; status: BuddyInvitationStatus } | null;
   createdAt: ISODate;
 }
 

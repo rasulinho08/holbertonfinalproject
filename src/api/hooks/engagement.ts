@@ -5,12 +5,14 @@ import { qk } from '../queryKeys';
 import type {
   AppNotification,
   Badge,
+  BuddyInvitation,
   BuddyMessage,
   BuddyRead,
   LeaderboardEntry,
   LeaderboardMetric,
   LeaderboardPeriod,
   Paginated,
+  UserSummary,
 } from '@/types';
 
 /* ------------------------------ gamification ------------------------------ */
@@ -179,5 +181,54 @@ export function useUpdateBuddyProgress() {
     mutationFn: ({ id, page }: { id: string; page: number }) =>
       api.patch<BuddyRead>(Endpoints.buddyReads.progress(id), { page }),
     onSuccess: (buddy) => client.setQueryData(qk.buddyReads.detail(buddy.id), buddy),
+  });
+}
+
+/* --------------------------- buddy read invites --------------------------- */
+
+/** Friends the signed-in reader can still invite to a group. */
+export function useInvitableFriends(id: string | undefined, search = '') {
+  return useQuery({
+    queryKey: [...qk.buddyReads.invitableFriends(id ?? ''), search] as const,
+    queryFn: () =>
+      api.get<{ user: UserSummary }[]>(Endpoints.buddyReads.invitableFriends(id!), {
+        ...(search ? { q: search } : {}),
+      }),
+    enabled: !!id,
+    select: (data) => data.map((d) => d.user),
+  });
+}
+
+export function useInviteToBuddyRead() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, inviteeId }: { id: string; inviteeId: string }) =>
+      api.post<BuddyInvitation>(Endpoints.buddyReads.invitations(id), { inviteeId }),
+    onSuccess: (_invite, { id }) =>
+      Promise.all([
+        client.invalidateQueries({ queryKey: qk.buddyReads.detail(id) }),
+        client.invalidateQueries({ queryKey: qk.buddyReads.invitableFriends(id) }),
+      ]),
+  });
+}
+
+export function useAcceptBuddyInvitation() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, invitationId }: { id: string; invitationId: string }) =>
+      api.post<BuddyRead>(Endpoints.buddyReads.acceptInvitation(id, invitationId)),
+    onSuccess: (buddy) => {
+      client.setQueryData(qk.buddyReads.detail(buddy.id), buddy);
+      return client.invalidateQueries({ queryKey: qk.buddyReads.all });
+    },
+  });
+}
+
+export function useDeclineBuddyInvitation() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, invitationId }: { id: string; invitationId: string }) =>
+      api.post<void>(Endpoints.buddyReads.declineInvitation(id, invitationId)),
+    onSuccess: (_res, { id }) => client.invalidateQueries({ queryKey: qk.buddyReads.detail(id) }),
   });
 }
