@@ -61,10 +61,18 @@ export function ProfileView({ user, isMe }: ProfileViewProps) {
 
   return (
     <View style={{ gap: theme.spacing['2xl'] }}>
-      {/* identity */}
+      {/* identity — LinkedIn-style cover + overlapping avatar */}
       <View style={{ gap: theme.spacing.md }}>
-        {user.coverPhotoUrl ? (
-          <View style={{ height: 150, borderRadius: theme.radius.xl, overflow: 'hidden' }}>
+        <View
+          style={{
+            borderRadius: theme.radius.xl,
+            overflow: 'hidden',
+            aspectRatio: 3,
+            minHeight: 120,
+            maxHeight: 220,
+          }}
+        >
+          {user.coverPhotoUrl ? (
             <Image
               source={{ uri: user.coverPhotoUrl }}
               style={{ width: '100%', height: '100%' }}
@@ -73,40 +81,33 @@ export function ProfileView({ user, isMe }: ProfileViewProps) {
               cachePolicy="memory-disk"
               accessibilityLabel={user.name}
             />
-          </View>
-        ) : null}
+          ) : (
+            <View style={{ flex: 1, backgroundColor: theme.colors.primarySoft }} />
+          )}
+        </View>
 
         <View
           style={{
             flexDirection: 'row',
             gap: theme.spacing.lg,
             alignItems: 'center',
-            marginTop: user.coverPhotoUrl ? -36 : 0,
+            marginTop: -36,
           }}
         >
-          {user.coverPhotoUrl ? (
-            <View
-              style={{
-                borderRadius: 45,
-                backgroundColor: theme.colors.card,
-                padding: 3,
-              }}
-            >
-              <Avatar
-                name={user.name}
-                uri={user.avatarUrl}
-                size={84}
-                ring={user.stats.readToday}
-              />
-            </View>
-          ) : (
+          <View
+            style={{
+              borderRadius: 45,
+              backgroundColor: theme.colors.bg,
+              padding: 3,
+            }}
+          >
             <Avatar
               name={user.name}
               uri={user.avatarUrl}
-              size={72}
+              size={84}
               ring={user.stats.readToday}
             />
-          )}
+          </View>
           <View style={{ flex: 1, gap: 3 }}>
             <Text variant="h1" numberOfLines={1}>
               {user.name}
