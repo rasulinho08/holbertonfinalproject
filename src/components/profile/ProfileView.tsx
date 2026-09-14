@@ -1,6 +1,7 @@
 import React from 'react';
 import { Linking, Pressable, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Image } from 'expo-image';
 import { Award, CalendarDays, ChevronRight, ExternalLink } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
@@ -61,25 +62,64 @@ export function ProfileView({ user, isMe }: ProfileViewProps) {
   return (
     <View style={{ gap: theme.spacing['2xl'] }}>
       {/* identity */}
-      <View style={{ flexDirection: 'row', gap: theme.spacing.lg, alignItems: 'center' }}>
-        <Avatar
-          name={user.name}
-          uri={user.avatarUrl}
-          size={72}
-          ring={user.stats.readToday}
-        />
-        <View style={{ flex: 1, gap: 3 }}>
-          <Text variant="h1" numberOfLines={1}>
-            {user.name}
-          </Text>
-          <Text variant="small" color="fgSubtle">
-            @{user.username}
-          </Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-            <CalendarDays size={12} color={theme.colors.fgSubtle} />
-            <Text variant="caption" color="fgSubtle">
-              {t('profile.joined', { date: formatDate(user.createdAt, locale) })}
+      <View style={{ gap: theme.spacing.md }}>
+        {user.coverPhotoUrl ? (
+          <View style={{ height: 150, borderRadius: theme.radius.xl, overflow: 'hidden' }}>
+            <Image
+              source={{ uri: user.coverPhotoUrl }}
+              style={{ width: '100%', height: '100%' }}
+              contentFit="cover"
+              transition={theme.duration(theme.motion.base)}
+              cachePolicy="memory-disk"
+              accessibilityLabel={user.name}
+            />
+          </View>
+        ) : null}
+
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: theme.spacing.lg,
+            alignItems: 'center',
+            marginTop: user.coverPhotoUrl ? -36 : 0,
+          }}
+        >
+          {user.coverPhotoUrl ? (
+            <View
+              style={{
+                borderRadius: 45,
+                backgroundColor: theme.colors.card,
+                padding: 3,
+              }}
+            >
+              <Avatar
+                name={user.name}
+                uri={user.avatarUrl}
+                size={84}
+                ring={user.stats.readToday}
+              />
+            </View>
+          ) : (
+            <Avatar
+              name={user.name}
+              uri={user.avatarUrl}
+              size={72}
+              ring={user.stats.readToday}
+            />
+          )}
+          <View style={{ flex: 1, gap: 3 }}>
+            <Text variant="h1" numberOfLines={1}>
+              {user.name}
             </Text>
+            <Text variant="small" color="fgSubtle">
+              @{user.username}
+            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+              <CalendarDays size={12} color={theme.colors.fgSubtle} />
+              <Text variant="caption" color="fgSubtle">
+                {t('profile.joined', { date: formatDate(user.createdAt, locale) })}
+              </Text>
+            </View>
           </View>
         </View>
       </View>

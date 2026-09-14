@@ -18,7 +18,7 @@ export function AuthHeader({ title, subtitle }: { title: string; subtitle?: stri
         <Text variant="h2">KitabDostu</Text>
       </View>
 
-      <Text variant="display" style={{ marginTop: theme.spacing.md }}>
+      <Text variant="display" color="primary" style={{ marginTop: theme.spacing.md }}>
         {title}
       </Text>
       {subtitle ? (

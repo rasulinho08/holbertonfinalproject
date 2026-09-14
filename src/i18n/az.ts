@@ -291,6 +291,7 @@ export const az = {
     website: 'Vebsayt / link',
     websitePlaceholder: 'https://github.com/…',
     avatar: 'Profil şəkli',
+    coverPhoto: 'Örtük şəkli',
     genreDistribution: 'Janr bölgüsü',
     yearlyGoal: 'İllik hədəf',
     goalRemaining: '{{count}} kitab qalıb',
@@ -600,6 +601,14 @@ export const az = {
     emptyHint: 'Eyni kitabı bir dostla oxumağa başla.',
     targetDate: 'Hədəf bitirmə tarixi',
     created: 'Qrup yaradıldı',
+    inviteSent: 'Dəvət göndərildi',
+    inviteSearch: 'Dost axtar…',
+    inviteSend: 'Dəvət et',
+    invitationPending: 'Səni bu qrupa dəvət ediblər.',
+    acceptInvitation: 'Qəbul et',
+    declineInvitation: 'İmtina et',
+    noInvitableFriends: 'Dəvət ediləcək dost yoxdur',
+    noInvitableFriendsHint: 'İzlədiyin dostların hamısı artıq buradadır.',
   },
 
   session: {

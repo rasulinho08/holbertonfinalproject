@@ -290,6 +290,7 @@ export const en: Translated<Dictionary> = {
     website: 'Website / link',
     websitePlaceholder: 'https://github.com/…',
     avatar: 'Profile photo',
+    coverPhoto: 'Cover photo',
     genreDistribution: 'Genre distribution',
     yearlyGoal: 'Yearly goal',
     goalRemaining: '{{count}} books to go',
@@ -599,6 +600,14 @@ export const en: Translated<Dictionary> = {
     emptyHint: 'Start reading the same book with a friend.',
     targetDate: 'Target finish date',
     created: 'Group created',
+    inviteSent: 'Invitation sent',
+    inviteSearch: 'Search friends…',
+    inviteSend: 'Invite',
+    invitationPending: 'You have been invited to this group.',
+    acceptInvitation: 'Accept',
+    declineInvitation: 'Decline',
+    noInvitableFriends: 'No friends to invite',
+    noInvitableFriendsHint: 'Everyone you follow is already in here.',
   },
 
   session: {

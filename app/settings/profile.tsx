@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import { Image } from 'expo-image';
 import { Camera } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
@@ -40,6 +41,7 @@ export default function ProfileSettingsScreen() {
   const [bio, setBio] = useState(user?.bio ?? '');
   const [website, setWebsite] = useState(user?.website ?? '');
   const [avatarUrl, setAvatarUrl] = useState<string | null>(user?.avatarUrl ?? null);
+  const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(user?.coverPhotoUrl ?? null);
   const [goal, setGoalValue] = useState(String(user?.goal.target ?? 24));
   const [errors, setErrors] = useState<Record<string, validate.FieldError>>({});
   const [busy, setBusy] = useState(false);
@@ -52,6 +54,16 @@ export default function ProfileSettingsScreen() {
       quality: 0.6,
     });
     if (!result.canceled && result.assets?.[0]) setAvatarUrl(result.assets[0].uri);
+  };
+
+  const pickCover = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [3, 1],
+      quality: 0.7,
+    });
+    if (!result.canceled && result.assets?.[0]) setCoverPhotoUrl(result.assets[0].uri);
   };
 
   const save = async () => {
@@ -72,6 +84,7 @@ export default function ProfileSettingsScreen() {
         username: username.trim(),
         bio,
         avatarUrl,
+        coverPhotoUrl,
         website: websiteValue || null,
       });
       const target = Number(goal);
@@ -92,16 +105,43 @@ export default function ProfileSettingsScreen() {
       <AppHeader back title={t('settings.editProfile')} />
 
       <Screen keyboardAware>
-        <View style={{ alignItems: 'center', gap: theme.spacing.md }}>
-          <Avatar name={name || '?'} uri={avatarUrl} size={92} />
-          <Button
-            title={t('profile.avatar')}
-            variant="outline"
-            size="sm"
-            fullWidth={false}
-            icon={<Camera size={15} color={theme.colors.fg} />}
-            onPress={pickAvatar}
-          />
+        <View style={{ gap: theme.spacing.lg }}>
+          <View style={{ gap: theme.spacing.md, alignItems: 'center' }}>
+            {coverPhotoUrl ? (
+              <View style={{ height: 140, width: '100%', borderRadius: theme.radius.xl, overflow: 'hidden' }}>
+                <Image
+                  source={{ uri: coverPhotoUrl }}
+                  style={{ width: '100%', height: '100%' }}
+                  contentFit="cover"
+                  transition={theme.duration(theme.motion.base)}
+                  cachePolicy="memory-disk"
+                  accessibilityLabel={t('profile.coverPhoto')}
+                />
+              </View>
+            ) : null}
+
+            <View style={{ alignItems: 'center', gap: theme.spacing.md }}>
+              <Avatar name={name || '?'} uri={avatarUrl} size={92} />
+              <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
+                <Button
+                  title={t('profile.avatar')}
+                  variant="outline"
+                  size="sm"
+                  fullWidth={false}
+                  icon={<Camera size={15} color={theme.colors.fg} />}
+                  onPress={pickAvatar}
+                />
+                <Button
+                  title={t('profile.coverPhoto')}
+                  variant="outline"
+                  size="sm"
+                  fullWidth={false}
+                  icon={<Camera size={15} color={theme.colors.fg} />}
+                  onPress={pickCover}
+                />
+              </View>
+            </View>
+          </View>
         </View>
 
         <View style={{ gap: theme.spacing.md }}>

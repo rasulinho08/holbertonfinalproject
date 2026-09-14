@@ -82,6 +82,7 @@ export const qk = {
     all: ['buddy-reads'] as const,
     detail: (id: string) => ['buddy-reads', id] as const,
     messages: (id: string) => ['buddy-reads', id, 'messages'] as const,
+    invitableFriends: (id: string) => ['buddy-reads', id, 'invitable-friends'] as const,
   },
 
   cart: ['cart'] as const,

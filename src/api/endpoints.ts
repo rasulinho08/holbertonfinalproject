@@ -136,6 +136,12 @@ export const Endpoints = {
     leave: (id: string) => `/buddy-reads/${id}/members/me`,
     messages: (id: string) => `/buddy-reads/${id}/messages`,
     progress: (id: string) => `/buddy-reads/${id}/progress`,
+    invitableFriends: (id: string) => `/buddy-reads/${id}/invitable-friends`,
+    invitations: (id: string) => `/buddy-reads/${id}/invitations`,
+    acceptInvitation: (id: string, invitationId: string) =>
+      `/buddy-reads/${id}/invitations/${invitationId}/accept`,
+    declineInvitation: (id: string, invitationId: string) =>
+      `/buddy-reads/${id}/invitations/${invitationId}/decline`,
   },
 
   cart: {

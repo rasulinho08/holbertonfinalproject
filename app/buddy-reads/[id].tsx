@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { FlatList, Pressable, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Lock, Send } from 'lucide-react-native';
+import { Lock, Send, Users } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useCurrentUser } from '@/store/auth';
 import {
+  useAcceptBuddyInvitation,
   useBuddyMessages,
   useBuddyRead,
+  useDeclineBuddyInvitation,
+  useInvitableFriends,
+  useInviteToBuddyRead,
   useJoinBuddyRead,
   useLeaveBuddyRead,
   useSendBuddyMessage,
   useUpdateBuddyProgress,
 } from '@/api/hooks';
+import { useDebounced } from '@/lib/hooks';
 import { formatRelative } from '@/lib/format';
 import { BookCover } from '@/components/book/BookCover';
 import { AppHeader } from '@/components/layout/AppHeader';
@@ -47,10 +52,26 @@ export default function BuddyReadScreen() {
   const join = useJoinBuddyRead();
   const leave = useLeaveBuddyRead();
   const updateProgress = useUpdateBuddyProgress();
+  const acceptInvitation = useAcceptBuddyInvitation();
+  const declineInvitation = useDeclineBuddyInvitation();
+  const invite = useInviteToBuddyRead();
 
   const [draft, setDraft] = useState('');
   const [progressOpen, setProgressOpen] = useState(false);
   const [page, setPage] = useState('');
+
+  // Invite flow: the member taps "Invite a friend", searches their follows and
+  // sends an invitation; the invited reader lands here with a pending invite.
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const [friendSearch, setFriendSearch] = useState('');
+  const debouncedSearch = useDebounced(friendSearch, 300);
+  const { data: friends, isFetching: friendsLoading } = useInvitableFriends(
+    id,
+    debouncedSearch,
+  );
+
+  const myInvitation = buddy?.invitation ?? null;
+  const isPendingInvitee = !isMember && myInvitation?.status === 'pending';
 
   const myProgress = buddy?.members.find((m) => m.user.id === me?.id)?.progressPage ?? 0;
 
@@ -69,6 +90,18 @@ export default function BuddyReadScreen() {
     await updateProgress.mutateAsync({ id, page: Math.max(0, Number(page) || 0) });
     setProgressOpen(false);
     toast.success(t('book.progressSaved'));
+  };
+
+  const sendInvite = async (friendId: string) => {
+    if (!id) return;
+    try {
+      await invite.mutateAsync({ id, inviteeId: friendId });
+      setFriendSearch('');
+      setInviteOpen(false);
+      toast.success(t('buddy.inviteSent'));
+    } catch {
+      toast.error(t('errors.generic'));
+    }
   };
 
   if (isLoading || error || !buddy) {
@@ -116,14 +149,54 @@ export default function BuddyReadScreen() {
         </Card>
 
         {isMember ? (
-          <Button
-            title={t('book.updateProgress')}
-            variant="secondary"
-            onPress={() => {
-              setPage(String(myProgress));
-              setProgressOpen(true);
-            }}
-          />
+          <View style={{ gap: theme.spacing.md }}>
+            <View style={{ flexDirection: 'row', gap: theme.spacing.md }}>
+              <Button
+                title={t('book.updateProgress')}
+                variant="secondary"
+                style={{ flex: 1 }}
+                onPress={() => {
+                  setPage(String(myProgress));
+                  setProgressOpen(true);
+                }}
+              />
+              <Button
+                title={t('buddy.invite')}
+                variant="outline"
+                icon={<Users size={16} color={theme.colors.fg} />}
+                onPress={() => setInviteOpen(true)}
+              />
+            </View>
+          </View>
+        ) : isPendingInvitee ? (
+          <View style={{ gap: theme.spacing.md }}>
+            <Text variant="body" color="fgMuted">
+              {t('buddy.invitationPending')}
+            </Text>
+            <View style={{ flexDirection: 'row', gap: theme.spacing.md }}>
+              <Button
+                title={t('buddy.acceptInvitation')}
+                loading={acceptInvitation.isPending}
+                style={{ flex: 1 }}
+                onPress={() =>
+                  id && myInvitation
+                    ? acceptInvitation.mutate({ id, invitationId: myInvitation.id })
+                    : undefined
+                }
+              />
+              <Button
+                title={t('buddy.declineInvitation')}
+                variant="ghost"
+                loading={declineInvitation.isPending}
+                style={{ flex: 1 }}
+                onPress={() =>
+                  id && myInvitation
+                    ? declineInvitation.mutate({ id, invitationId: myInvitation.id })
+                    : undefined
+                }
+              />
+            </View>
+          </View>
         ) : (
           <Button
             title={t('buddy.join')}
@@ -280,6 +353,81 @@ export default function BuddyReadScreen() {
           hint={`${t('common.of')} ${buddy.book.pageCount}`}
         />
         <Button title={t('common.save')} loading={updateProgress.isPending} onPress={saveProgress} />
+      </Sheet>
+
+      <Sheet
+        visible={inviteOpen}
+        onClose={() => setInviteOpen(false)}
+        title={t('buddy.invite')}
+        scrollable={false}
+      >
+        <Input
+          value={friendSearch}
+          onChangeText={setFriendSearch}
+          placeholder={t('buddy.inviteSearch')}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+
+        {friendsLoading && !friends ? (
+          <View style={{ gap: theme.spacing.sm }}>
+            {[0, 1, 2].map((i) => (
+              <Skeleton key={i} height={52} radius={theme.radius.md} />
+            ))}
+          </View>
+        ) : (
+          <FlatList
+            data={friends ?? []}
+            keyExtractor={(item) => item.id}
+            style={{ maxHeight: 280 }}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ gap: theme.spacing.xs, paddingVertical: theme.spacing.sm }}
+            ListEmptyComponent={
+              <EmptyState
+                compact
+                icon={<Users size={20} color={theme.colors.fgSubtle} />}
+                title={t('buddy.noInvitableFriends')}
+                hint={t('buddy.noInvitableFriendsHint')}
+              />
+            }
+            renderItem={({ item }) => (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={item.name}
+                onPress={() => void sendInvite(item.id)}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: theme.spacing.md,
+                  padding: theme.spacing.sm,
+                  borderRadius: theme.radius.md,
+                  borderWidth: 1.5,
+                  borderColor: 'transparent',
+                  backgroundColor: theme.colors.subtle,
+                }}
+              >
+                <Avatar name={item.name} uri={item.avatarUrl} size={38} />
+                <View style={{ flex: 1, gap: 1 }}>
+                  <Text variant="smallStrong" numberOfLines={1}>
+                    {item.name}
+                  </Text>
+                  <Text variant="caption" color="fgSubtle" numberOfLines={1}>
+                    @{item.username}
+                  </Text>
+                </View>
+                <Button
+                  title={t('buddy.inviteSend')}
+                  variant="outline"
+                  size="sm"
+                  fullWidth={false}
+                  loading={invite.isPending}
+                  disabled={invite.isPending}
+                  onPress={() => void sendInvite(item.id)}
+                />
+              </Pressable>
+            )}
+          />
+        )}
       </Sheet>
     </>
   );
