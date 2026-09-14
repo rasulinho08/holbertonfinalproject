@@ -1,8 +1,13 @@
 {
+  // Cloudflare Workers — statik sayt (Workers Static Assets).
   "name": "holbertonfinalproject0",
   "compatibility_date": "2026-08-18",
+
   "assets": {
+    // Expo web build output
     "directory": "./dist",
+
+    // Expo Router client-side routes
     "not_found_handling": "single-page-application"
   }
 }

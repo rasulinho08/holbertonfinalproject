@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "expo lint",
     "doctor": "npx expo-doctor",
-    "build:web": "expo export --platform web --output-dir dist"
+    "build:web": "expo export --platform web --output-dir dist && node scripts/inject-pwa-head.mjs"
   },
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",

@@ -97,6 +97,7 @@ export default function BookReviewsScreen() {
           <ReviewCard
             review={item}
             onLike={(liked) => toggleLike.mutate({ id: item.id, liked })}
+            onComment={() => router.push(`/review/${item.id}`)}
             onReport={() => setReporting(item)}
           />
         )}

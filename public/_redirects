@@ -1,8 +1,0 @@
-# expo-router is a client-side router: every unknown path has to fall through to
-# the single HTML entry point, or a refresh on /profile returns the host's 404.
-#
-# This file is the Netlify/Cloudflare Pages redirect format, and Expo copies
-# everything in `public/` into the export. Keeping the rule here rather than in
-# netlify.toml means it also applies on Cloudflare Pages, Render and any other
-# host that reads `_redirects` — the site is no longer tied to one provider.
-/*    /index.html   200

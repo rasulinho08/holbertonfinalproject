@@ -4,55 +4,40 @@
     "appVersionSource": "remote"
   },
   "build": {
-    "//": [
-      "EXPO_PUBLIC_* values are inlined into the bundle at build time, so the",
-      "API address and the Google client id are chosen per profile here rather",
-      "than read at runtime. There is no bundled mock: every profile needs a",
-      "reachable backend, and an APK built against localhost only works on the",
-      "machine that ran the server.",
-      "",
-      "Only the client *id* appears here. The implicit id_token flow needs no",
-      "client secret, and a secret in an app bundle is not a secret."
-    ],
-
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "android": { "buildType": "apk" },
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
         "EXPO_PUBLIC_API_BASE_URL": "http://10.0.2.2:4000/api/v1",
         "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "124124575060-tdstriicil2o9rcm4khoifggreb77d44.apps.googleusercontent.com"
       }
     },
-
     "preview": {
-      "//": "Shareable APK. Points at the deployed API so it works on any phone.",
       "distribution": "internal",
       "channel": "preview",
-      "android": { "buildType": "apk" },
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
         "EXPO_PUBLIC_API_BASE_URL": "https://holbertonfinalproject-backend.onrender.com/api/v1",
         "EXPO_PUBLIC_DEFAULT_LOCALE": "az",
         "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "124124575060-tdstriicil2o9rcm4khoifggreb77d44.apps.googleusercontent.com"
       }
     },
-
     "preview-lan": {
-      "//": [
-        "APK against a backend on your own machine, for testing before the",
-        "deployed one is updated. Replace the IP with your computer's — find it",
-        "with `ipconfig`. Phone and computer must share a Wi-Fi network, and",
-        "Windows Firewall must allow Node on private networks."
-      ],
       "extends": "preview",
       "env": {
         "EXPO_PUBLIC_API_BASE_URL": "http://192.168.1.42:4000/api/v1"
       }
     },
-
     "production": {
       "channel": "production",
-      "android": { "buildType": "app-bundle" },
+      "android": {
+        "buildType": "app-bundle"
+      },
       "env": {
         "EXPO_PUBLIC_API_BASE_URL": "https://holbertonfinalproject-backend.onrender.com/api/v1",
         "EXPO_PUBLIC_DEFAULT_LOCALE": "az",
