@@ -1,6 +1,7 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, Pressable, View } from 'react-native';
 import { useTheme } from '@/theme';
+import { useI18n } from '@/i18n';
 import { Section } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { BookCard, BookCardSkeleton } from './BookCard';
@@ -11,11 +12,16 @@ export interface BookRailProps {
   subtitle?: string;
   books: Book[] | undefined;
   loading?: boolean;
+  /** When set, a failed request renders a retry row instead of hiding the rail. */
+  error?: boolean;
+  onRetry?: () => void;
   action?: React.ReactNode;
   cardWidth?: number;
   showProgress?: boolean;
   showPrice?: boolean;
   emptyLabel?: string;
+  /** Optional label rendered on each card, e.g. "412 readers". */
+  statFor?: (book: Book) => string | null | undefined;
 }
 
 /**
@@ -28,13 +34,40 @@ export function BookRail({
   subtitle,
   books,
   loading,
+  error,
+  onRetry,
   action,
   cardWidth = 118,
   showProgress = false,
   showPrice = true,
   emptyLabel,
+  statFor,
 }: BookRailProps) {
   const theme = useTheme();
+  const { t } = useI18n();
+
+  // A failed request keeps `books` undefined, which would otherwise take the
+  // empty path below and silently hide the whole rail. Fail loudly instead.
+  if (error && !loading) {
+    return (
+      <Section
+        title={title}
+        action={
+          onRetry ? (
+            <Pressable accessibilityRole="button" onPress={onRetry}>
+              <Text variant="smallStrong" color="primary">
+                {t('common.retry')}
+              </Text>
+            </Pressable>
+          ) : undefined
+        }
+      >
+        <Text variant="small" color="fgSubtle">
+          {t('errors.generic')}
+        </Text>
+      </Section>
+    );
+  }
 
   if (!loading && (!books || books.length === 0)) {
     if (!emptyLabel) return null;
@@ -75,6 +108,7 @@ export function BookRail({
               width={cardWidth}
               showProgress={showProgress}
               showPrice={showPrice}
+              stat={statFor ? statFor(item) : undefined}
             />
           )}
         />

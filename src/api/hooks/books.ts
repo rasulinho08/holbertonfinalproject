@@ -88,6 +88,42 @@ export function useNewReleases() {
   });
 }
 
+/** `/books/most-read` — a Book decorated with its distinct-reader count. */
+export interface MostReadBook extends Book {
+  readers: number;
+}
+
+/** `/books/best-selling` — a Book decorated with units sold. */
+export interface BestSellingBook extends Book {
+  units: number;
+}
+
+/** `/authors/most-read` — an Author decorated with its readers' count. */
+export interface MostReadAuthor extends Author {
+  readers: number;
+}
+
+export function useMostReadBooks() {
+  return useQuery({
+    queryKey: qk.books.mostRead,
+    queryFn: () => api.get<MostReadBook[]>(Endpoints.books.mostRead, { limit: 12 }),
+  });
+}
+
+export function useBestSellingBooks() {
+  return useQuery({
+    queryKey: qk.books.bestSelling,
+    queryFn: () => api.get<BestSellingBook[]>(Endpoints.books.bestSelling, { limit: 12 }),
+  });
+}
+
+export function useMostReadAuthors() {
+  return useQuery({
+    queryKey: qk.authors.mostRead,
+    queryFn: () => api.get<MostReadAuthor[]>(Endpoints.authors.mostRead, { limit: 12 }),
+  });
+}
+
 export function useBookReviews(bookId: string | undefined) {
   return useQuery({
     queryKey: qk.books.reviews(bookId ?? ''),

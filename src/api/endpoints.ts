@@ -52,6 +52,8 @@ export const Endpoints = {
     recommendations: '/books/recommendations',
     randomRecommendation: '/books/random-recommendation',
     newReleases: '/books/new-releases',
+    mostRead: '/books/most-read',
+    bestSelling: '/books/best-selling',
   },
 
   search: {
@@ -62,6 +64,7 @@ export const Endpoints = {
     detail: (id: string) => `/authors/${id}`,
     books: (id: string) => `/authors/${id}/books`,
     follow: (id: string) => `/authors/${id}/follow`,
+    mostRead: '/authors/most-read',
   },
 
   genres: {

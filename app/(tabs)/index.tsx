@@ -6,7 +6,10 @@ import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useCurrentUser } from '@/store/auth';
 import {
+  useBestSellingBooks,
   useFriendsFeed,
+  useMostReadAuthors,
+  useMostReadBooks,
   useQuotes,
   useRandomRecommendation,
   useRecommendedBooks,
@@ -17,7 +20,7 @@ import {
   useTrendingBooks,
 } from '@/api/hooks';
 import { readingPercent } from '@/lib/format';
-import { BookCard, BookCardSkeleton } from '@/components/book/BookCard';
+import { AuthorCard, AuthorCardSkeleton } from '@/components/book/AuthorCard';
 import { BookCover } from '@/components/book/BookCover';
 import { BookRail } from '@/components/book/BookRail';
 import { ProgressSheet } from '@/components/book/ProgressSheet';
@@ -34,6 +37,7 @@ import { Progress } from '@/components/ui/Progress';
 import { Screen, Section } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import type { Book } from '@/types';
+import type { BestSellingBook, MostReadBook } from '@/api/hooks';
 
 export default function HomeScreen() {
   const theme = useTheme();
@@ -48,6 +52,24 @@ export default function HomeScreen() {
 
   const { data: trending, isLoading: trendingLoading } = useTrendingBooks();
   const { data: recommended, isLoading: recommendedLoading } = useRecommendedBooks();
+  const {
+    data: mostRead,
+    isLoading: mostReadLoading,
+    isError: mostReadError,
+    refetch: refetchMostRead,
+  } = useMostReadBooks();
+  const {
+    data: bestSelling,
+    isLoading: bestSellingLoading,
+    isError: bestSellingError,
+    refetch: refetchBestSelling,
+  } = useBestSellingBooks();
+  const {
+    data: mostReadAuthors,
+    isLoading: mostReadAuthorsLoading,
+    isError: mostReadAuthorsError,
+    refetch: refetchMostReadAuthors,
+  } = useMostReadAuthors();
   const randomPick = useRandomRecommendation();
   const { data: streak } = useStreak();
   const { data: feed } = useFriendsFeed();
@@ -155,6 +177,66 @@ export default function HomeScreen() {
           subtitle={t('home.forYouHint')}
           books={recommended}
           loading={recommendedLoading}
+        />
+
+        <BookRail
+          title={t('home.mostReadBooks')}
+          books={mostRead}
+          loading={mostReadLoading}
+          error={mostReadError}
+          onRetry={() => refetchMostRead()}
+          statFor={(book) =>
+            (book as MostReadBook).readers
+              ? t('home.readers', { count: (book as MostReadBook).readers })
+              : undefined
+          }
+        />
+
+        <Section title={t('home.mostReadAuthors')}>
+          {mostReadAuthorsLoading ? (
+            <View style={{ flexDirection: 'row', gap: theme.spacing.md }}>
+              {[0, 1, 2, 3].map((i) => (
+                <AuthorCardSkeleton key={i} />
+              ))}
+            </View>
+          ) : mostReadAuthorsError ? (
+            <View style={{ gap: theme.spacing.md }}>
+              <Text variant="small" color="fgSubtle">
+                {t('errors.generic')}
+              </Text>
+              <Pressable
+                accessibilityRole="button"
+                onPress={() => refetchMostReadAuthors()}
+                style={{ alignSelf: 'flex-start' }}
+              >
+                <Text variant="smallStrong" color="primary">
+                  {t('common.retry')}
+                </Text>
+              </Pressable>
+            </View>
+          ) : mostReadAuthors && mostReadAuthors.length > 0 ? (
+            <FlatList
+              horizontal
+              data={mostReadAuthors}
+              keyExtractor={(item) => item.id}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ gap: theme.spacing.md, paddingRight: theme.spacing.lg }}
+              renderItem={({ item, index }) => <AuthorCard author={item} index={index} />}
+            />
+          ) : null}
+        </Section>
+
+        <BookRail
+          title={t('home.bestSelling')}
+          books={bestSelling}
+          loading={bestSellingLoading}
+          error={bestSellingError}
+          onRetry={() => refetchBestSelling()}
+          statFor={(book) =>
+            (book as BestSellingBook).units
+              ? t('home.sold', { count: (book as BestSellingBook).units })
+              : undefined
+          }
         />
 
         <Section
