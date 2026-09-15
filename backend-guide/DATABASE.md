@@ -21,7 +21,7 @@ CREATE EXTENSION IF NOT EXISTS "pg_trgm";     -- "did you mean…?" suggestions
 ## Enums
 
 ```sql
-CREATE TYPE user_role        AS ENUM ('user', 'publisher', 'admin');
+CREATE TYPE user_role        AS ENUM ('user', 'author', 'publisher', 'admin');
 CREATE TYPE book_language    AS ENUM ('az', 'en', 'tr', 'ru');
 CREATE TYPE shelf_status     AS ENUM ('reading', 'read', 'want_to_read', 'dnf');
 CREATE TYPE order_status     AS ENUM ('pending', 'confirmed', 'preparing',
@@ -64,6 +64,7 @@ CREATE TABLE users (
   website           text,
   role              user_role NOT NULL DEFAULT 'user',
   publisher_id      uuid REFERENCES publishers(id) ON DELETE SET NULL,
+  author_id         uuid REFERENCES authors(id) ON DELETE SET NULL,
   wallet_balance    numeric(10,2) NOT NULL DEFAULT 0 CHECK (wallet_balance >= 0),
   two_factor_secret text,
   two_factor_enabled boolean NOT NULL DEFAULT false,
@@ -567,6 +568,11 @@ CREATE TABLE buddy_reads (
   book_id     uuid NOT NULL REFERENCES books(id) ON DELETE CASCADE,
   owner_id    uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   target_date timestamptz,
+  -- A private group is not listed to anyone outside it; the code is the only
+  -- way in besides an invitation. Every group gets a code, private or not, so
+  -- one can be closed later without backfilling.
+  is_private  boolean NOT NULL DEFAULT false,
+  invite_code text NOT NULL UNIQUE,
   created_at  timestamptz NOT NULL DEFAULT now()
 );
 

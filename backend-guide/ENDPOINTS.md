@@ -47,8 +47,31 @@ Every route below has a working reference implementation in the frontend repo at
 ```jsonc
 // request
 { "name": "Leyla Məmmədova", "username": "leyla",
-  "email": "leyla@example.com", "password": "min8chars" }
+  "email": "leyla@example.com", "password": "min8chars",
+
+  // Optional. Omitted, it is "reader" — so an older client keeps working.
+  "accountType": "reader",     // "reader" | "author" | "publisher"
+
+  // accountType "author" only. Both optional; a blank pen name falls back
+  // to `name`.
+  "penName": "Qələm adı",
+  "bio": "Seeds the public author page.",
+
+  // accountType "publisher" only. `publisherName` is REQUIRED for that type
+  // — it is what the imprint's books are listed under. City is optional.
+  "publisherName": "Qanun Nəşriyyat",
+  "publisherCity": "Bakı" }
 ```
+
+`accountType` maps to `user.role`: `reader` → `user`, `author` → `author`,
+`publisher` → `publisher`. **`admin` is not an accepted value** — it is granted
+from the moderation dashboard, and accepting it here would make registration a
+privilege-escalation hole.
+
+A writer gets an `Author` row created and linked, surfaced as `user.authorId`;
+a publisher gets a `Publisher` row, surfaced as `user.publisherId`. If the
+account insert then fails, the author or imprint row is removed again rather
+than left orphaned.
 
 ```jsonc
 // 201
@@ -564,7 +587,9 @@ commenter is the author.
 | GET | `/buddy-reads` | auth | Caller's groups first, then discoverable |
 | POST | `/buddy-reads` | auth | Create |
 | GET | `/buddy-reads/:id` | auth | Detail |
-| POST | `/buddy-reads/:id/join` | auth | Join |
+| POST | `/buddy-reads/:id/join` | auth | Join (public groups only) |
+| POST | `/buddy-reads/join-by-code` | auth | Join whichever group owns the code |
+| PATCH | `/buddy-reads/:id/settings` | auth (owner) | Flip privacy, rotate the code |
 | DELETE | `/buddy-reads/:id/members/me` | auth | Leave |
 | PATCH | `/buddy-reads/:id/progress` | auth | Update own progress |
 | GET | `/buddy-reads/:id/messages` | auth (member) | Discussion, oldest first |
@@ -578,6 +603,10 @@ commenter is the author.
   "members": [ { "user": { /* UserSummary */ }, "progressPage": 184 } ],
   "targetDate": "2026-08-27T…",   // nullable
   "messagesCount": 4,
+  "isPrivate": false,
+  // Members only. `null` for everyone else — sending it to a non-member would
+  // make "private" decorative, since the code is the only thing gating entry.
+  "inviteCode": "K7RM2P",
   "createdAt": "2026-07-25T…" }
 ```
 
@@ -588,9 +617,34 @@ Messages carry an optional `chapter` anchor so discussion can be filtered:
   "body": "2-ci hissəyə keçdim.", "chapter": 2, "createdAt": "2026-07-28T…" }
 ```
 
-`POST /buddy-reads` requires `{ name, bookId }`, optional `targetDate`. The
-creator is added as the first member. When the owner leaves, transfer ownership
-to the longest-standing remaining member, or delete the group if empty.
+`POST /buddy-reads` requires `{ name, bookId }`, optional `targetDate` and
+`isPrivate`. The creator is added as the first member. When the owner leaves,
+transfer ownership to the longest-standing remaining member, or delete the
+group if empty.
+
+### Private groups
+
+Every group is minted with a six-character `inviteCode`, private or not, so one
+can be closed later without a backfill. The alphabet excludes `O`/`0` and
+`I`/`1`/`L`, because a code is read off one screen and typed into another.
+
+A private group is:
+
+- filtered out of `GET /buddy-reads` for anyone who is not a member and does
+  not hold a pending invitation — filtered **in the query**, so pages stay full
+  and `meta.total` does not count invisible rows;
+- **404**, not 403, on `GET /buddy-reads/:id` and `POST /buddy-reads/:id/join`
+  for those same people, so it does not confirm its own existence to someone
+  guessing ids.
+
+`POST /buddy-reads/join-by-code` takes `{ code }`, case-insensitively and
+ignoring spaces and dashes. A code nobody owns and a code for a group the
+caller may not see both answer 404 — the client shows one message, because the
+API deliberately cannot tell them apart. Joining spends any pending invitation.
+
+`PATCH /buddy-reads/:id/settings` takes `{ isPrivate?, regenerateCode? }` and is
+owner-only (403 otherwise). Rotating is the only way to shut out a code that has
+travelled too far, since there is nothing else to revoke.
 
 ---
 
