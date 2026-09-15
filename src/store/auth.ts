@@ -3,7 +3,7 @@ import { api } from '@/api/client';
 import { Endpoints } from '@/api/endpoints';
 import { clearTokens, loadTokens, setTokens } from '@/api/tokens';
 import { storage, StorageKeys } from '@/lib/storage';
-import type { AuthSession, GenreSlug, OAuthProvider, User } from '@/types';
+import type { AccountType, AuthSession, GenreSlug, OAuthProvider, User } from '@/types';
 
 export type AuthStatus = 'loading' | 'authenticated' | 'guest';
 
@@ -18,6 +18,13 @@ interface AuthState {
     username: string;
     email: string;
     password: string;
+    accountType?: AccountType;
+    /** Writers only. */
+    penName?: string;
+    bio?: string;
+    /** Publishers only. */
+    publisherName?: string;
+    publisherCity?: string;
   }) => Promise<User>;
   loginWithProvider: (provider: OAuthProvider, idToken: string) => Promise<User>;
   logout: () => Promise<void>;

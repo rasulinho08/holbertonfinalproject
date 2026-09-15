@@ -136,6 +136,8 @@ export const Endpoints = {
     create: '/buddy-reads',
     detail: (id: string) => `/buddy-reads/${id}`,
     join: (id: string) => `/buddy-reads/${id}/join`,
+    joinByCode: '/buddy-reads/join-by-code',
+    settings: (id: string) => `/buddy-reads/${id}/settings`,
     leave: (id: string) => `/buddy-reads/${id}/members/me`,
     messages: (id: string) => `/buddy-reads/${id}/messages`,
     progress: (id: string) => `/buddy-reads/${id}/progress`,

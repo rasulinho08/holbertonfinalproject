@@ -29,7 +29,16 @@ export type GenreSlug =
   | 'selfHelp';
 
 export type ShelfStatus = 'reading' | 'read' | 'want_to_read' | 'dnf';
-export type UserRole = 'user' | 'publisher' | 'admin';
+export type UserRole = 'user' | 'author' | 'publisher' | 'admin';
+
+/**
+ * What the reader picks on the sign-up screen.
+ *
+ * Distinct from `UserRole` on purpose: the API takes this vocabulary and maps
+ * it to a role. `admin` has no account type, because it is granted from the
+ * moderation dashboard and never claimed at registration.
+ */
+export type AccountType = 'reader' | 'author' | 'publisher';
 
 /* -------------------------------- people --------------------------------- */
 
@@ -82,6 +91,8 @@ export interface User {
   twoFactorEnabled: boolean;
   /** Set for role === 'publisher'. */
   publisherId?: ID;
+  /** Set for role === 'author': the writer profile this account speaks for. */
+  authorId?: ID;
 }
 
 /** Trimmed user object embedded in reviews, quotes, comments, leaderboards. */
@@ -348,6 +359,10 @@ export interface BuddyRead {
   members: BuddyMember[];
   targetDate: ISODate | null;
   messagesCount: number;
+  /** Private groups are hidden from the public list and need a code to join. */
+  isPrivate: boolean;
+  /** The join code — sent only to members, so it is null for everyone else. */
+  inviteCode: string | null;
   /** The viewer's invitation to this group, when one exists. */
   invitation?: { id: ID; status: BuddyInvitationStatus } | null;
   createdAt: ISODate;

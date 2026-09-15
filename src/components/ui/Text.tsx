@@ -2,7 +2,19 @@ import React from 'react';
 import { Text as RNText, type TextProps as RNTextProps, type TextStyle } from 'react-native';
 import { useTheme, type TypographyVariant } from '@/theme';
 
-type ColorToken = 'fg' | 'fgMuted' | 'fgSubtle' | 'primary' | 'danger' | 'success' | 'warning' | 'accent' | 'primaryFg';
+type ColorToken =
+  | 'fg'
+  | 'fgMuted'
+  | 'fgSubtle'
+  | 'primary'
+  | 'danger'
+  | 'success'
+  | 'warning'
+  | 'accent'
+  | 'primaryFg'
+  // For text sitting on a `primarySoft` fill, where `primary` itself is too
+  // close in value to read.
+  | 'primarySoftFg';
 
 export interface TextProps extends RNTextProps {
   variant?: TypographyVariant;
