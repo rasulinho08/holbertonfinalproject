@@ -135,6 +135,8 @@ export const en: Translated<Dictionary> = {
     publisherName: 'Publisher name',
     publisherCity: 'City',
     publisherNameRequired: 'Enter the publisher name',
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
     guestContinue: 'Continue as guest',
   },
 

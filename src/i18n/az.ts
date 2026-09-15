@@ -136,6 +136,8 @@ export const az = {
     publisherName: 'Nəşriyyatın adı',
     publisherCity: 'Şəhər',
     publisherNameRequired: 'Nəşriyyatın adını yaz',
+    showPassword: 'Şifrəni göstər',
+    hidePassword: 'Şifrəni gizlət',
     guestContinue: 'Qonaq kimi bax',
   },
 
