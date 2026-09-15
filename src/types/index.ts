@@ -82,6 +82,7 @@ export interface User {
   twoFactorEnabled: boolean;
   /** Set for role === 'publisher'. */
   publisherId?: ID;
+  onboardingCompleted: boolean;
 }
 
 /** Trimmed user object embedded in reviews, quotes, comments, leaderboards. */
