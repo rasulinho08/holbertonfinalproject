@@ -45,6 +45,7 @@ function AppShell() {
   const logout = useAuth((s) => s.logout);
   const prefsHydrated = usePrefs((s) => s.hydrated);
   const onboardingDone = usePrefs((s) => s.onboardingDone);
+  const onboardingCompleted = useAuth((s) => s.user?.onboardingCompleted ?? false);
 
   useEffect(() => {
     void bootstrap();
@@ -69,9 +70,9 @@ function AppShell() {
 
     if (status === 'guest' && !inAuthGroup) {
       router.replace('/login');
-    } else if (status === 'authenticated' && inAuthGroup && onboardingDone) {
+    } else if (status === 'authenticated' && inAuthGroup && onboardingCompleted) {
       router.replace('/');
-    } else if (status === 'authenticated' && !onboardingDone && path[1] !== 'onboarding') {
+    } else if (status === 'authenticated' && !onboardingCompleted && path[1] !== 'onboarding') {
       router.replace('/onboarding');
     }
   }, [ready, status, onboardingDone, segments, router]);
