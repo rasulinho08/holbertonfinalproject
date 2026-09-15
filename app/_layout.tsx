@@ -60,7 +60,7 @@ function AppShell() {
 
   const ready = status !== 'loading' && prefsHydrated;
 
-  useEffect(() => {
+useEffect(() => {
     if (!ready) return;
 
     // `segments` is typed as a tuple by expo-router's typed routes; widen it so
@@ -72,10 +72,10 @@ function AppShell() {
       router.replace('/login');
     } else if (status === 'authenticated' && inAuthGroup && onboardingCompleted) {
       router.replace('/');
-    } else if (status === 'authenticated' && !onboardingCompleted && path[1] !== 'onboarding') {
+    } else if (status === 'authenticated' && !onboardingDone && path[1] !== 'onboarding') {
       router.replace('/onboarding');
     }
-  }, [ready, status, onboardingDone, segments, router]);
+  }, [ready, status, onboardingDone, onboardingCompleted, segments, router]);
 
   if (!ready) {
     return (
