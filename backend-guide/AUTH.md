@@ -184,13 +184,19 @@ Clear the secret and the recovery codes.
 
 ## 6. Roles and authorization
 
-Three roles on `users.role`:
+Four roles on `users.role`:
 
 | Role | Can |
 |---|---|
 | `user` | Everything social and commercial — shelves, quotes, reviews, cart, orders |
+| `author` | All of the above, and owns the `Author` profile named by `author_id` |
 | `publisher` | All of the above, plus `/publisher/*` scoped to their own `publisher_id` |
 | `admin` | All of the above, plus `/admin/*` |
+
+`user`, `author` and `publisher` are reachable from `POST /auth/register` via
+`accountType` (`reader` / `author` / `publisher`). **`admin` is not** — it is
+granted from the moderation dashboard. A register endpoint that accepted it
+would hand anyone who can send a POST a route to full administrative access.
 
 ### Middleware
 

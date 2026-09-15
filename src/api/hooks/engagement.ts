@@ -137,9 +137,51 @@ export function useBuddyMessages(id: string | undefined, isMember = true) {
 export function useCreateBuddyRead() {
   const client = useQueryClient();
   return useMutation({
-    mutationFn: (input: { name: string; bookId: string; targetDate?: string | null }) =>
-      api.post<BuddyRead>(Endpoints.buddyReads.create, input),
+    mutationFn: (input: {
+      name: string;
+      bookId: string;
+      targetDate?: string | null;
+      isPrivate?: boolean;
+    }) => api.post<BuddyRead>(Endpoints.buddyReads.create, input),
     onSuccess: () => client.invalidateQueries({ queryKey: qk.buddyReads.all }),
+  });
+}
+
+/**
+ * Joins whichever group owns the code.
+ *
+ * A wrong code answers 404, the same as a code for a group that does not
+ * exist — the screen turns both into one "no such code" message rather than
+ * telling the reader which of the two it was.
+ */
+export function useJoinBuddyReadByCode() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (code: string) =>
+      api.post<BuddyRead>(Endpoints.buddyReads.joinByCode, { code: code.trim() }),
+    onSuccess: (buddy) => {
+      client.setQueryData(qk.buddyReads.detail(buddy.id), buddy);
+      return client.invalidateQueries({ queryKey: qk.buddyReads.all });
+    },
+  });
+}
+
+/** Owner-only: flip privacy, or mint a fresh code. */
+export function useUpdateBuddySettings() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      ...body
+    }: {
+      id: string;
+      isPrivate?: boolean;
+      regenerateCode?: boolean;
+    }) => api.patch<BuddyRead>(Endpoints.buddyReads.settings(id), body),
+    onSuccess: (buddy) => {
+      client.setQueryData(qk.buddyReads.detail(buddy.id), buddy);
+      return client.invalidateQueries({ queryKey: qk.buddyReads.all });
+    },
   });
 }
 

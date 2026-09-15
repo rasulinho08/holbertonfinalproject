@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { FlatList, Pressable, View } from 'react-native';
+import { Alert, FlatList, Platform, Pressable, Share, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Lock, Send, Users } from 'lucide-react-native';
+import { Copy, KeyRound, Lock, RefreshCw, Send, Users } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useCurrentUser } from '@/store/auth';
@@ -15,6 +15,7 @@ import {
   useJoinBuddyRead,
   useLeaveBuddyRead,
   useSendBuddyMessage,
+  useUpdateBuddySettings,
   useUpdateBuddyProgress,
 } from '@/api/hooks';
 import { useDebounced } from '@/lib/hooks';
@@ -22,6 +23,7 @@ import { formatRelative } from '@/lib/format';
 import { BookCover } from '@/components/book/BookCover';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { Avatar } from '@/components/ui/Avatar';
+import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -55,6 +57,7 @@ export default function BuddyReadScreen() {
   const acceptInvitation = useAcceptBuddyInvitation();
   const declineInvitation = useDeclineBuddyInvitation();
   const invite = useInviteToBuddyRead();
+  const updateSettings = useUpdateBuddySettings();
 
   const [draft, setDraft] = useState('');
   const [progressOpen, setProgressOpen] = useState(false);
@@ -90,6 +93,66 @@ export default function BuddyReadScreen() {
     await updateProgress.mutateAsync({ id, page: Math.max(0, Number(page) || 0) });
     setProgressOpen(false);
     toast.success(t('book.progressSaved'));
+  };
+
+  const isOwner = buddy?.ownerId === me?.id;
+
+  /**
+   * Hands the code to whatever the platform uses for sharing.
+   *
+   * The native share sheet is the right target on a phone — the reader is
+   * going to send this to someone in a chat app, not paste it locally. On web
+   * there is no share sheet worth using, so the clipboard is the fallback.
+   */
+  const shareCode = async (code: string) => {
+    const message = `${buddy?.name ?? ''} — ${t('buddy.inviteCode')}: ${code}`;
+    try {
+      if (Platform.OS === 'web') {
+        await navigator.clipboard.writeText(code);
+        toast.success(t('buddy.codeCopied'));
+        return;
+      }
+      await Share.share({ message });
+    } catch {
+      // A dismissed share sheet is not a failure, and neither is a browser
+      // that refuses clipboard access — the code is on screen either way.
+    }
+  };
+
+  const regenerate = () => {
+    if (!id) return;
+    const run = () => {
+      updateSettings.mutate(
+        { id, regenerateCode: true },
+        {
+          onSuccess: () => toast.success(t('buddy.codeRegenerated')),
+          onError: () => toast.error(t('errors.generic')),
+        },
+      );
+    };
+
+    // Rotating throws out every copy of the old code that is already in
+    // circulation, so it asks first. `Alert` is a no-op on web, where the
+    // confirm dialog is the browser's.
+    if (Platform.OS === 'web') {
+      if (window.confirm(t('buddy.regenerateCodeConfirm'))) run();
+      return;
+    }
+    Alert.alert(t('buddy.regenerateCode'), t('buddy.regenerateCodeConfirm'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      { text: t('buddy.regenerateCode'), style: 'destructive', onPress: run },
+    ]);
+  };
+
+  const setPrivacy = (next: boolean) => {
+    if (!id) return;
+    updateSettings.mutate(
+      { id, isPrivate: next },
+      {
+        onSuccess: () => toast.success(next ? t('buddy.madePrivate') : t('buddy.madePublic')),
+        onError: () => toast.error(t('errors.generic')),
+      },
+    );
   };
 
   const sendInvite = async (friendId: string) => {
@@ -148,6 +211,64 @@ export default function BuddyReadScreen() {
           </View>
         </Card>
 
+        {/* The join code, for members of a private group.
+            Non-members never reach this: the API sends `inviteCode` as null to
+            anyone outside the group, so there is nothing here to leak even if
+            this branch were reached by accident. */}
+        {isMember && buddy.isPrivate && buddy.inviteCode ? (
+          <Card level={0} style={{ gap: theme.spacing.md }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}>
+              <KeyRound size={16} color={theme.colors.primary} />
+              <Text variant="caption" color="fgSubtle" style={{ flex: 1 }}>
+                {t('buddy.inviteCode').toUpperCase()}
+              </Text>
+              <Badge label={t('buddy.privateBadge')} tone="warning" />
+            </View>
+
+            <Text
+              variant="display"
+              center
+              // Wide tracking because this is read a character at a time and
+              // then typed somewhere else.
+              style={{ letterSpacing: 6 }}
+            >
+              {buddy.inviteCode}
+            </Text>
+
+            <Text variant="small" color="fgMuted" center>
+              {t('buddy.inviteCodeHint')}
+            </Text>
+
+            <View style={{ flexDirection: 'row', gap: theme.spacing.md }}>
+              <Button
+                title={Platform.OS === 'web' ? t('buddy.copyCode') : t('common.share')}
+                variant="secondary"
+                style={{ flex: 1 }}
+                icon={<Copy size={16} color={theme.colors.primary} />}
+                onPress={() => void shareCode(buddy.inviteCode!)}
+              />
+              {isOwner ? (
+                <Button
+                  title={t('buddy.regenerateCode')}
+                  variant="outline"
+                  loading={updateSettings.isPending}
+                  icon={<RefreshCw size={16} color={theme.colors.fg} />}
+                  onPress={regenerate}
+                />
+              ) : null}
+            </View>
+
+            {isOwner ? (
+              <Button
+                title={t('buddy.makePublic')}
+                variant="ghost"
+                loading={updateSettings.isPending}
+                onPress={() => setPrivacy(false)}
+              />
+            ) : null}
+          </Card>
+        ) : null}
+
         {isMember ? (
           <View style={{ gap: theme.spacing.md }}>
             <View style={{ flexDirection: 'row', gap: theme.spacing.md }}>
@@ -167,6 +288,18 @@ export default function BuddyReadScreen() {
                 onPress={() => setInviteOpen(true)}
               />
             </View>
+
+            {/* An open group can be closed after the fact — people usually
+                discover they wanted it private once strangers turn up. */}
+            {isOwner && !buddy.isPrivate ? (
+              <Button
+                title={t('buddy.private')}
+                variant="ghost"
+                loading={updateSettings.isPending}
+                icon={<Lock size={16} color={theme.colors.fgMuted} />}
+                onPress={() => setPrivacy(true)}
+              />
+            ) : null}
           </View>
         ) : isPendingInvitee ? (
           <View style={{ gap: theme.spacing.md }}>

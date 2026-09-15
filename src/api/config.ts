@@ -56,7 +56,19 @@ if (!API_BASE_URL) {
   }
 }
 
-/** Requests give up after this long so a dead backend cannot hang a screen. */
-export const REQUEST_TIMEOUT_MS = 15_000;
+/**
+ * Requests give up after this long so a dead backend cannot hang a screen.
+ *
+ * 60s, not 15s, because the API runs on Render's free tier: it sleeps after
+ * about 15 minutes of no traffic and the request that wakes it waits 30-50
+ * seconds for the container to boot. At 15 seconds that first request was
+ * guaranteed to abort — so the first launch of the day always failed on the
+ * sign-in screen, and the app looked broken rather than asleep.
+ *
+ * The cost is that a genuinely unreachable backend now takes a minute to say
+ * so. That is the rarer case, and it is the one where waiting is harmless;
+ * giving up on a server that was about to answer is not.
+ */
+export const REQUEST_TIMEOUT_MS = 60_000;
 
 export const DEFAULT_PAGE_SIZE = 20;

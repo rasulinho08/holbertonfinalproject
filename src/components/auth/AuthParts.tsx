@@ -1,31 +1,179 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
+import { BookOpen, Building2, PenLine } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { LOCALES, useI18n } from '@/i18n';
+import type { AccountType } from '@/types';
 import { isGoogleConfigured } from '@/lib/googleAuth';
 import { Button } from '@/components/ui/Button';
 import { Text } from '@/components/ui/Text';
 
-/** Wordmark + copy shared by the sign-in, sign-up and reset screens. */
+/**
+ * Wordmark + copy shared by the sign-in, sign-up and reset screens.
+ *
+ * QA could not read the heading: it was brand-coloured `display` text sitting
+ * directly on the page background. `primary` is tuned to carry a filled button,
+ * where it is the *background* behind white — as a text colour on the page it
+ * lands near 4.5:1 in light mode, which is the floor rather than a margin, and
+ * it looked washed out next to nothing.
+ *
+ * So the heading now uses `fg` (7:1 against any of the six palettes) and sits
+ * on a tinted panel that separates it from the form below. The brand colour
+ * moves to the wordmark and the rule under it, where it decorates instead of
+ * carrying the text.
+ */
 export function AuthHeader({ title, subtitle }: { title: string; subtitle?: string }) {
   const theme = useTheme();
 
   return (
-    <View style={{ gap: theme.spacing.md, alignItems: 'flex-start' }}>
+    <View
+      style={{
+        gap: theme.spacing.md,
+        alignItems: 'flex-start',
+        padding: theme.spacing.xl,
+        borderRadius: theme.radius.xl,
+        backgroundColor: theme.colors.primarySoft,
+        borderWidth: 1,
+        borderColor: theme.colors.border,
+      }}
+    >
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}>
         <Logo size={38} />
-        <Text variant="h2">KitabDostu</Text>
+        <Text variant="h2" color="primarySoftFg">
+          KitabDostu
+        </Text>
       </View>
 
-      <Text variant="display" color="primary" style={{ marginTop: theme.spacing.md }}>
+      <Text variant="display" style={{ marginTop: theme.spacing.xs }}>
         {title}
       </Text>
+
+      {/* A short brand rule instead of brand-coloured text: the accent is still
+          present, but it is no longer the thing the reader has to decipher. */}
+      <View
+        style={{
+          width: 48,
+          height: 3,
+          borderRadius: theme.radius.pill,
+          backgroundColor: theme.colors.primary,
+        }}
+      />
+
       {subtitle ? (
         <Text variant="body" color="fgMuted">
           {subtitle}
         </Text>
       ) : null}
+    </View>
+  );
+}
+
+/**
+ * Reader / Writer / Publisher, picked at sign-up.
+ *
+ * Stacked rows rather than a segmented control: each option needs a sentence
+ * explaining what the account can do, and three labels squeezed onto one line
+ * would say "Writer" without ever saying what choosing it means. The choice
+ * decides which extra fields appear below, so getting it wrong is expensive.
+ */
+export function AccountTypePicker({
+  value,
+  onChange,
+  disabled,
+}: {
+  value: AccountType;
+  onChange: (next: AccountType) => void;
+  disabled?: boolean;
+}) {
+  const theme = useTheme();
+  const { t } = useI18n();
+
+  const options: { key: AccountType; label: string; hint: string; icon: React.ReactNode }[] = [
+    {
+      key: 'reader',
+      label: t('auth.accountTypeReader'),
+      hint: t('auth.accountTypeReaderHint'),
+      icon: <BookOpen size={20} color={theme.colors.primary} />,
+    },
+    {
+      key: 'author',
+      label: t('auth.accountTypeAuthor'),
+      hint: t('auth.accountTypeAuthorHint'),
+      icon: <PenLine size={20} color={theme.colors.primary} />,
+    },
+    {
+      key: 'publisher',
+      label: t('auth.accountTypePublisher'),
+      hint: t('auth.accountTypePublisherHint'),
+      icon: <Building2 size={20} color={theme.colors.primary} />,
+    },
+  ];
+
+  return (
+    <View style={{ gap: theme.spacing.sm }}>
+      <Text variant="caption" color="fgSubtle">
+        {t('auth.accountTypeTitle').toUpperCase()}
+      </Text>
+
+      {options.map((option) => {
+        const selected = option.key === value;
+        return (
+          <Pressable
+            key={option.key}
+            accessibilityRole="radio"
+            accessibilityState={{ selected, disabled: !!disabled }}
+            accessibilityLabel={`${option.label}. ${option.hint}`}
+            disabled={disabled}
+            onPress={() => onChange(option.key)}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: theme.spacing.md,
+              padding: theme.spacing.md,
+              borderRadius: theme.radius.lg,
+              borderWidth: 1.5,
+              borderColor: selected ? theme.colors.primary : theme.colors.border,
+              backgroundColor: selected ? theme.colors.primarySoft : theme.colors.card,
+              opacity: disabled ? 0.6 : 1,
+            }}
+          >
+            {option.icon}
+
+            <View style={{ flex: 1, gap: 2, minWidth: 0 }}>
+              <Text variant="bodyStrong">{option.label}</Text>
+              <Text variant="small" color="fgMuted">
+                {option.hint}
+              </Text>
+            </View>
+
+            {/* A filled dot, not a tick: this is one-of-three, and a tick reads
+                as a checkbox the reader could tick more than one of. */}
+            <View
+              style={{
+                width: 20,
+                height: 20,
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: selected ? theme.colors.primary : theme.colors.borderStrong,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {selected ? (
+                <View
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: 5,
+                    backgroundColor: theme.colors.primary,
+                  }}
+                />
+              ) : null}
+            </View>
+          </Pressable>
+        );
+      })}
     </View>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { Link, useRouter } from 'expo-router';
-import { AtSign, Lock, User as UserIcon } from 'lucide-react-native';
+import { AtSign, Building2, Lock, PenLine, User as UserIcon } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useAuth } from '@/store/auth';
@@ -13,7 +13,8 @@ import { Input } from '@/components/ui/Input';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
-import { AuthHeader, LocaleSwitch, SocialButtons } from '@/components/auth/AuthParts';
+import { AccountTypePicker, AuthHeader, LocaleSwitch, SocialButtons } from '@/components/auth/AuthParts';
+import type { AccountType } from '@/types';
 
 export default function RegisterScreen() {
   const theme = useTheme();
@@ -25,12 +26,17 @@ export default function RegisterScreen() {
   const { signIn: googleSignIn } = useGoogleAuth();
   const loginWithProvider = useAuth((s) => s.loginWithProvider);
 
+  const [accountType, setAccountType] = useState<AccountType>('reader');
   const [form, setForm] = useState({
     name: '',
     username: '',
     email: '',
     password: '',
     confirm: '',
+    penName: '',
+    bio: '',
+    publisherName: '',
+    publisherCity: '',
   });
   const [errors, setErrors] = useState<Record<string, validate.FieldError>>({});
   const [busy, setBusy] = useState(false);
@@ -39,12 +45,18 @@ export default function RegisterScreen() {
     setForm((prev) => ({ ...prev, [key]: value }));
 
   const submit = async () => {
-    const next = {
+    const next: Record<string, validate.FieldError> = {
       name: validate.required(form.name),
       username: validate.username(form.username),
       email: validate.email(form.email),
       password: validate.password(form.password),
       confirm: validate.passwordsMatch(form.password, form.confirm),
+      // The imprint name is what the publisher's books are listed under, so it
+      // is the one extra field that cannot be skipped. A writer's pen name can:
+      // left blank, the server falls back to their own name.
+      // null, not undefined: `isValid` treats a key as an error and null as
+      // clean, so an absent field has to be explicitly clean.
+      publisherName: accountType === 'publisher' ? validate.required(form.publisherName) : null,
     };
     setErrors(next);
     if (!validate.isValid(next)) return;
@@ -56,6 +68,21 @@ export default function RegisterScreen() {
         username: form.username.trim().toLowerCase(),
         email: form.email.trim(),
         password: form.password,
+        accountType,
+        // Only the fields that belong to the chosen account type are sent.
+        // Posting a pen name alongside accountType 'publisher' would be
+        // ignored, but it would also mean the request no longer describes what
+        // the reader actually filled in.
+        ...(accountType === 'author' && form.penName.trim()
+          ? { penName: form.penName.trim() }
+          : {}),
+        ...(accountType === 'author' && form.bio.trim() ? { bio: form.bio.trim() } : {}),
+        ...(accountType === 'publisher'
+          ? {
+              publisherName: form.publisherName.trim(),
+              ...(form.publisherCity.trim() ? { publisherCity: form.publisherCity.trim() } : {}),
+            }
+          : {}),
       });
       // New accounts always go through the onboarding quiz first.
       router.replace('/onboarding');
@@ -84,6 +111,8 @@ export default function RegisterScreen() {
     <Screen keyboardAware contentStyle={{ gap: theme.spacing.xl, paddingTop: theme.spacing['3xl'] }}>
       <LocaleSwitch />
       <AuthHeader title={t('auth.createAccount')} />
+
+      <AccountTypePicker value={accountType} onChange={setAccountType} disabled={busy} />
 
       <View style={{ gap: theme.spacing.md }}>
         <Input
@@ -129,9 +158,49 @@ export default function RegisterScreen() {
           error={errors.confirm ? t(errors.confirm) : undefined}
           password
           icon={<Lock size={18} color={theme.colors.fgSubtle} />}
-          onSubmitEditing={submit}
-          returnKeyType="go"
+          onSubmitEditing={accountType === 'reader' ? submit : undefined}
+          returnKeyType={accountType === 'reader' ? 'go' : 'next'}
         />
+
+        {accountType === 'author' ? (
+          <>
+            <Input
+              label={t('auth.penName')}
+              hint={t('auth.penNameHint')}
+              value={form.penName}
+              onChangeText={set('penName')}
+              placeholder={form.name.trim() || undefined}
+              icon={<PenLine size={18} color={theme.colors.fgSubtle} />}
+            />
+            <Input
+              label={t('auth.authorBio')}
+              hint={t('auth.authorBioHint')}
+              value={form.bio}
+              onChangeText={set('bio')}
+              multiline
+              maxLength={600}
+            />
+          </>
+        ) : null}
+
+        {accountType === 'publisher' ? (
+          <>
+            <Input
+              label={t('auth.publisherName')}
+              value={form.publisherName}
+              onChangeText={set('publisherName')}
+              error={errors.publisherName ? t(errors.publisherName) : undefined}
+              icon={<Building2 size={18} color={theme.colors.fgSubtle} />}
+            />
+            <Input
+              label={t('auth.publisherCity')}
+              value={form.publisherCity}
+              onChangeText={set('publisherCity')}
+              onSubmitEditing={submit}
+              returnKeyType="go"
+            />
+          </>
+        ) : null}
       </View>
 
       <Button title={t('auth.register')} loading={busy} onPress={submit} />

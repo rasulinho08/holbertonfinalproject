@@ -75,24 +75,24 @@ export default function LoginScreen() {
 
       <View style={{ gap: theme.spacing.md }}>
         <Input
-          label="Email"
+          label={t('auth.email')}
           value={email}
           onChangeText={setEmail}
           error={errors.email ? t(errors.email) : undefined}
           autoCapitalize="none"
           autoComplete="email"
           keyboardType="email-address"
-          placeholder="Enter your email"
+          placeholder={t('auth.emailPlaceholder')}
           icon={<AtSign size={18} color={theme.colors.fgSubtle} />}
         />
         <Input
-          label="Password"
+          label={t('auth.password')}
           value={password}
           onChangeText={setPassword}
           error={errors.password ? t(errors.password) : undefined}
           password
           autoComplete="current-password"
-          placeholder="Enter your password"
+          placeholder={t('auth.passwordPlaceholder')}
           icon={<Lock size={18} color={theme.colors.fgSubtle} />}
           onSubmitEditing={submit}
           returnKeyType="go"
@@ -107,7 +107,7 @@ export default function LoginScreen() {
         </Link>
       </View>
 
-      <Button title="Log in" loading={busy} onPress={submit} />
+      <Button title={t('auth.login')} loading={busy} onPress={submit} />
 
       <Text variant="caption" color="fgSubtle" center>
         {t('auth.demoHint')}
@@ -117,12 +117,12 @@ export default function LoginScreen() {
 
       <View style={{ flexDirection: 'row', justifyContent: 'center', gap: theme.spacing.xs }}>
         <Text variant="small" color="fgMuted">
-          Don't have an account?
+          {t('auth.noAccount')}
         </Text>
         <Link href="/register" asChild>
           <Pressable accessibilityRole="link">
             <Text variant="smallStrong" color="primary">
-              Sign up
+              {t('auth.register')}
             </Text>
           </Pressable>
         </Link>

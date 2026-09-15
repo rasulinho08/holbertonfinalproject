@@ -1,11 +1,18 @@
 import React, { useMemo, useState } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Plus, Users } from 'lucide-react-native';
+import { KeyRound, Lock, Plus, Users } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useCurrentUser } from '@/store/auth';
-import { useBooks, useBuddyReads, useCreateBuddyRead, useShelfBooks, useShelves } from '@/api/hooks';
+import {
+  useBooks,
+  useBuddyReads,
+  useCreateBuddyRead,
+  useJoinBuddyReadByCode,
+  useShelfBooks,
+  useShelves,
+} from '@/api/hooks';
 import { useDebounced } from '@/lib/hooks';
 import { formatDate } from '@/lib/format';
 import { BookCover } from '@/components/book/BookCover';
@@ -33,6 +40,7 @@ export default function BuddyReadsScreen() {
 
   const { data: buddyReads, isLoading } = useBuddyReads();
   const create = useCreateBuddyRead();
+  const joinByCode = useJoinBuddyReadByCode();
 
   const { data: shelves } = useShelves();
   const readingShelfId = shelves?.find((s) => s.status === 'reading')?.id;
@@ -40,8 +48,13 @@ export default function BuddyReadsScreen() {
 
   const [creating, setCreating] = useState(!!params.bookId);
   const [name, setName] = useState('');
+  const [isPrivate, setIsPrivate] = useState(false);
   const [search, setSearch] = useState('');
   const [pickedBook, setPickedBook] = useState<Book | null>(null);
+
+  const [joining, setJoining] = useState(false);
+  const [code, setCode] = useState('');
+  const [codeError, setCodeError] = useState<string | null>(null);
 
   const debouncedSearch = useDebounced(search, 300);
   const searchQuery = useBooks({ q: debouncedSearch || undefined });
@@ -56,13 +69,39 @@ export default function BuddyReadsScreen() {
   const submit = async () => {
     if (!book || name.trim().length < 2) return;
     try {
-      const created = await create.mutateAsync({ name: name.trim(), bookId: book.id });
+      const created = await create.mutateAsync({
+        name: name.trim(),
+        bookId: book.id,
+        isPrivate,
+      });
       toast.success(t('buddy.created'));
       setCreating(false);
       setName('');
+      setIsPrivate(false);
       router.push(`/buddy-reads/${created.id}`);
     } catch {
       toast.error(t('errors.generic'));
+    }
+  };
+
+  const submitCode = async () => {
+    const trimmed = code.trim();
+    if (trimmed.length === 0) {
+      setCodeError(t('buddy.codeRequired'));
+      return;
+    }
+    setCodeError(null);
+    try {
+      const joined = await joinByCode.mutateAsync(trimmed);
+      toast.success(t('buddy.joinedByCode'));
+      setJoining(false);
+      setCode('');
+      router.push(`/buddy-reads/${joined.id}`);
+    } catch {
+      // The API answers 404 both for a code nobody owns and for a private
+      // group the reader may not see. That is deliberate, so the screen shows
+      // one message rather than guessing which case it was.
+      setCodeError(t('buddy.codeNotFound'));
     }
   };
 
@@ -72,9 +111,18 @@ export default function BuddyReadsScreen() {
         back
         title={t('buddy.title')}
         right={
-          <IconButton label={t('buddy.create')} variant="subtle" onPress={() => setCreating(true)}>
-            <Plus size={20} color={theme.colors.primary} />
-          </IconButton>
+          <View style={{ flexDirection: 'row', gap: theme.spacing.xs }}>
+            <IconButton
+              label={t('buddy.joinByCode')}
+              variant="subtle"
+              onPress={() => setJoining(true)}
+            >
+              <KeyRound size={20} color={theme.colors.primary} />
+            </IconButton>
+            <IconButton label={t('buddy.create')} variant="subtle" onPress={() => setCreating(true)}>
+              <Plus size={20} color={theme.colors.primary} />
+            </IconButton>
+          </View>
         }
       />
 
@@ -99,13 +147,23 @@ export default function BuddyReadsScreen() {
               ))}
             </View>
           ) : (
-            <EmptyState
-              icon={<Users size={22} color={theme.colors.fgSubtle} />}
-              title={t('buddy.empty')}
-              hint={t('buddy.emptyHint')}
-              actionLabel={t('buddy.create')}
-              onAction={() => setCreating(true)}
-            />
+            <View style={{ gap: theme.spacing.md }}>
+              <EmptyState
+                icon={<Users size={22} color={theme.colors.fgSubtle} />}
+                title={t('buddy.empty')}
+                hint={t('buddy.emptyHint')}
+                actionLabel={t('buddy.create')}
+                onAction={() => setCreating(true)}
+              />
+              {/* A reader whose friend already made the group arrives here with
+                  a code and nothing to do with it. */}
+              <Button
+                title={t('buddy.joinByCode')}
+                variant="secondary"
+                icon={<KeyRound size={16} color={theme.colors.primary} />}
+                onPress={() => setJoining(true)}
+              />
+            </View>
           )
         }
       />
@@ -117,6 +175,51 @@ export default function BuddyReadsScreen() {
           onChangeText={setName}
           placeholder={t('buddy.title')}
         />
+
+        <Pressable
+          accessibilityRole="switch"
+          accessibilityState={{ checked: isPrivate }}
+          accessibilityLabel={`${t('buddy.private')}. ${t('buddy.privateHint')}`}
+          onPress={() => setIsPrivate((v) => !v)}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: theme.spacing.md,
+            padding: theme.spacing.md,
+            borderRadius: theme.radius.lg,
+            borderWidth: 1.5,
+            borderColor: isPrivate ? theme.colors.primary : theme.colors.border,
+            backgroundColor: isPrivate ? theme.colors.primarySoft : 'transparent',
+          }}
+        >
+          <Lock size={18} color={isPrivate ? theme.colors.primary : theme.colors.fgSubtle} />
+          <View style={{ flex: 1, gap: 2, minWidth: 0 }}>
+            <Text variant="bodyStrong">{t('buddy.private')}</Text>
+            <Text variant="small" color="fgMuted">
+              {t('buddy.privateHint')}
+            </Text>
+          </View>
+          <View
+            style={{
+              width: 44,
+              height: 26,
+              borderRadius: theme.radius.pill,
+              padding: 3,
+              justifyContent: 'center',
+              alignItems: isPrivate ? 'flex-end' : 'flex-start',
+              backgroundColor: isPrivate ? theme.colors.primary : theme.colors.borderStrong,
+            }}
+          >
+            <View
+              style={{
+                width: 20,
+                height: 20,
+                borderRadius: 10,
+                backgroundColor: theme.colors.card,
+              }}
+            />
+          </View>
+        </Pressable>
 
         <Text variant="caption" color="fgSubtle">
           {t('buddy.selectBook').toUpperCase()}
@@ -164,6 +267,43 @@ export default function BuddyReadsScreen() {
           onPress={submit}
         />
       </Sheet>
+
+      <Sheet
+        visible={joining}
+        onClose={() => {
+          setJoining(false);
+          setCodeError(null);
+        }}
+        title={t('buddy.joinByCode')}
+        scrollable={false}
+      >
+        <Input
+          label={t('buddy.inviteCode')}
+          hint={t('buddy.joinByCodeHint')}
+          value={code}
+          // Uppercased as the reader types, because that is how the code is
+          // shown everywhere else — a lowercase echo looks like a different code.
+          onChangeText={(v) => {
+            setCode(v.toUpperCase());
+            if (codeError) setCodeError(null);
+          }}
+          error={codeError ?? undefined}
+          autoCapitalize="characters"
+          autoCorrect={false}
+          maxLength={16}
+          placeholder={t('buddy.joinByCodePlaceholder')}
+          icon={<KeyRound size={18} color={theme.colors.fgSubtle} />}
+          onSubmitEditing={submitCode}
+          returnKeyType="go"
+        />
+
+        <Button
+          title={t('buddy.join')}
+          loading={joinByCode.isPending}
+          disabled={code.trim().length === 0}
+          onPress={submitCode}
+        />
+      </Sheet>
     </>
   );
 }
@@ -189,6 +329,7 @@ function BuddyCard({ buddy }: { buddy: BuddyRead }) {
             <Text variant="bodyStrong" style={{ flex: 1 }} numberOfLines={1}>
               {buddy.name}
             </Text>
+            {buddy.isPrivate ? <Badge label={t('buddy.privateBadge')} tone="warning" /> : null}
             {isMember ? <Badge label={t('buddy.members')} tone="primary" /> : null}
           </View>
           <Text variant="small" color="fgMuted" numberOfLines={1}>

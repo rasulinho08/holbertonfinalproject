@@ -10,6 +10,7 @@ import { errorMessageKey } from '@/api/errors';
 import { useToast } from '@/components/ui/Toast';
 import { AuthHeader, SocialButtons } from '@/components/auth/AuthParts';
 import { View, Image, StyleSheet } from 'react-native';
+import { Eye, EyeOff } from 'lucide-react-native';
 
 export default function LoginWeb() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function LoginWeb() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordShown, setPasswordShown] = useState(false);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState('');
 
@@ -667,17 +669,47 @@ export default function LoginWeb() {
                     {t('auth.password')}
                   </label>
 
-                  <input
-                    className="input"
-                    type="password"
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      setStatus('');
-                    }}
-                    placeholder="••••••••"
-                    autoComplete="current-password"
-                  />
+                  {/* The reveal button QA asked for. The native screen gets it
+                      from the shared Input component; this screen is hand-built
+                      out of raw elements, so it needs its own. */}
+                  <div style={{ position: 'relative', display: 'flex' }}>
+                    <input
+                      className="input"
+                      type={passwordShown ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        setStatus('');
+                      }}
+                      placeholder="••••••••"
+                      autoComplete="current-password"
+                      style={{ flex: 1, paddingRight: 44 }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setPasswordShown((v) => !v)}
+                      aria-label={passwordShown ? t('auth.hidePassword') : t('auth.showPassword')}
+                      aria-pressed={passwordShown}
+                      style={{
+                        position: 'absolute',
+                        right: 4,
+                        top: 0,
+                        bottom: 0,
+                        width: 38,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0,
+                        color: 'inherit',
+                        opacity: 0.7,
+                      }}
+                    >
+                      {passwordShown ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
 
                   {/* FORGOT PASSWORD */}
 
