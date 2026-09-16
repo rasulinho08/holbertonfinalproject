@@ -68,6 +68,11 @@ export default function ProfileSettingsScreen() {
     }
   };
 
+  const removeCoverPhoto = async () => {
+    await updateProfile({ coverPhotoUrl: null });
+    setCoverPhotoUrl(null);
+  };
+
   const save = async () => {
     const websiteValue = normalizeWebsite(website);
     const next = {
@@ -88,7 +93,7 @@ export default function ProfileSettingsScreen() {
           uri: coverPhotoUrl,
           kind: 'cover',
         });
-        persistentCoverPhotoUrl = uploadResult.data.url ?? coverPhotoUrl;
+        persistentCoverPhotoUrl = uploadResult.url ?? coverPhotoUrl;
       }
 
       await updateProfile({
@@ -129,16 +134,31 @@ export default function ProfileSettingsScreen() {
                   cachePolicy="memory-disk"
                   accessibilityLabel={t('profile.coverPhoto')}
                 />
-                <View style={{ position: 'absolute', top: 4, right: 4, backgroundColor: 'black', opacity: 0.6, borderRadius: 9999, padding: 4 }}>
-                  <Button
-                    variant="ghost"
-                    size="xs"
-                    onPress={() => setCoverPhotoUrl(null)}
-                    style={{ padding: 2 }}
+                {/* Delete overlay button - placed top-right, inside cover boundaries */}
+                <Pressable
+                  style={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    backgroundColor: theme.colors.primary,
+                    padding: 6,
+                    borderRadius: theme.radius.full,
+                    minWidth: 28,
+                    minHeight: 28,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onPress={removeCoverPhoto}
+                  accessibilityLabel={t('profile.removeCoverPhoto')}
+                >
+                  <Text
+                    variant="caption"
+                    color={theme.colors.onPrimary}
+                    style={{ fontSize: 12 }}
                   >
-                    <Text variant="caption" color="white">Delete</Text>
-                  </Button>
-                </View>
+                    🗑
+                  </Text>
+                </Pressable>
               </View>
             ) : null}
 
