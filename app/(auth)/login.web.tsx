@@ -820,6 +820,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     minHeight: '100%',
+    overflowY: 'auto',
     backgroundColor: '#ffffff',
   },
 
