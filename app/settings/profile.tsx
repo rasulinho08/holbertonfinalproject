@@ -131,28 +131,10 @@ const pickCover = async () => {
           <View style={{ gap: theme.spacing.md, alignItems: 'center' }}>
             {coverPhotoUrl ? (
               <View style={{ height: 140, width: '100%', borderRadius: theme.radius.xl, overflow: 'hidden' }}>
-                {coverPhotoUrl && coverPhotoUrl.startsWith('blob:') ? (
-                  // Blob URI from web image picker - cannot be rendered by <Image>
-                  // without causing a React rendering crash (white screen). Show a
-                  // placeholder rectangle instead; the Save flow will still upload
-                  // the original local URI from the picker result.
-                  <View
-                    style={{
-                      height: '100%',
-                      width: '100%',
-                      backgroundColor: theme.colors.surface,
-                      borderRadius: theme.radius.xl,
-                    }}
-                  >
-                    <Text
-                      variant="caption"
-                      color={theme.colors.fgSubtle}
-                      style={{ fontSize: 12, textAlign: 'center', margin: theme.spacing.md }}
-                    >
-                      {t('profile.coverPhotoPending')}
-                    </Text>
-                  </View>
-                ) : (
+                {coverPhotoUrl.startsWith('http://') || coverPhotoUrl.startsWith('https://') ? (
+                  // http/https URI: render the image normally via <Image>
+                  // This works because http/https URIs have intrinsic dimensions
+ // that expo-image can handle without crashing.
                   <Image
                     source={{ uri: coverPhotoUrl }}
                     style={{ width: '100%', height: '100%' }}
@@ -162,6 +144,33 @@ const pickCover = async () => {
                     accessibilityLabel={t('profile.coverPhoto')}
                     onError={() => setCoverPhotoUrl(null)}
                   />
+                ) : (
+                  // blob: URI (Web image picker): cannot be rendered by <Image>
+                  // without causing a React rendering crash (white screen).
+                  // Show a placeholder preview card instead; the Save flow will still
+                  // upload the original blob: URI, and after a successful upload the
+                  // backend URL will be rendered normally via <Image>.
+                  <View
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      backgroundColor: theme.colors.surface,
+                      borderRadius: theme.radius.xl,
+                    }}
+                  >
+                    <View
+                      style={{
+                        padding: theme.spacing.md,
+                        color: theme.colors.fgSubtle,
+                        fontSize: 12,
+                        textAlign: 'center',
+                      }}>
+                      <Text>{t('profile.coverPhotoSelected')}</Text>
+                      <Text style={{ fontSize: 10, marginTop: theme.spacing.xs }}>
+                        {t('profile.tapSaveToUpload')}
+                      </Text>
+                    </View>
+                  </View>
                 )}
                 {/* Delete overlay button - placed top-right, inside cover boundaries */}
                 <Pressable
