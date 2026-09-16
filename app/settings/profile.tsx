@@ -63,7 +63,7 @@ export default function ProfileSettingsScreen() {
       aspect: [3, 1],
       quality: 0.7,
     });
-    if (!result.canceled && result.assets?.[0]) {
+    if (!result.canceled && result.assets?.[0] && result.assets[0].uri) {
       setCoverPhotoUrl(result.assets[0].uri);
     }
   };
@@ -133,6 +133,7 @@ export default function ProfileSettingsScreen() {
                   transition={theme.duration(theme.motion.base)}
                   cachePolicy="memory-disk"
                   accessibilityLabel={t('profile.coverPhoto')}
+                  onError={() => setCoverPhotoUrl(null)}
                 />
                 {/* Delete overlay button - placed top-right, inside cover boundaries */}
                 <Pressable
