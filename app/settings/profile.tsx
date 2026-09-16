@@ -56,15 +56,20 @@ export default function ProfileSettingsScreen() {
     if (!result.canceled && result.assets?.[0]) setAvatarUrl(result.assets[0].uri);
   };
 
-  const pickCover = async () => {
+const pickCover = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [3, 1],
       quality: 0.7,
     });
-    if (!result.canceled && result.assets?.[0] && result.assets[0].uri) {
-      setCoverPhotoUrl(result.assets[0].uri);
+    if (!result.canceled && result.assets?.[0]) {
+      const uri = result.assets[0].uri;
+      // Store the URI as-is. The Save function will upload it.
+      // CRITICAL: We must NOT set coverPhotoUrl to a blob:/data: URI if
+      // we also want to render the Image below safely. Instead, we store
+      // the URI and handle the rendering specially.
+      setCoverPhotoUrl(uri);
     }
   };
 
@@ -126,15 +131,38 @@ export default function ProfileSettingsScreen() {
           <View style={{ gap: theme.spacing.md, alignItems: 'center' }}>
             {coverPhotoUrl ? (
               <View style={{ height: 140, width: '100%', borderRadius: theme.radius.xl, overflow: 'hidden' }}>
-                <Image
-                  source={{ uri: coverPhotoUrl }}
-                  style={{ width: '100%', height: '100%' }}
-                  contentFit="cover"
-                  transition={theme.duration(theme.motion.base)}
-                  cachePolicy="memory-disk"
-                  accessibilityLabel={t('profile.coverPhoto')}
-                  onError={() => setCoverPhotoUrl(null)}
-                />
+                {coverPhotoUrl && coverPhotoUrl.startsWith('blob:') ? (
+                  // Blob URI from web image picker - cannot be rendered by <Image>
+                  // without causing a React rendering crash (white screen). Show a
+                  // placeholder rectangle instead; the Save flow will still upload
+                  // the original local URI from the picker result.
+                  <View
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      backgroundColor: theme.colors.surface,
+                      borderRadius: theme.radius.xl,
+                    }}
+                  >
+                    <Text
+                      variant="caption"
+                      color={theme.colors.fgSubtle}
+                      style={{ fontSize: 12, textAlign: 'center', margin: theme.spacing.md }}
+                    >
+                      {t('profile.coverPhotoPending')}
+                    </Text>
+                  </View>
+                ) : (
+                  <Image
+                    source={{ uri: coverPhotoUrl }}
+                    style={{ width: '100%', height: '100%' }}
+                    contentFit="cover"
+                    transition={theme.duration(theme.motion.base)}
+                    cachePolicy="memory-disk"
+                    accessibilityLabel={t('profile.coverPhoto')}
+                    onError={() => setCoverPhotoUrl(null)}
+                  />
+                )}
                 {/* Delete overlay button - placed top-right, inside cover boundaries */}
                 <Pressable
                   style={{
