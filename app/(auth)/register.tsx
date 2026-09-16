@@ -27,6 +27,7 @@ export default function RegisterScreen() {
   const loginWithProvider = useAuth((s) => s.loginWithProvider);
 
   const [accountType, setAccountType] = useState<AccountType>('reader');
+  const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     name: '',
     username: '',
@@ -107,101 +108,144 @@ export default function RegisterScreen() {
     }
   };
 
+  /**
+   * Navigate back to the account-type selection step.
+   * Keeps the selected accountType so the form re-renders with the correct fields.
+   */
+  const goBackToAccountType = () => {
+    setShowForm(false);
+  };
+
+  // When account type is selected, advance to the registration form
+  const advanceToForm = () => {
+    setShowForm(true);
+  };
+
   return (
     <Screen keyboardAware contentStyle={{ gap: theme.spacing.xl, paddingTop: theme.spacing['3xl'] }}>
       <LocaleSwitch />
       <AuthHeader title={t('auth.createAccount')} />
 
-      <AccountTypePicker value={accountType} onChange={setAccountType} disabled={busy} />
+      {/* Step 1: Account Type Selection - always visible, form hidden until selection */}
+      <AccountTypePicker
+        value={accountType}
+        onChange={nextAccountType => {
+          setAccountType(nextAccountType);
+          setShowForm(true);
+        }}
+        disabled={busy}
+      />
 
-      <View style={{ gap: theme.spacing.md }}>
-        <Input
-          label={t('auth.fullName')}
-          value={form.name}
-          onChangeText={set('name')}
-          error={errors.name ? t(errors.name) : undefined}
-          autoComplete="name"
-          icon={<UserIcon size={18} color={theme.colors.fgSubtle} />}
-        />
-        <Input
-          label={t('auth.username')}
-          value={form.username}
-          onChangeText={(v) => set('username')(validate.toUsername(v))}
-          error={errors.username ? t(errors.username) : undefined}
-          autoCapitalize="none"
-          placeholder="kitabsever"
-          icon={<Text color="fgSubtle">@</Text>}
-        />
-        <Input
-          label={t('auth.email')}
-          value={form.email}
-          onChangeText={set('email')}
-          error={errors.email ? t(errors.email) : undefined}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          autoComplete="email"
-          icon={<AtSign size={18} color={theme.colors.fgSubtle} />}
-        />
-        <Input
-          label={t('auth.password')}
-          value={form.password}
-          onChangeText={set('password')}
-          error={errors.password ? t(errors.password) : undefined}
-          password
-          autoComplete="new-password"
-          icon={<Lock size={18} color={theme.colors.fgSubtle} />}
-        />
-        <Input
-          label={t('auth.confirmPassword')}
-          value={form.confirm}
-          onChangeText={set('confirm')}
-          error={errors.confirm ? t(errors.confirm) : undefined}
-          password
-          icon={<Lock size={18} color={theme.colors.fgSubtle} />}
-          onSubmitEditing={accountType === 'reader' ? submit : undefined}
-          returnKeyType={accountType === 'reader' ? 'go' : 'next'}
-        />
+      {/* Step 2: Registration Form - only shown after account type is selected */}
+      {showForm && (
+        <View style={{ gap: theme.spacing.md }}>
+          <Input
+            label={t('auth.fullName')}
+            value={form.name}
+            onChangeText={set('name')}
+            error={errors.name ? t(errors.name) : undefined}
+            autoComplete="name"
+            icon={<UserIcon size={18} color={theme.colors.fgSubtle} />}
+          />
+          <Input
+            label={t('auth.username')}
+            value={form.username}
+            onChangeText={(v) => set('username')(validate.toUsername(v))}
+            error={errors.username ? t(errors.username) : undefined}
+            autoCapitalize="none"
+            placeholder="kitabsever"
+            icon={<Text color="fgSubtle">@</Text>}
+          />
+          <Input
+            label={t('auth.email')}
+            value={form.email}
+            onChangeText={set('email')}
+            error={errors.email ? t(errors.email) : undefined}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            autoComplete="email"
+            icon={<AtSign size={18} color={theme.colors.fgSubtle} />}
+          />
+          <Input
+            label={t('auth.password')}
+            value={form.password}
+            onChangeText={set('password')}
+            error={errors.password ? t(errors.password) : undefined}
+            password
+            autoComplete="new-password"
+            icon={<Lock size={18} color={theme.colors.fgSubtle} />}
+          />
+          <Input
+            label={t('auth.confirmPassword')}
+            value={form.confirm}
+            onChangeText={set('confirm')}
+            error={errors.confirm ? t(errors.confirm) : undefined}
+            password
+            icon={<Lock size={18} color={theme.colors.fgSubtle} />}
+            onSubmitEditing={accountType === 'reader' ? submit : undefined}
+            returnKeyType={accountType === 'reader' ? 'go' : 'next'}
+          />
 
-        {accountType === 'author' ? (
-          <>
-            <Input
-              label={t('auth.penName')}
-              hint={t('auth.penNameHint')}
-              value={form.penName}
-              onChangeText={set('penName')}
-              placeholder={form.name.trim() || undefined}
-              icon={<PenLine size={18} color={theme.colors.fgSubtle} />}
-            />
-            <Input
-              label={t('auth.authorBio')}
-              hint={t('auth.authorBioHint')}
-              value={form.bio}
-              onChangeText={set('bio')}
-              multiline
-              maxLength={600}
-            />
-          </>
-        ) : null}
+          {accountType === 'author' ? (
+            <>
+              <Input
+                label={t('auth.penName')}
+                hint={t('auth.penNameHint')}
+                value={form.penName}
+                onChangeText={set('penName')}
+                placeholder={form.name.trim() || undefined}
+                icon={<PenLine size={18} color={theme.colors.fgSubtle} />}
+              />
+              <Input
+                label={t('auth.authorBio')}
+                hint={t('auth.authorBioHint')}
+                value={form.bio}
+                onChangeText={set('bio')}
+                multiline
+                maxLength={600}
+              />
+            </>
+          ) : null}
 
-        {accountType === 'publisher' ? (
-          <>
-            <Input
-              label={t('auth.publisherName')}
-              value={form.publisherName}
-              onChangeText={set('publisherName')}
-              error={errors.publisherName ? t(errors.publisherName) : undefined}
-              icon={<Building2 size={18} color={theme.colors.fgSubtle} />}
-            />
-            <Input
-              label={t('auth.publisherCity')}
-              value={form.publisherCity}
-              onChangeText={set('publisherCity')}
-              onSubmitEditing={submit}
-              returnKeyType="go"
-            />
-          </>
-        ) : null}
-      </View>
+          {accountType === 'publisher' ? (
+            <>
+              <Input
+                label={t('auth.publisherName')}
+                value={form.publisherName}
+                onChangeText={set('publisherName')}
+                error={errors.publisherName ? t(errors.publisherName) : undefined}
+                icon={<Building2 size={18} color={theme.colors.fgSubtle} />}
+              />
+              <Input
+                label={t('auth.publisherCity')}
+                value={form.publisherCity}
+                onChangeText={set('publisherCity')}
+                onSubmitEditing={submit}
+                returnKeyType="go"
+              />
+            </>
+          ) : null}
+        </View>
+      )}
+
+      {/* Back button shown only when in the form step */}
+      {!showForm && (
+        <View style={{ marginBottom: theme.spacing.lg }}>
+          <Text variant="small" color="fgMuted">
+            {t('auth.or')}
+          </Text>
+        </View>
+      )}
+
+      {showForm && (
+        <View style={{ marginBottom: theme.spacing.lg }}>
+          <Button
+            title={t('common.back')}
+            onPress={goBackToAccountType}
+            accessibilityRole="button"
+          />
+        </View>
+      )}
 
       <Button title={t('auth.register')} loading={busy} onPress={submit} />
 
