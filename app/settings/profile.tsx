@@ -63,7 +63,9 @@ export default function ProfileSettingsScreen() {
       aspect: [3, 1],
       quality: 0.7,
     });
-    if (!result.canceled && result.assets?.[0]) setCoverPhotoUrl(result.assets[0].uri);
+    if (!result.canceled && result.assets?.[0]) {
+      setCoverPhotoUrl(result.assets[0].uri);
+    }
   };
 
   const save = async () => {
@@ -79,12 +81,22 @@ export default function ProfileSettingsScreen() {
 
     setBusy(true);
     try {
+      // Upload cover photo to backend if it's a local URI, to get a persistent URL
+      let persistentCoverPhotoUrl = coverPhotoUrl;
+      if (coverPhotoUrl && !coverPhotoUrl.startsWith('/uploads')) {
+        const uploadResult = await api.post('/api/v1/uploads', {
+          uri: coverPhotoUrl,
+          kind: 'cover',
+        });
+        persistentCoverPhotoUrl = uploadResult.data.url ?? coverPhotoUrl;
+      }
+
       await updateProfile({
         name: name.trim(),
         username: username.trim(),
         bio,
         avatarUrl,
-        coverPhotoUrl,
+        coverPhotoUrl: persistentCoverPhotoUrl,
         website: websiteValue || null,
       });
       const target = Number(goal);
@@ -117,6 +129,16 @@ export default function ProfileSettingsScreen() {
                   cachePolicy="memory-disk"
                   accessibilityLabel={t('profile.coverPhoto')}
                 />
+                <View style={{ position: 'absolute', top: 4, right: 4, backgroundColor: 'black', opacity: 0.6, borderRadius: 9999, padding: 4 }}>
+                  <Button
+                    variant="ghost"
+                    size="xs"
+                    onPress={() => setCoverPhotoUrl(null)}
+                    style={{ padding: 2 }}
+                  >
+                    <Text variant="caption" color="white">Delete</Text>
+                  </Button>
+                </View>
               </View>
             ) : null}
 
