@@ -41,7 +41,6 @@ export default function ProfileSettingsScreen() {
   const [bio, setBio] = useState(user?.bio ?? '');
   const [website, setWebsite] = useState(user?.website ?? '');
   const [avatarUrl, setAvatarUrl] = useState<string | null>(user?.avatarUrl ?? null);
-  const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(user?.coverPhotoUrl ?? null);
   const [goal, setGoalValue] = useState(String(user?.goal.target ?? 24));
   const [errors, setErrors] = useState<Record<string, validate.FieldError>>({});
   const [busy, setBusy] = useState(false);
@@ -56,29 +55,7 @@ export default function ProfileSettingsScreen() {
     if (!result.canceled && result.assets?.[0]) setAvatarUrl(result.assets[0].uri);
   };
 
-const pickCover = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsEditing: true,
-      aspect: [3, 1],
-      quality: 0.7,
-    });
-    if (!result.canceled && result.assets?.[0]) {
-      const uri = result.assets[0].uri;
-      // Store the URI as-is. The Save function will upload it.
-      // CRITICAL: We must NOT set coverPhotoUrl to a blob:/data: URI if
-      // we also want to render the Image below safely. Instead, we store
-      // the URI and handle the rendering specially.
-      setCoverPhotoUrl(uri);
-    }
-  };
-
-  const removeCoverPhoto = async () => {
-    await updateProfile({ coverPhotoUrl: null });
-    setCoverPhotoUrl(null);
-  };
-
-  const save = async () => {
+const save = async () => {
     const websiteValue = normalizeWebsite(website);
     const next = {
       name: validate.required(name),
@@ -91,22 +68,11 @@ const pickCover = async () => {
 
     setBusy(true);
     try {
-      // Upload cover photo to backend if it's a local URI, to get a persistent URL
-      let persistentCoverPhotoUrl = coverPhotoUrl;
-      if (coverPhotoUrl && !coverPhotoUrl.startsWith('/uploads')) {
-        const uploadResult = await api.post('/api/v1/uploads', {
-          uri: coverPhotoUrl,
-          kind: 'cover',
-        });
-        persistentCoverPhotoUrl = uploadResult.url ?? coverPhotoUrl;
-      }
-
       await updateProfile({
         name: name.trim(),
         username: username.trim(),
         bio,
         avatarUrl,
-        coverPhotoUrl: persistentCoverPhotoUrl,
         website: websiteValue || null,
       });
       const target = Number(goal);
@@ -129,78 +95,7 @@ const pickCover = async () => {
       <Screen keyboardAware>
         <View style={{ gap: theme.spacing.lg }}>
           <View style={{ gap: theme.spacing.md, alignItems: 'center' }}>
-            {coverPhotoUrl ? (
-              <View style={{ height: 140, width: '100%', borderRadius: theme.radius.xl, overflow: 'hidden' }}>
-                {coverPhotoUrl.startsWith('http://') || coverPhotoUrl.startsWith('https://') ? (
-                  // http/https URI: render the image normally via <Image>
-                  // This works because http/https URIs have intrinsic dimensions
- // that expo-image can handle without crashing.
-                  <Image
-                    source={{ uri: coverPhotoUrl }}
-                    style={{ width: '100%', height: '100%' }}
-                    contentFit="cover"
-                    transition={theme.duration(theme.motion.base)}
-                    cachePolicy="memory-disk"
-                    accessibilityLabel={t('profile.coverPhoto')}
-                    onError={() => setCoverPhotoUrl(null)}
-                  />
-                ) : (
-                  // blob: URI (Web image picker): cannot be rendered by <Image>
-                  // without causing a React rendering crash (white screen).
-                  // Show a placeholder preview card instead; the Save flow will still
-                  // upload the original blob: URI, and after a successful upload the
-                  // backend URL will be rendered normally via <Image>.
-                  <View
-                    style={{
-                      height: '100%',
-                      width: '100%',
-                      backgroundColor: theme.colors.surface,
-                      borderRadius: theme.radius.xl,
-                    }}
-                  >
-                    <View
-                      style={{
-                        padding: theme.spacing.md,
-                        color: theme.colors.fgSubtle,
-                        fontSize: 12,
-                        textAlign: 'center',
-                      }}>
-                      <Text>{t('profile.coverPhotoSelected')}</Text>
-                      <Text style={{ fontSize: 10, marginTop: theme.spacing.xs }}>
-                        {t('profile.tapSaveToUpload')}
-                      </Text>
-                    </View>
-                  </View>
-                )}
-                {/* Delete overlay button - placed top-right, inside cover boundaries */}
-                <Pressable
-                  style={{
-                    position: 'absolute',
-                    top: 8,
-                    right: 8,
-                    backgroundColor: theme.colors.primary,
-                    padding: 6,
-                    borderRadius: theme.radius.full,
-                    minWidth: 28,
-                    minHeight: 28,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  onPress={removeCoverPhoto}
-                  accessibilityLabel={t('profile.removeCoverPhoto')}
-                >
-                  <Text
-                    variant="caption"
-                    color={theme.colors.onPrimary}
-                    style={{ fontSize: 12 }}
-                  >
-                    🗑
-                  </Text>
-                </Pressable>
-              </View>
-            ) : null}
-
-            <View style={{ alignItems: 'center', gap: theme.spacing.md }}>
+<View style={{ alignItems: 'center', gap: theme.spacing.md }}>
               <Avatar name={name || '?'} uri={avatarUrl} size={92} />
               <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
                 <Button
@@ -210,14 +105,6 @@ const pickCover = async () => {
                   fullWidth={false}
                   icon={<Camera size={15} color={theme.colors.fg} />}
                   onPress={pickAvatar}
-                />
-                <Button
-                  title={t('profile.coverPhoto')}
-                  variant="outline"
-                  size="sm"
-                  fullWidth={false}
-                  icon={<Camera size={15} color={theme.colors.fg} />}
-                  onPress={pickCover}
                 />
               </View>
             </View>
