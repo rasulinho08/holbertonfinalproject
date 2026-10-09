@@ -90,7 +90,9 @@ export function ProfileView({ user, isMe }: ProfileViewProps) {
           style={{
             flexDirection: 'row',
             gap: theme.spacing.lg,
-            alignItems: 'center',
+            // Only the avatar tucks into the cover; the text starts below it.
+            // Centring the row pulled the name up over the photo.
+            alignItems: 'flex-start',
             marginTop: -36,
           }}
         >
@@ -108,8 +110,8 @@ export function ProfileView({ user, isMe }: ProfileViewProps) {
               ring={user.stats.readToday}
             />
           </View>
-          <View style={{ flex: 1, gap: 3 }}>
-            <Text variant="h1" numberOfLines={1}>
+          <View style={{ flex: 1, gap: 3, paddingTop: 36 + theme.spacing.sm }}>
+            <Text variant="h2" numberOfLines={2}>
               {user.name}
             </Text>
             <Text variant="small" color="fgSubtle">
