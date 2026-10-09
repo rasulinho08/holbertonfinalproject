@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0E1116"
+      "backgroundColor": "#12100E"
     },
     "ios": {
       "supportsTablet": true,
@@ -24,12 +24,16 @@
       "package": "az.kitabdostu.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#0E1116"
+        "backgroundColor": "#DE5A11"
       },
-      "edgeToEdgeEnabled": false
+      "edgeToEdgeEnabled": false,
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "androidNavigationBar": {
-      "visible": "always",
       "barStyle": "light-content",
       "backgroundColor": "#0E1116"
     },
@@ -38,26 +42,34 @@
       "favicon": "./assets/images/favicon.png",
       "name": "KitabDostu",
       "shortName": "KitabDostu",
-      "themeColor": "#1E3A5F",
+      "themeColor": "#C2410C",
       "backgroundColor": "#0E1116",
       "display": "standalone",
       "lang": "az"
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store",
+      [
+        "expo-secure-store",
+        {
+          "faceIDPermission": false
+        }
+      ],
       "expo-font",
       [
         "expo-image-picker",
         {
-          "photosPermission": "KitabDostu sitatları kitab şəkillərindən çıxarmaq üçün qalereyaya giriş istəyir.",
-          "cameraPermission": "KitabDostu sitat çəkmək üçün kameraya giriş istəyir."
+          "photosPermission": "KitabDostu profil şəkli seçmək və sitatı kitab səhifəsinin şəklindən çıxarmaq üçün qalereyaya giriş istəyir.",
+          "cameraPermission": "KitabDostu kitabın barkodunu oxumaq və kitab səhifəsinin şəklini çəkmək üçün kameradan istifadə edir.",
+          "microphonePermission": false
         }
       ],
       [
         "expo-camera",
         {
-          "cameraPermission": "KitabDostu kitabın barkodunu oxumaq üçün kameradan istifadə edir."
+          "cameraPermission": "KitabDostu kitabın barkodunu oxumaq və kitab səhifəsinin şəklini çəkmək üçün kameradan istifadə edir.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
         }
       ]
     ],
