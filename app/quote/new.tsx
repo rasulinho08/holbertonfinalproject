@@ -79,6 +79,10 @@ export default function NewQuoteScreen() {
 
     try {
       const extracted = await ocr.mutateAsync({ imageUri: result.assets[0].uri });
+      if (extracted.available === false || !extracted.text) {
+        toast.info(t('quote.ocrUnavailable'));
+        return;
+      }
       setText((prev) => (prev ? `${prev}\n${extracted.text}` : extracted.text));
       toast.success(t('quote.ocrDone'));
     } catch {
