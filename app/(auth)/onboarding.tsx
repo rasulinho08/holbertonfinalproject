@@ -79,6 +79,11 @@ export default function OnboardingScreen() {
 
   const skip = () => {
     setOnboardingDone(true);
+    // Tell the server too, so the quiz is not offered again on another device.
+    // Best effort: skipping must work offline.
+    savePreferences({ favoriteGenres: selectedGenres, favoriteAuthorIds: selectedAuthors }).catch(
+      () => undefined,
+    );
     router.replace('/');
   };
 

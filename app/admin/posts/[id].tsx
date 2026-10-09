@@ -1,13 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import { uploadImage } from '@/lib/uploads';
 import { Check, ImagePlus, Search, X } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useCurrentUser } from '@/store/auth';
-import { api } from '@/api/client';
-import { Endpoints } from '@/api/endpoints';
 import {
   useBooks,
   usePublication,
@@ -53,13 +52,17 @@ export default function EditPublicationScreen() {
   const [bookSearch, setBookSearch] = useState('');
   const debouncedBookSearch = useDebounced(bookSearch, 300);
 
-  useEffect(() => {
-    if (!data) return;
+  // Fill the form once per loaded publication. Done while rendering (React's
+  // "adjusting state when a prop changes" pattern) rather than in an effect,
+  // which rendered the empty form first and then re-rendered everything.
+  const [hydratedId, setHydratedId] = useState<string | null>(null);
+  if (data && data.id !== hydratedId) {
+    setHydratedId(data.id);
     setTitle(data.title);
     setContent(data.content);
     setCoverUrl(data.coverUrl);
     setSelectedBooks(toPicks(data));
-  }, [data?.id]);
+  }
 
   const update = useUpdatePublication();
   const booksQuery = useBooks({ q: debouncedBookSearch || undefined });
@@ -83,14 +86,10 @@ export default function EditPublicationScreen() {
       quality: 0.7,
     });
     if (result.canceled || !result.assets?.[0]) return;
-    const uri = result.assets[0].uri;
+    const asset = result.assets[0];
     setUploadingCover(true);
     try {
-      const uploaded = await api.post<{ id: string; url: string }>(Endpoints.uploads.create, {
-        uri,
-        kind: 'publication',
-      });
-      setCoverUrl(uploaded.url);
+      setCoverUrl(await uploadImage(asset.uri, 'publication', asset.width));
     } catch {
       Alert.alert(t('common.error'), t('common.tryAgain'));
     } finally {

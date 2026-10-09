@@ -53,34 +53,47 @@ export function buildQueryString(query?: Record<string, QueryValue>): string {
 
 /* --------------------------------- core ---------------------------------- */
 
-let refreshInFlight: Promise<boolean> | null = null;
+/**
+ * How a refresh attempt ended. Only `rejected` — the server looked at the
+ * refresh token and said no — means the session is over. `unreachable` (no
+ * network, a timeout, a 5xx while the free-tier host wakes up) must not sign
+ * the reader out: their tokens are still good, the server just did not answer.
+ */
+type RefreshOutcome = 'ok' | 'rejected' | 'unreachable';
+
+let refreshInFlight: Promise<RefreshOutcome> | null = null;
 
 /**
  * Refreshes the access token. Concurrent 401s share one refresh call so a
  * screen firing five queries does not trigger five token rotations.
  */
-async function refreshSession(): Promise<boolean> {
+async function refreshSession(): Promise<RefreshOutcome> {
   if (refreshInFlight) return refreshInFlight;
 
-  refreshInFlight = (async () => {
+  refreshInFlight = (async (): Promise<RefreshOutcome> => {
     const refresh = getRefreshToken();
-    if (!refresh) return false;
+    if (!refresh) return 'rejected';
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {
       const res = await fetch(`${API_BASE_URL}${Endpoints.auth.refresh}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refreshToken: refresh }),
+        signal: controller.signal,
       });
-      if (!res.ok) return false;
+      if (res.status === 429 || res.status >= 500) return 'unreachable';
+      if (!res.ok) return 'rejected';
       const json = (await res.json()) as SuccessEnvelope<{
         accessToken: string;
         refreshToken: string;
       }>;
       await setTokens(json.data.accessToken, json.data.refreshToken);
-      return true;
+      return 'ok';
     } catch {
-      return false;
+      return 'unreachable';
     } finally {
+      clearTimeout(timeout);
       refreshInFlight = null;
     }
   })();
@@ -161,9 +174,15 @@ async function httpRequest<T>(path: string, options: RequestOptions, retry = tru
 
   if (!response.ok) {
     // One transparent refresh-and-retry on 401, then give up and sign out.
-    if (response.status === 401 && auth && retry) {
-      const refreshed = await refreshSession();
-      if (refreshed) return httpRequest<T>(path, options, false);
+    // Without any stored session (a guest) there is nothing to refresh or to
+    // sign out of: emitting "session expired" there used to trigger one
+    // logout call per failed request.
+    if (response.status === 401 && auth && retry && (getAccessToken() || getRefreshToken())) {
+      const outcome = await refreshSession();
+      if (outcome === 'ok') return httpRequest<T>(path, options, false);
+      if (outcome === 'unreachable') {
+        throw new ApiError('NETWORK_ERROR', 'Network request failed', 0);
+      }
       await clearTokens();
       emitSessionExpired();
     }

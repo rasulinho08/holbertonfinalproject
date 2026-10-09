@@ -41,8 +41,8 @@ export default function LoginScreen() {
 
     setBusy(true);
     try {
-      await login(email.trim(), password);
-      router.replace(onboardingDone ? '/' : '/onboarding');
+      const user = await login(email.trim(), password);
+      router.replace(user.onboardingCompleted || onboardingDone ? '/' : '/onboarding');
     } catch (error) {
       toast.error(t(errorMessageKey(error)));
     } finally {
@@ -59,8 +59,8 @@ export default function LoginScreen() {
       const result = await googleSignIn();
       // null means the reader closed the consent screen — not an error.
       if (!result) return;
-      await loginWithProvider('google', result.idToken);
-      router.replace(onboardingDone ? '/' : '/onboarding');
+      const user = await loginWithProvider('google', result.idToken);
+      router.replace(user.onboardingCompleted || onboardingDone ? '/' : '/onboarding');
     } catch (error) {
       toast.error(t(errorMessageKey(error)));
     } finally {
@@ -109,9 +109,12 @@ export default function LoginScreen() {
 
       <Button title={t('auth.login')} loading={busy} onPress={submit} />
 
-      <Text variant="caption" color="fgSubtle" center>
-        {t('auth.demoHint')}
-      </Text>
+      {/* Points at a developer's .env file: only meaningful in a development build. */}
+      {__DEV__ ? (
+        <Text variant="caption" color="fgSubtle" center>
+          {t('auth.demoHint')}
+        </Text>
+      ) : null}
 
       <SocialButtons onPress={social} disabled={busy} />
 
