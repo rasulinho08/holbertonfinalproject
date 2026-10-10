@@ -119,7 +119,6 @@ export const az = {
     twoFactorTitle: 'İki mərhələli doğrulama',
     twoFactorHint: 'Tətbiqdəki 6 rəqəmli kodu daxil et.',
     twoFactorCode: 'Doğrulama kodu',
-    demoHint: 'Test hesabı: leyla@kitabdostu.az / backend .env-də təyin olunmuş SEED_PASSWORD istifadə edin',
     emailPlaceholder: 'E-poçt ünvanın',
     passwordPlaceholder: 'Şifrən',
     accountTypeTitle: 'Hansı hesabı açırsan?',

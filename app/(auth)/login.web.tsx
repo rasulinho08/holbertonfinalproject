@@ -741,12 +741,6 @@ export default function LoginWeb() {
 
                   {/* DEMO HINT */}
 
-                  {__DEV__ ? (
-                    <div style={{ textAlign: 'center', color: '#64748b', fontSize: 13 }}>
-                      {t('auth.demoHint')}
-                    </div>
-                  ) : null}
-
                   {/* GOOGLE */}
 
                   <div>

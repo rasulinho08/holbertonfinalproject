@@ -118,7 +118,6 @@ export const en: Translated<Dictionary> = {
     twoFactorTitle: 'Two-factor authentication',
     twoFactorHint: 'Enter the 6-digit code from your authenticator app.',
     twoFactorCode: 'Verification code',
-    demoHint: 'Test account: leyla@kitabdostu.az / use the SEED_PASSWORD set in your backend .env',
     emailPlaceholder: 'Your email address',
     passwordPlaceholder: 'Your password',
     accountTypeTitle: 'What kind of account?',

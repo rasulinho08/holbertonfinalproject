@@ -109,13 +109,6 @@ export default function LoginScreen() {
 
       <Button title={t('auth.login')} loading={busy} onPress={submit} />
 
-      {/* Points at a developer's .env file: only meaningful in a development build. */}
-      {__DEV__ ? (
-        <Text variant="caption" color="fgSubtle" center>
-          {t('auth.demoHint')}
-        </Text>
-      ) : null}
-
       <SocialButtons onPress={social} disabled={busy} />
 
       <View style={{ flexDirection: 'row', justifyContent: 'center', gap: theme.spacing.xs }}>
