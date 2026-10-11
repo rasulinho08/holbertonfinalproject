@@ -708,7 +708,7 @@ quantity exceeds `stock`. `PATCH` with `quantity: 0` removes the line.
                "note": "Zəng edin" },
   "deliveryMethod": "courier",     // courier | pickup | post
   "paymentMethod": "cod",          // card | cod | pos_on_delivery | wallet
-  "giftCardCode": "KITAB10"        // optional
+  "giftCardCode": "DEV_GIFT_CARD_DEMO"        // optional
 }
 ```
 
@@ -799,8 +799,8 @@ The app renders this payload directly; `url` is optional and only used for the
 // GET /wallet
 { "data": { "balance": 12.50, "currency": "AZN" } }
 
-// POST /gift-cards/redeem  { "code": "KITAB10" }
-{ "data": { "code": "KITAB10", "amount": 10.00, "valid": true } }
+// POST /gift-cards/redeem  { "code": "DEV_GIFT_CARD_DEMO" }
+{ "data": { "code": "DEV_GIFT_CARD_DEMO", "amount": 0.00, "valid": true } }
 ```
 
 `redeem` **validates only** — the card is consumed at checkout, not here.
