@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { ArrowRight, ScanLine, Search, SlidersHorizontal, X } from 'lucide-react-native';
+import { ArrowRight, Bot, ScanLine, Search, SlidersHorizontal, X } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import {
@@ -67,7 +67,15 @@ export default function ExploreScreen() {
 
   return (
     <>
-      <AppHeader title={t('nav.explore')} actions />
+      <AppHeader
+        title={t('nav.explore')}
+        actions
+        right={
+          <IconButton label={t('assistant.entry')} variant="subtle" onPress={() => router.push('/assistant')}>
+            <Bot size={20} color={theme.colors.primary} />
+          </IconButton>
+        }
+      />
 
       <View
         style={{

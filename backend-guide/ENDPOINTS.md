@@ -22,6 +22,7 @@ Every route below has a working reference implementation in the frontend repo at
 13. [Notifications](#13-notifications) · 14. [Reports](#14-reports) · 15. [Publisher](#15-publisher)
 16. [Admin](#16-admin) · 17. [Uploads & OCR](#17-uploads--ocr)
 18. [Reading sessions](#18-reading-sessions) · 19. [Book lists](#19-book-lists)
+20. [Assistant](#20-assistant)
 
 ---
 
@@ -1206,6 +1207,41 @@ Rules:
 - `isOfficial` is set by staff only. Never let `POST /lists` accept it from the
   body — it is what the verified badge in the UI is keyed on.
 - `isFollowing` requires the caller; return `false` for anonymous requests.
+
+---
+
+## 20. Assistant
+
+| Method | Path | Auth | Purpose |
+|---|---|---|---|
+| GET | `/assistant` | auth | Whether the book assistant is switched on |
+| POST | `/assistant/chat` | auth | Next reply in a conversation |
+
+A plain chat with Google Gemini. The server holds the API key
+(`GEMINI_API_KEY`, model from `GEMINI_MODEL`); nothing is stored, and the client
+sends the whole conversation each time.
+
+```jsonc
+// GET /assistant
+{ "available": true }
+
+// POST /assistant/chat
+{ "messages": [
+  { "role": "user", "content": "Dostoyevskini sevirəm, növbəti nə oxuyum?" }
+]}
+// →
+{ "available": true, "reply": "…" }
+```
+
+Rules:
+
+- 1–30 messages, roles `user` / `assistant`, each 1–2000 characters; the first
+  and the last message are the reader's (`user`). Otherwise `422`.
+- Without a key the server answers `{ "available": false, "reply": null }`
+  rather than inventing a reply.
+- A reply Gemini blocks for safety comes back as a short polite refusal, not an
+  error. A Gemini failure is `500 SERVER_ERROR`.
+- Rate limited to 20 requests a minute per client.
 
 ---
 

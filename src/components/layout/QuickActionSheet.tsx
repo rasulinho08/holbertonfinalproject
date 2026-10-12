@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, View, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import {
+  Bot,
   BookPlus,
   ShoppingBag,
   Tag,
@@ -73,6 +74,15 @@ export function QuickActionSheet({ visible, onClose }: QuickActionSheetProps) {
       color: theme.colors.rating,
       bg: theme.colors.card,
       route: '/quote/new' as PushArg,
+    },
+    {
+      key: 'assistant',
+      title: t('assistant.entry'),
+      description: t('assistant.entryHint'),
+      Icon: Bot,
+      color: theme.colors.info,
+      bg: theme.colors.infoSoft,
+      route: '/assistant' as PushArg,
     },
     {
       key: 'start-buddy',

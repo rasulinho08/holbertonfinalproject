@@ -5,6 +5,7 @@
  * hooks. One module per resource knows its endpoints, so a route rename is one
  * edit here rather than a search across 40 screens.
  */
+export * from './assistant';
 export * from './books';
 export * from './commerce';
 export * from './engagement';
