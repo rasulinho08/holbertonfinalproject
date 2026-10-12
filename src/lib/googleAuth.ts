@@ -125,6 +125,10 @@ export function useGoogleAuth() {
       // assertion, and the implicit id_token flow avoids shipping a client
       // secret in an app bundle, where it would not be secret.
       responseType: AuthSession.ResponseType.IdToken,
+      // PKCE belongs to the code flow. expo-auth-session adds it by default,
+      // and Google refuses an id_token request that carries it (400
+      // "Parameter not allowed for this message type: code_challenge_method").
+      usePKCE: false,
       extraParams: { nonce },
     },
     DISCOVERY,
