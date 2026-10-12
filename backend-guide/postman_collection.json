@@ -339,7 +339,7 @@
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "url": "{{baseUrl}}/gift-cards/redeem",
-            "body": { "mode": "raw", "raw": "{\n  \"code\": \"KITAB10\"\n}" }
+            "body": { "mode": "raw", "raw": "{\n  \"code\": \"DEV_GIFT_CARD_DEMO\"\n}" }
           }
         },
         {
