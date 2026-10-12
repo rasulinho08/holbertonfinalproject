@@ -20,6 +20,9 @@ import { useToast } from '@/components/ui/Toast';
 
 const BIO_LIMIT = 240;
 
+/** A saved http(s) URL, or a freshly picked local image with its size. */
+type Photo = { uri: string | null; width?: number; height?: number };
+
 /** Folds free text into an absolute URL: "github.com/e" → "https://github.com/e". */
 function normalizeWebsite(value: string): string {
   const cleaned = value.trim();
@@ -43,10 +46,10 @@ export default function ProfileSettingsScreen() {
   const [website, setWebsite] = useState(user?.website ?? '');
   // Either the saved http(s) URL or, after picking, a local URI that is
   // uploaded on save. Width is kept so small pictures are not upscaled.
-  const [avatar, setAvatar] = useState<{ uri: string | null; width?: number }>({
+  const [avatar, setAvatar] = useState<Photo>({
     uri: user?.avatarUrl ?? null,
   });
-  const [cover, setCover] = useState<{ uri: string | null; width?: number }>({
+  const [cover, setCover] = useState<Photo>({
     uri: user?.coverPhotoUrl ?? null,
   });
   const [goal, setGoalValue] = useState(String(user?.goal.target ?? 24));
@@ -61,7 +64,7 @@ export default function ProfileSettingsScreen() {
       quality: 0.8,
     });
     const asset = result.canceled ? undefined : result.assets?.[0];
-    return asset ? { uri: asset.uri, width: asset.width } : null;
+    return asset ? { uri: asset.uri, width: asset.width, height: asset.height } : null;
   };
 
   const pickAvatar = async () => {
@@ -75,8 +78,8 @@ export default function ProfileSettingsScreen() {
   };
 
   /** Uploads a freshly picked photo; saved URLs and removals pass through. */
-  const persist = async (photo: { uri: string | null; width?: number }, kind: 'avatar' | 'cover') =>
-    isLocalUri(photo.uri) ? uploadImage(photo.uri, kind, photo.width) : photo.uri;
+  const persist = async (photo: Photo, kind: 'avatar' | 'cover') =>
+    isLocalUri(photo.uri) ? uploadImage(photo.uri, kind, photo) : photo.uri;
 
 const save = async () => {
     const websiteValue = normalizeWebsite(website);

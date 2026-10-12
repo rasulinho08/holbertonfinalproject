@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Flag, Send } from 'lucide-react-native';
+import { Flag, MessageCircle, Send } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import {
@@ -56,7 +56,7 @@ export default function QuoteDetailScreen() {
     <>
       <AppHeader
         back
-        title={t('nav.quotes')}
+        title={t('quote.single')}
         right={
           quote ? (
             <IconButton label={t('common.report')} onPress={() => setReporting(true)}>
@@ -68,11 +68,12 @@ export default function QuoteDetailScreen() {
 
       <Screen keyboardAware bottomInset={72}>
         {isLoading || !quote ? (
-          <Skeleton height={220} radius={theme.radius.lg} />
+          <Skeleton height={300} radius={theme.radius.xl} />
         ) : (
           <>
             <QuoteCard
               quote={quote}
+              full
               onLike={(liked) => toggleLike.mutate({ id: quote.id, liked })}
             />
 
@@ -84,9 +85,22 @@ export default function QuoteDetailScreen() {
 
             <Section title={t('quote.comments', { count: comments?.length ?? 0 })}>
               {!comments || comments.length === 0 ? (
-                <Text variant="small" color="fgSubtle">
-                  {t('quote.addComment')}
-                </Text>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    gap: theme.spacing.sm,
+                    paddingVertical: theme.spacing.xl,
+                    borderRadius: theme.radius.lg,
+                    borderWidth: 1,
+                    borderStyle: 'dashed',
+                    borderColor: theme.colors.border,
+                  }}
+                >
+                  <MessageCircle size={20} color={theme.colors.fgSubtle} />
+                  <Text variant="small" color="fgMuted" center>
+                    {t('quote.noComments')}
+                  </Text>
+                </View>
               ) : (
                 <View style={{ gap: theme.spacing.md }}>
                   {comments.map((comment) => (

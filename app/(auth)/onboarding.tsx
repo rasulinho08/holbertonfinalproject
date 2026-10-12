@@ -4,6 +4,8 @@ import { useRouter } from 'expo-router';
 import { ArrowLeft, Check, Target } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
+import { api } from '@/api/client';
+import { Endpoints } from '@/api/endpoints';
 import { useAuth } from '@/store/auth';
 import { usePrefs } from '@/store/prefs';
 import { useBooks, useGenres } from '@/api/hooks';
@@ -80,10 +82,13 @@ export default function OnboardingScreen() {
   const skip = () => {
     setOnboardingDone(true);
     // Tell the server too, so the quiz is not offered again on another device.
-    // Best effort: skipping must work offline.
-    savePreferences({ favoriteGenres: selectedGenres, favoriteAuthorIds: selectedAuthors }).catch(
-      () => undefined,
-    );
+    // Best effort: skipping must work offline. Sent directly rather than via
+    // the auth store, whose savePreferences writes the response into `user` —
+    // a slow reply arriving after a sign-out or account switch would put this
+    // account back as the current user.
+    api
+      .patch(Endpoints.users.preferences, { favoriteGenres: selectedGenres, favoriteAuthorIds: selectedAuthors })
+      .catch(() => undefined);
     router.replace('/');
   };
 

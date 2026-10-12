@@ -22,6 +22,8 @@ export const qk = {
 
   feed: ['feed'] as const,
 
+  assistant: ['assistant'] as const,
+
   books: {
     all: ['books'] as const,
     list: (filters: BookFilters) => ['books', 'list', filters] as const,

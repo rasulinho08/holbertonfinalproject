@@ -16,6 +16,7 @@ import {
 import { serverMessage } from '@/api/errors';
 import { BookCover } from '@/components/book/BookCover';
 import { Button } from '@/components/ui/Button';
+import { QuotePage } from '@/components/quote/QuoteCard';
 import { Card } from '@/components/ui/Card';
 import { IconButton } from '@/components/ui/IconButton';
 import { Input } from '@/components/ui/Input';
@@ -118,40 +119,82 @@ export default function NewQuoteScreen() {
           </IconButton>
         </View>
 
-        {/* live preview of the card that will be published */}
+        {/* Live preview: the same component the feed renders. */}
         <View
           style={{
-            borderRadius: theme.radius.lg,
+            borderRadius: theme.radius.xl,
             overflow: 'hidden',
-            minHeight: 170,
-            justifyContent: 'center',
-            padding: theme.spacing.xl,
+            borderWidth: 1,
+            borderColor: theme.colors.border,
+            ...theme.elevation(2),
           }}
         >
-          <Svg style={{ position: 'absolute', width: '100%', height: '100%' }}>
-            <Defs>
-              <LinearGradient id="composer-bg" x1="0" y1="0" x2="1" y2="1">
-                <Stop offset="0" stopColor={bg.colors[0]} />
-                <Stop offset="1" stopColor={bg.colors[1]} />
-              </LinearGradient>
-            </Defs>
-            <Rect width="100%" height="100%" fill="url(#composer-bg)" />
-          </Svg>
+          <QuotePage
+            background={bg}
+            text={text}
+            placeholder={t('quote.quotePlaceholder')}
+            bookTitle={book?.title}
+            authorName={book?.authorName}
+            coverUrl={book?.coverUrl}
+            page={page}
+            size="full"
+            gradientId="composer-preview"
+          />
+        </View>
 
-          <Text
-            serif
-            style={{ color: bg.text, fontSize: 17, lineHeight: 26, fontWeight: '500' }}
-            numberOfLines={6}
-          >
-            {text || t('quote.quotePlaceholder')}
+        <View style={{ gap: theme.spacing.sm }}>
+          <Text variant="smallStrong" color="fgMuted">
+            {t('quote.background')}
           </Text>
-
-          {book ? (
-            <Text style={{ color: bg.text, opacity: 0.75, fontSize: 12, marginTop: theme.spacing.md }}>
-              — {book.title}
-              {page ? `, ${t('common.page')} ${page}` : ''}
-            </Text>
-          ) : null}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            {QUOTE_BACKGROUNDS.map((option) => {
+              const active = option.id === background;
+              return (
+                <Pressable
+                  key={option.id}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: active }}
+                  accessibilityLabel={option.id}
+                  onPress={() => setBackground(option.id)}
+                  style={{
+                    width: 38,
+                    height: 38,
+                    borderRadius: theme.radius.pill,
+                    padding: 3,
+                    borderWidth: 2,
+                    borderColor: active ? theme.colors.primary : 'transparent',
+                  }}
+                >
+                  <View
+                    style={{
+                      flex: 1,
+                      borderRadius: theme.radius.pill,
+                      overflow: 'hidden',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 1,
+                      borderColor: theme.colors.border,
+                    }}
+                  >
+                    <Svg
+                      width="100%"
+                      height="100%"
+                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                    >
+                      <Defs>
+                        <LinearGradient id={`sw-${option.id}`} x1="0" y1="0" x2="1" y2="1">
+                          <Stop offset="0" stopColor={option.colors[0]} />
+                          <Stop offset="1" stopColor={option.colors[1]} />
+                        </LinearGradient>
+                      </Defs>
+                      <Rect width="100%" height="100%" fill={`url(#sw-${option.id})`} />
+                    </Svg>
+                    {active ? <Check size={14} color={option.text} strokeWidth={3} /> : null}
+                  </View>
+                </Pressable>
+              );
+            })}
+          </View>
         </View>
 
         {/* book selection */}
@@ -201,16 +244,26 @@ export default function NewQuoteScreen() {
           hint={`${text.length}/${MAX_LENGTH}`}
         />
 
-        <Button
-          title={ocr.isPending ? t('quote.ocrRunning') : t('quote.ocrScan')}
-          variant="outline"
-          loading={ocr.isPending}
-          icon={<ScanText size={16} color={theme.colors.fg} />}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityHint={t('quote.ocrHint')}
+          disabled={ocr.isPending}
           onPress={scan}
-        />
-        <Text variant="caption" color="fgSubtle" center>
-          {t('quote.ocrHint')}
-        </Text>
+          style={({ pressed }) => ({
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: theme.spacing.sm,
+            marginTop: -theme.spacing.md,
+            alignSelf: 'flex-start',
+            paddingVertical: theme.spacing.xs,
+            opacity: pressed || ocr.isPending ? 0.6 : 1,
+          })}
+        >
+          <ScanText size={16} color={theme.colors.primary} />
+          <Text variant="smallStrong" color="primary">
+            {ocr.isPending ? t('quote.ocrRunning') : t('quote.ocrScan')}
+          </Text>
+        </Pressable>
 
         <Input
           label={`${t('quote.pageNumber')} (${t('common.optional')})`}
@@ -219,45 +272,6 @@ export default function NewQuoteScreen() {
           keyboardType="number-pad"
           inputMode="numeric"
         />
-
-        <View style={{ gap: theme.spacing.sm }}>
-          <Text variant="bodyStrong">{t('quote.background')}</Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.sm }}>
-            {QUOTE_BACKGROUNDS.map((option) => {
-              const active = option.id === background;
-              return (
-                <Pressable
-                  key={option.id}
-                  accessibilityRole="button"
-                  accessibilityState={{ selected: active }}
-                  accessibilityLabel={option.id}
-                  onPress={() => setBackground(option.id)}
-                  style={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: theme.radius.md,
-                    overflow: 'hidden',
-                    borderWidth: active ? 2.5 : 1,
-                    borderColor: active ? theme.colors.primary : theme.colors.border,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Svg style={{ position: 'absolute', width: '100%', height: '100%' }}>
-                    <Defs>
-                      <LinearGradient id={`sw-${option.id}`} x1="0" y1="0" x2="1" y2="1">
-                        <Stop offset="0" stopColor={option.colors[0]} />
-                        <Stop offset="1" stopColor={option.colors[1]} />
-                      </LinearGradient>
-                    </Defs>
-                    <Rect width="100%" height="100%" fill={`url(#sw-${option.id})`} />
-                  </Svg>
-                  {active ? <Check size={18} color={option.text} /> : null}
-                </Pressable>
-              );
-            })}
-          </View>
-        </View>
 
         <Button
           title={t('quote.post')}

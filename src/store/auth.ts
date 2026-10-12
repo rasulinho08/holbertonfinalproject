@@ -4,6 +4,7 @@ import { ApiError } from '@/api/errors';
 import { Endpoints } from '@/api/endpoints';
 import { clearTokens, loadTokens, setTokens } from '@/api/tokens';
 import { storage, StorageKeys } from '@/lib/storage';
+import { usePrefs } from '@/store/prefs';
 import type { AccountType, AuthSession, GenreSlug, OAuthProvider, User } from '@/types';
 
 export type AuthStatus = 'loading' | 'authenticated' | 'guest';
@@ -172,5 +173,11 @@ export const useIsAuthenticated = () => useAuth((s) => s.status === 'authenticat
 useAuth.subscribe((state, previous) => {
   if (state.user && state.user !== previous.user) {
     void storage.set(StorageKeys.session, state.user);
+  }
+  // The device-local "onboarding done" flag belongs to whoever set it. Without
+  // this, one reader finishing the quiz meant every other account signed in on
+  // the same phone skipped theirs.
+  if (state.user?.id !== previous.user?.id && previous.user) {
+    usePrefs.getState().setOnboardingDone(false);
   }
 });

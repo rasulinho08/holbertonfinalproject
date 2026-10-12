@@ -105,6 +105,11 @@ export const Endpoints = {
     extract: '/ocr/extract',
   },
 
+  assistant: {
+    status: '/assistant',
+    chat: '/assistant/chat',
+  },
+
   uploads: {
     create: '/uploads',
   },
