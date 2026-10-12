@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { api } from '@/api/client';
+import { ApiError } from '@/api/errors';
 import { Endpoints } from '@/api/endpoints';
 import { clearTokens, loadTokens, setTokens } from '@/api/tokens';
 import { storage, StorageKeys } from '@/lib/storage';
@@ -51,16 +52,27 @@ export const useAuth = create<AuthState>((set, get) => ({
    * app opens on the sign-in screen.
    */
   bootstrap: async () => {
-    const { access } = await loadTokens();
-    if (!access) {
+    const { access, refresh } = await loadTokens();
+    if (!access && !refresh) {
       set({ status: 'guest', user: null });
       return;
     }
     try {
       const user = await api.get<User>(Endpoints.auth.me);
       set({ status: 'authenticated', user });
-    } catch {
-      await clearTokens();
+    } catch (error) {
+      // Only a rejected session ends it. Opening the app offline, or while the
+      // API is still waking up, used to clear the tokens and sign the reader
+      // out; now the last known profile is used and screens show their own
+      // network errors until the connection is back.
+      const rejected =
+        error instanceof ApiError && (error.code === 'UNAUTHORIZED' || error.code === 'FORBIDDEN');
+      const cached = rejected ? null : await storage.get<User>(StorageKeys.session);
+      if (cached) {
+        set({ status: 'authenticated', user: cached });
+        return;
+      }
+      if (rejected) await clearTokens();
       set({ status: 'guest', user: null });
     }
   },
@@ -114,6 +126,7 @@ export const useAuth = create<AuthState>((set, get) => ({
     // the reader can register again.
     await api.delete(Endpoints.users.deleteMe);
     await clearTokens();
+    await storage.remove(StorageKeys.session);
     set({ status: 'guest', user: null });
   },
 
@@ -151,3 +164,13 @@ export const useAuth = create<AuthState>((set, get) => ({
 export const useCurrentUser = () => useAuth((s) => s.user);
 export const useAuthStatus = () => useAuth((s) => s.status);
 export const useIsAuthenticated = () => useAuth((s) => s.status === 'authenticated');
+
+/**
+ * The last known profile is kept on the device so a cold start without a
+ * connection can still open the app (see `bootstrap`). Cleared on sign-out.
+ */
+useAuth.subscribe((state, previous) => {
+  if (state.user && state.user !== previous.user) {
+    void storage.set(StorageKeys.session, state.user);
+  }
+});

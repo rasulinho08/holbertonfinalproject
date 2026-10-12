@@ -59,8 +59,13 @@ function AppShell() {
   }, [bootstrap, logout]);
 
   const ready = status !== 'loading' && prefsHydrated;
+  // Onboarding is done if the server says so (the account finished it on any
+  // device) or this device recorded it. Using the device flag for one redirect
+  // and the server flag for the other sent readers in a loop on a new phone,
+  // or left them on the sign-in screen after a successful login.
+  const needsOnboarding = !onboardingCompleted && !onboardingDone;
 
-useEffect(() => {
+  useEffect(() => {
     if (!ready) return;
 
     // `segments` is typed as a tuple by expo-router's typed routes; widen it so
@@ -70,12 +75,12 @@ useEffect(() => {
 
     if (status === 'guest' && !inAuthGroup) {
       router.replace('/login');
-    } else if (status === 'authenticated' && inAuthGroup && onboardingCompleted) {
+    } else if (status === 'authenticated' && inAuthGroup && !needsOnboarding) {
       router.replace('/');
-    } else if (status === 'authenticated' && !onboardingDone && path[1] !== 'onboarding') {
+    } else if (status === 'authenticated' && needsOnboarding && path[1] !== 'onboarding') {
       router.replace('/onboarding');
     }
-  }, [ready, status, onboardingDone, onboardingCompleted, segments, router]);
+  }, [ready, status, needsOnboarding, segments, router]);
 
   if (!ready) {
     return (

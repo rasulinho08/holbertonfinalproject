@@ -2,12 +2,11 @@ import React, { useMemo, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import { uploadImage } from '@/lib/uploads';
 import { Check, ImagePlus, Search, X } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useCurrentUser } from '@/store/auth';
-import { api } from '@/api/client';
-import { Endpoints } from '@/api/endpoints';
 import {
   useBooks,
   useCreatePublication,
@@ -66,14 +65,10 @@ export default function NewPublicationScreen() {
       quality: 0.7,
     });
     if (result.canceled || !result.assets?.[0]) return;
-    const uri = result.assets[0].uri;
+    const asset = result.assets[0];
     setUploadingCover(true);
     try {
-      const uploaded = await api.post<{ id: string; url: string }>(Endpoints.uploads.create, {
-        uri,
-        kind: 'publication',
-      });
-      setCoverUrl(uploaded.url);
+      setCoverUrl(await uploadImage(asset.uri, 'publication', asset.width));
     } catch {
       Alert.alert(t('common.error'), t('common.tryAgain'));
     } finally {

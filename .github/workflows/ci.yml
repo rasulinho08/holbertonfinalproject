@@ -32,7 +32,6 @@ jobs:
 
       - name: Lint
         run: npm run lint
-        continue-on-error: true
 
       # Bundling the web target catches broken imports, missing modules and
       # invalid routes — the failures a typecheck alone will not surface.

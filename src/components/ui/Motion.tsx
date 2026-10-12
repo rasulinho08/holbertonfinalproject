@@ -125,6 +125,12 @@ export function PressableScale({
     }).start();
   };
 
+  // How the pressable sits in its parent (flex, size, margins) has to be set on
+  // the outer element. Applied to the inner view only, `flex: 1, minWidth: 0`
+  // never reached the Pressable, so rows could not shrink and pushed their
+  // neighbours off the edge of the card.
+  const [outer, inner] = splitLayoutStyle(style);
+
   return (
     <Pressable
       onPressIn={(e) => {
@@ -135,11 +141,55 @@ export function PressableScale({
         spring(1);
         onPressOut?.(e);
       }}
+      style={outer}
       {...rest}
     >
-      <Animated.View style={[{ transform: [{ scale: value }] }, style]}>{children}</Animated.View>
+      <Animated.View style={[{ transform: [{ scale: value }] }, inner, outer.flex !== undefined && { flex: 1 }]}>
+        {children}
+      </Animated.View>
     </Pressable>
   );
+}
+
+const OUTER_KEYS = new Set<keyof ViewStyle>([
+  'flex',
+  'flexGrow',
+  'flexShrink',
+  'flexBasis',
+  'alignSelf',
+  'width',
+  'minWidth',
+  'maxWidth',
+  'height',
+  'minHeight',
+  'maxHeight',
+  'margin',
+  'marginTop',
+  'marginBottom',
+  'marginLeft',
+  'marginRight',
+  'marginHorizontal',
+  'marginVertical',
+  'position',
+  'top',
+  'bottom',
+  'left',
+  'right',
+  'zIndex',
+]);
+
+function splitLayoutStyle(style: ViewStyle | undefined): [ViewStyle, ViewStyle] {
+  const outer: Record<string, unknown> = {};
+  const inner: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(style ?? {})) {
+    (OUTER_KEYS.has(key as keyof ViewStyle) ? outer : inner)[key] = value;
+  }
+  // The inner view still has to fill a sized outer box.
+  if (outer.width !== undefined || outer.height !== undefined) {
+    inner.width = '100%';
+    if (outer.height !== undefined) inner.height = '100%';
+  }
+  return [outer as ViewStyle, inner as ViewStyle];
 }
 
 /**

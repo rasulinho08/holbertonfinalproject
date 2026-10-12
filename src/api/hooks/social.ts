@@ -297,6 +297,6 @@ export function useReportContent() {
 export function useOcrExtract() {
   return useMutation({
     mutationFn: (input: { imageUri: string }) =>
-      api.post<{ text: string; confidence: number }>(Endpoints.ocr.extract, input),
+      api.post<{ text: string; confidence: number; available?: boolean }>(Endpoints.ocr.extract, input),
   });
 }

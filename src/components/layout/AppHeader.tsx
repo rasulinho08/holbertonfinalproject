@@ -2,11 +2,11 @@ import React from 'react';
 import { Pressable, View, type ViewStyle } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowLeft, Bell } from 'lucide-react-native';
+import { ArrowLeft, Bell, ShoppingBag } from 'lucide-react-native';
 import { useTheme } from '@/theme';
 import { useI18n } from '@/i18n';
 import { useCurrentUser } from '@/store/auth';
-import { useUnreadCount } from '@/api/hooks';
+import { useCartCount, useUnreadCount } from '@/api/hooks';
 import { IconButton } from '@/components/ui/IconButton';
 import { Avatar } from '@/components/ui/Avatar';
 import { Text } from '@/components/ui/Text';
@@ -16,9 +16,9 @@ export interface AppHeaderProps {
   subtitle?: string;
   /** Shows a back chevron. Defaults to true on non-tab screens. */
   back?: boolean;
-  /** Shows the notifications bell and profile avatar. */
+  /** Shows the cart and notifications buttons. */
   actions?: boolean;
-  /** Show profile avatar on the far right. Defaults to true when actions is true. */
+  /** Show the profile avatar on the far right. Off by default: Profile is a tab. */
   showProfile?: boolean;
   right?: React.ReactNode;
   large?: boolean;
@@ -46,8 +46,9 @@ export function AppHeader({
   const user = useCurrentUser();
 
   const unread = useUnreadCount();
+  const cartCount = useCartCount();
 
-  const shouldShowProfile = showProfile ?? actions;
+  const shouldShowProfile = showProfile ?? false;
 
   return (
     <View
@@ -100,6 +101,15 @@ export function AppHeader({
           {right}
 
           {actions ? (
+            <IconButton label={t('cart.title')} onPress={() => router.push('/cart')}>
+              <View>
+                <ShoppingBag size={21} color={theme.colors.fg} />
+                {cartCount > 0 ? <CountBadge count={cartCount} /> : null}
+              </View>
+            </IconButton>
+          ) : null}
+
+          {actions ? (
             <IconButton label={t('nav.notifications')} onPress={() => router.push('/notifications')}>
               <View>
                 <Bell size={21} color={theme.colors.fg} />
@@ -140,5 +150,31 @@ function Dot() {
         borderColor: theme.colors.bg,
       }}
     />
+  );
+}
+
+function CountBadge({ count }: { count: number }) {
+  const theme = useTheme();
+  return (
+    <View
+      style={{
+        position: 'absolute',
+        top: -6,
+        right: -8,
+        minWidth: 18,
+        height: 18,
+        paddingHorizontal: 4,
+        borderRadius: 9,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: theme.colors.primary,
+        borderWidth: 1.5,
+        borderColor: theme.colors.bg,
+      }}
+    >
+      <Text variant="caption" style={{ color: theme.colors.primaryFg, fontSize: 10, fontWeight: '700' }}>
+        {count > 9 ? '9+' : count}
+      </Text>
+    </View>
   );
 }

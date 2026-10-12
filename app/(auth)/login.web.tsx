@@ -48,9 +48,9 @@ export default function LoginWeb() {
     setBusy(true);
 
     try {
-      await login(email.trim(), password);
+      const user = await login(email.trim(), password);
 
-      router.replace(onboardingDone ? '/' : '/onboarding');
+      router.replace(user.onboardingCompleted || onboardingDone ? '/' : '/onboarding');
     } catch (err) {
       toast.error(t(errorMessageKey(err)));
     } finally {
@@ -70,9 +70,9 @@ export default function LoginWeb() {
 
       if (!result) return;
 
-      await loginWithProvider('google', result.idToken);
+      const user = await loginWithProvider('google', result.idToken);
 
-      router.replace(onboardingDone ? '/' : '/onboarding');
+      router.replace(user.onboardingCompleted || onboardingDone ? '/' : '/onboarding');
     } catch (err) {
       toast.error(t(errorMessageKey(err)));
     } finally {
@@ -91,10 +91,10 @@ export default function LoginWeb() {
         dangerouslySetInnerHTML={{
           __html: `
             :root {
-              --ink: #142a4a;
-              --blue: #3478ea;
-              --mist: #eaf4ff;
-              --line: #dbeafe;
+              --ink: #2A211C;
+              --blue: #E2611A;
+              --mist: #FFEFE4;
+              --line: #FED7BF;
             }
 
             * {
@@ -153,9 +153,9 @@ export default function LoginWeb() {
               background:
                 linear-gradient(
                   145deg,
-                  #fafdff 0%,
-                  #eff7ff 57%,
-                  #e0efff 100%
+                  #FFFBF8 0%,
+                  #FFF4EC 57%,
+                  #FFE6D5 100%
                 );
             }
 
@@ -173,8 +173,8 @@ export default function LoginWeb() {
                 linear-gradient(
                   145deg,
                   #ffffff,
-                  #fbfdff 68%,
-                  #f1f8ff
+                  #FFFCFA 68%,
+                  #FFF7F1
                 );
             }
 
@@ -214,11 +214,11 @@ export default function LoginWeb() {
             }
 
             .language-btn:hover {
-              color: #2563eb;
+              color: #C2410C;
             }
 
             .language-btn.active {
-              color: #2563eb;
+              color: #C2410C;
               font-weight: 700;
             }
 
@@ -241,11 +241,11 @@ export default function LoginWeb() {
               background: rgba(255, 255, 255, 0.92);
 
               border: 1px solid
-                rgba(192, 219, 249, 0.85);
+                rgba(249, 220, 200, 0.85);
 
               box-shadow:
                 0 24px 70px
-                rgba(47, 102, 165, 0.12);
+                rgba(124, 45, 18, 0.12);
             }
 
             .header-row {
@@ -266,7 +266,7 @@ export default function LoginWeb() {
             }
 
             .auth-sub {
-              color: #1f2d44;
+              color: #2A211C;
               opacity: 0.8;
               margin-bottom: 18px;
             }
@@ -282,26 +282,26 @@ export default function LoginWeb() {
 
               border-radius: 20px;
 
-              border: 1px solid #cfdef1;
+              border: 1px solid #F3DCCB;
 
               background:
-                rgba(248, 252, 255, 0.88);
+                rgba(255, 251, 248, 0.88);
 
               margin-top: 6px;
 
               font-size: 15px;
 
-              color: #142a4a;
+              color: #2A211C;
 
               outline: none;
             }
 
             .input:focus {
-              border-color: #4b8cf0;
+              border-color: #F07A2A;
 
               box-shadow:
                 0 0 0 4px
-                rgba(74, 145, 244, 0.13);
+                rgba(226, 97, 26, 0.13);
 
               background: #ffffff;
             }
@@ -329,8 +329,8 @@ export default function LoginWeb() {
               background:
                 linear-gradient(
                   145deg,
-                  #4a91f4,
-                  #2165cd
+                  #F28B4B,
+                  #9A3412
                 );
 
               color: white;
@@ -380,7 +380,7 @@ export default function LoginWeb() {
             .link-row a {
               font-size: 13px;
 
-              color: #2563eb;
+              color: #C2410C;
 
               text-decoration: none;
             }
@@ -400,7 +400,7 @@ export default function LoginWeb() {
 
               text-align: center;
 
-              color: #3478ea;
+              color: #E2611A;
 
               font-size: 13px;
             }
@@ -410,7 +410,7 @@ export default function LoginWeb() {
             ========================== */
 
             .register-link {
-              color: #2563eb;
+              color: #C2410C;
 
               font-weight: 700;
 
@@ -443,7 +443,7 @@ export default function LoginWeb() {
               right: -60px;
 
               background:
-                rgba(146, 204, 255, 0.5);
+                rgba(250, 190, 150, 0.5);
             }
 
             .orb.two {
@@ -454,7 +454,7 @@ export default function LoginWeb() {
               left: -70px;
 
               background:
-                rgba(107, 166, 247, 0.22);
+                rgba(242, 139, 75, 0.22);
             }
 
             /* =========================
@@ -741,16 +741,6 @@ export default function LoginWeb() {
 
                   {/* DEMO HINT */}
 
-                  <div
-                    style={{
-                      textAlign: 'center',
-                      color: '#64748b',
-                      fontSize: 13,
-                    }}
-                  >
-                    {t('auth.demoHint')}
-                  </div>
-
                   {/* GOOGLE */}
 
                   <div>
@@ -820,7 +810,9 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     minHeight: '100%',
-    overflowY: 'auto',
+    // Web-only scrolling for this web-only page. `overflowY` is not in React
+    // Native's style types, so it is spread in rather than written as a key.
+    ...({ overflowY: 'auto' } as object),
     backgroundColor: '#ffffff',
   },
 
@@ -853,7 +845,7 @@ const styles = StyleSheet.create({
 
     overflow: 'hidden',
 
-    shadowColor: '#124881',
+    shadowColor: '#7C2D12',
 
     shadowOffset: {
       width: 0,

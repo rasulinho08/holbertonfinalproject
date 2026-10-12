@@ -85,7 +85,10 @@ export interface Palette {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  ink — default theme. Updated to the new warm light palette.               */
+/*  ink — default theme. Primary is the app icon's orange, in both modes:     */
+/*  light used to be green and dark used to be blue, so the same theme looked */
+/*  like two different products and neither matched the icon. The previous   */
+/*  green is kept as the accent. All pairs re-checked for WCAG AA.            */
 /* -------------------------------------------------------------------------- */
 
 const inkLight: Palette = {
@@ -99,14 +102,14 @@ const inkLight: Palette = {
   border: '#E5E7EB',
   borderStrong: '#D9DCE0',
 
-  primary: '#3F7D5A',
+  primary: '#C2410C',
   primaryFg: '#FFFFFF',
-  primarySoft: '#E8F2EC',
-  primarySoftFg: '#184B36',
-  accent: '#D88A4A',
+  primarySoft: '#FFF1E8',
+  primarySoftFg: '#7C2D12',
+  accent: '#2F6F5E',
   accentFg: '#FFFFFF',
-  accentSoft: '#F7EDE2',
-  accentSoftFg: '#6B3F20',
+  accentSoft: '#E6F2EE',
+  accentSoftFg: '#1D4A3E',
 
   success: '#3F7D5A',
   successSoft: '#E8F2EC',
@@ -128,7 +131,7 @@ const inkLight: Palette = {
   shadow: '#000000',
   imagePlaceholder: '#ECECEA',
 
-  chart: ['#3F7D5A', '#D88A4A', '#2C7A6B', '#8C4A6B', '#4B5FA8', '#7A7F45'],
+  chart: ['#C2410C', '#2F6F5E', '#D99A15', '#8C4A6B', '#4B5FA8', '#7A7F45'],
 };
 
 const inkDark: Palette = {
@@ -142,14 +145,14 @@ const inkDark: Palette = {
   border: '#282E37',
   borderStrong: '#3A424D',
 
-  primary: '#7BA8D9',
-  primaryFg: '#0B1620',
-  primarySoft: '#182432',
-  primarySoftFg: '#A7C6E8',
-  accent: '#E0A45C',
-  accentFg: '#201506',
-  accentSoft: '#2A2013',
-  accentSoftFg: '#EBBE84',
+  primary: '#F28B4B',
+  primaryFg: '#1F0D03',
+  primarySoft: '#2B1A10',
+  primarySoftFg: '#F5B88E',
+  accent: '#5CC5A8',
+  accentFg: '#062019',
+  accentSoft: '#10261F',
+  accentSoftFg: '#8FD9C3',
 
   success: '#4ADE80',
   successSoft: '#12271A',
@@ -171,7 +174,7 @@ const inkDark: Palette = {
   shadow: '#000000',
   imagePlaceholder: '#1E232B',
 
-  chart: ['#7BA8D9', '#E0A45C', '#5CCBB5', '#E08CB0', '#8B9BE8', '#B8C46A'],
+  chart: ['#F28B4B', '#5CC5A8', '#E8B33B', '#E08CB0', '#8B9BE8', '#B8C46A'],
 };
 
 /* -------------------------------------------------------------------------- */

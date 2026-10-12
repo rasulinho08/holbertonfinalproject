@@ -7,6 +7,7 @@ import {
   onlineManager,
 } from '@tanstack/react-query';
 import NetInfo from '@react-native-community/netinfo';
+import { useAuth } from '@/store/auth';
 import { ApiError } from './errors';
 
 /**
@@ -49,6 +50,18 @@ onlineManager.setEventListener((setOnline) =>
 
 export function QueryProvider({ children }: { children: React.ReactNode }) {
   const [client] = useState(createClient);
+
+  // Cached server data belongs to whoever was signed in when it was fetched.
+  // Without this, signing out and into another account on the same device
+  // showed the previous reader's shelves, cart and notifications — as "fresh"
+  // data for up to `staleTime`.
+  useEffect(
+    () =>
+      useAuth.subscribe((state, previous) => {
+        if (state.user?.id !== previous.user?.id) client.clear();
+      }),
+    [client],
+  );
 
   useEffect(() => {
     if (Platform.OS === 'web') return;
