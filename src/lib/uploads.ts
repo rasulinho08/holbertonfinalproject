@@ -20,10 +20,19 @@ const MAX_EDGE: Record<UploadKind, number> = {
  * on the device — which also converts HEIC from iPhones — and the bytes are
  * sent to the API, which stores them and answers with a public URL.
  */
-export async function uploadImage(uri: string, kind: UploadKind, width?: number): Promise<string> {
+export async function uploadImage(
+  uri: string,
+  kind: UploadKind,
+  size: { width?: number; height?: number } = {},
+): Promise<string> {
   const edge = MAX_EDGE[kind];
-  // Never upscale: a picture already narrower than the target is only re-encoded.
-  const actions = width !== undefined && width <= edge ? [] : [{ resize: { width: edge } }];
+  const { width, height } = size;
+  // The limit applies to the longest edge, so a tall photo (the web picker
+  // cannot crop) is bounded by its height. Unknown dimensions are resized by
+  // width, as before; a picture already within the limit is only re-encoded.
+  const fits = width !== undefined && height !== undefined && Math.max(width, height) <= edge;
+  const portrait = width !== undefined && height !== undefined && height > width;
+  const actions = fits ? [] : [{ resize: portrait ? { height: edge } : { width: edge } }];
   const resized = await manipulateAsync(uri, actions, {
     compress: 0.8,
     format: SaveFormat.JPEG,

@@ -89,7 +89,7 @@ export default function EditPublicationScreen() {
     const asset = result.assets[0];
     setUploadingCover(true);
     try {
-      setCoverUrl(await uploadImage(asset.uri, 'publication', asset.width));
+      setCoverUrl(await uploadImage(asset.uri, 'publication', { width: asset.width, height: asset.height }));
     } catch {
       Alert.alert(t('common.error'), t('common.tryAgain'));
     } finally {
