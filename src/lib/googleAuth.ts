@@ -7,8 +7,8 @@ import * as WebBrowser from 'expo-web-browser';
 /**
  * Google sign-in.
  *
- * The app never sees a password. It opens Google's consent screen, gets an
- * `id_token` back, and posts that to `POST /auth/oauth/google`; the backend
+ * The app never sees a password. It gets an `id_token` from Google and posts
+ * that to `POST /auth/oauth/google`; the backend
  * verifies the token *with Google* — including the audience claim — before
  * trusting anything in it. Decoding it client-side and sending the claims would
  * let anyone sign in as anyone.
@@ -37,6 +37,51 @@ function clientIdForPlatform(): string {
 }
 
 export const isGoogleConfigured = clientIdForPlatform().length > 0;
+
+type NativeGoogle = typeof import('@react-native-google-signin/google-signin');
+
+/**
+ * On Android the browser flow does not work: Google no longer accepts a
+ * custom-scheme redirect (`kitabdostu://`) for new Android clients. The app
+ * uses Google's own account picker instead, configured with the *web* client
+ * id, so the id token's audience is the web id the backend already checks.
+ *
+ * Google matches the app to the Android OAuth client in the same Cloud project
+ * by package name and signing SHA-1; nothing in the code names that client.
+ *
+ * The native module is missing in Expo Go, where requiring it throws; there the
+ * browser flow below is the fallback.
+ */
+function loadNativeGoogle(): NativeGoogle | null {
+  if (Platform.OS !== 'android' || !WEB_CLIENT_ID) return null;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const mod = require('@react-native-google-signin/google-signin') as NativeGoogle;
+    mod.GoogleSignin.configure({ webClientId: WEB_CLIENT_ID });
+    return mod;
+  } catch {
+    return null;
+  }
+}
+
+const nativeGoogle = loadNativeGoogle();
+
+async function nativeSignIn(google: NativeGoogle): Promise<GoogleAuthResult | null> {
+  const { GoogleSignin, isSuccessResponse } = google;
+  await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  // Forget the last account so the picker always shows and the reader can switch.
+  await GoogleSignin.signOut().catch(() => undefined);
+
+  const response = await GoogleSignin.signIn();
+  // Anything but success is the reader closing the picker.
+  if (!isSuccessResponse(response)) return null;
+
+  if (!response.data.idToken) {
+    // Only happens when webClientId is not a web client of the same project.
+    throw new Error('Google returned no id token. Check EXPO_PUBLIC_GOOGLE_CLIENT_ID.');
+  }
+  return { idToken: response.data.idToken };
+}
 
 const DISCOVERY = {
   authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
@@ -91,6 +136,7 @@ export function useGoogleAuth() {
         'Google sign-in is not configured. Set EXPO_PUBLIC_GOOGLE_CLIENT_ID and rebuild.',
       );
     }
+    if (nativeGoogle) return nativeSignIn(nativeGoogle);
     if (!request) return null;
 
     const result = await promptAsync();
@@ -102,5 +148,5 @@ export function useGoogleAuth() {
     return { idToken };
   }, [clientId, promptAsync, request]);
 
-  return { signIn, ready: !!request, isConfigured: isGoogleConfigured };
+  return { signIn, ready: !!nativeGoogle || !!request, isConfigured: isGoogleConfigured };
 }
