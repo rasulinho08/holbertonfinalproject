@@ -810,8 +810,9 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     minHeight: '100%',
-    // Web-only scrolling for this web-only page; not part of RN's style types.
-    overflowY: 'auto' as unknown as undefined,
+    // Web-only scrolling for this web-only page. `overflowY` is not in React
+    // Native's style types, so it is spread in rather than written as a key.
+    ...({ overflowY: 'auto' } as object),
     backgroundColor: '#ffffff',
   },
 
